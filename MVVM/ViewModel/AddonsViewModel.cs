@@ -20,25 +20,43 @@ namespace WotlkCPKTools.MVVM.ViewModel
 
         AddonInfo addon = new AddonInfo();
         CommitInfo infoCommit;
+        StoredAddonInfo oldInfo = new StoredAddonInfo();
 
         public AddonsViewModel()
         {
-            CargarInfoAsync();
+            
+            LoadInfoAsync();
             
         }
 
-        private async void CargarInfoAsync()
+        private async void LoadInfoAsync()
         {
-            var builder = new AddonInfoBuilder();
-            infoCommit = await builder.GetShaAndCommitDateAsync(testApiUrl);
+            try
+            {
+                var builder = new AddonInfoBuilder();
+                infoCommit = await builder.GetShaAndCommitDateAsync(testApiUrl);
+                oldInfo = await builder.GetLocalAddonInfoAsync(testRepoUrl);
 
-            addon.NewCommitDate = infoCommit.Date;
-            addon.NewSha = infoCommit.Sha;
-            addon.Name = AddonInfoBuilder.GetName(testRepoUrl);
-            addon.GitHubUrl = AddonInfoBuilder.GetUrl(testRepoUrl);
+
+                addon.NewCommitDate = infoCommit.Date;
+                addon.NewSha = infoCommit.Sha;
+                addon.Name = AddonInfoBuilder.GetName(testRepoUrl);
+                addon.GitHubUrl = AddonInfoBuilder.GetUrl(testRepoUrl);
+                addon.OldSha = oldInfo.Sha;
+                addon.LocalPath = oldInfo.LocalPath;
+                addon.LastUpdated = oldInfo.LastUpdated;
+
+
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error when loading addon info: {ex.Message}");
+            }
+
         }
 
-
+        
 
 
     }

@@ -9,17 +9,11 @@
              Background="#1b1b1b">
     <Grid>
         <Grid>
-            <ListView ItemsSource="{Binding Addons}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Margin="5">
-                            <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding Repo}" FontStyle="Italic"/>
-                            <TextBlock Text="{Binding LastUpdatedUtc}" FontSize="10"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <TextBlock Text="Addons"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       Margin="10"/>
         </Grid>
     </Grid>
 </UserControl>

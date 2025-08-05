@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -60,6 +61,27 @@ namespace WotlkCPKTools.Services
                 httpClient.Dispose();
             }
         }
+
+        //Get Local Data
+        public async Task<StoredAddonInfo> GetLocalAddonInfoAsync(string repoUrl)
+        {
+
+            StoredAddonInfo storedAddonInfo = new StoredAddonInfo();
+
+            //string _jsonFilePath = AppDomain.CurrentDomain.BaseDirectory+"\\storedAddons.json";
+            string _jsonFilePath = "C:\\Users\\f\\Desktop\\TestWOW\\testData" + "\\storedAddons.json";
+            string _jsonContent = await File.ReadAllTextAsync(_jsonFilePath);
+
+
+
+
+            List<StoredAddonInfo> allStoredAddons = JsonSerializer.Deserialize<List<StoredAddonInfo>>(_jsonContent);
+
+            storedAddonInfo = allStoredAddons.FirstOrDefault(a => a.GitHubUrl.Equals(repoUrl, StringComparison.OrdinalIgnoreCase));
+
+            return storedAddonInfo;
+        }
+        
     }
     
 
