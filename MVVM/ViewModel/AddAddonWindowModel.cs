@@ -32,7 +32,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
         public AddAddonWindowModel()
         {
             AddAddonCommand = new RelayCommand(
-                //test msgbox--- execute: o => MessageBox.Show($"URL: {GitHubUrl}", "GitHub URL"),
+                //test msgbox, change for addaddon() when ready--- execute: o => MessageBox.Show($"URL: {GitHubUrl}", "GitHub URL"),
                 canExecute: o => CanAddAddon
             );
         }
