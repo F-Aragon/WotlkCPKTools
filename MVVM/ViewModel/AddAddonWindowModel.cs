@@ -27,15 +27,17 @@ namespace WotlkCPKTools.MVVM.ViewModel
 
         public RelayCommand AddAddonCommand { get; }
 
-        /* test msgbox
+
+        /*
         public AddAddonWindowModel()
         {
             AddAddonCommand = new RelayCommand(
-                execute: o => MessageBox.Show($"URL: {GitHubUrl}", "GitHub URL"),
+                //test msgbox--- execute: o => MessageBox.Show($"URL: {GitHubUrl}", "GitHub URL"),
                 canExecute: o => CanAddAddon
             );
         }
         */
+
 
         private bool IsValidGitHubRepoUrl(string url)
         {

@@ -22,10 +22,11 @@
                  Text="{Binding GitHubUrl, UpdateSourceTrigger=PropertyChanged}" />
 
         <Button Content="Add Addon"
+                Command="{Binding AddAddonCommand}"
+                IsEnabled="{Binding CanAddAddon}"
                 HorizontalAlignment="Left"
                 Margin="368,0,0,0"
-                VerticalAlignment="Center"
-                Command="{Binding AddAddonCommand}" />
+                VerticalAlignment="Center" />
     </Grid>
 </Window>
 
