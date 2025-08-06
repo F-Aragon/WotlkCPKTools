@@ -10,18 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WotlkCPKTools.MVVM.ViewModel;
 
 namespace WotlkCPKTools.MVVM.View
 {
-    public partial class AddonsView : UserControl
+    
+    public partial class AddAddonWindow : Window
     {
-        public AddonsView()
+        public AddAddonWindow()
         {
             InitializeComponent();
-        }
 
-        
+        }
     }
 }

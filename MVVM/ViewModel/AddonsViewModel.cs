@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WotlkCPKTools.Core;
 using WotlkCPKTools.MVVM.Model;
+using WotlkCPKTools.MVVM.View;
 using WotlkCPKTools.Services;
 
 namespace WotlkCPKTools.MVVM.ViewModel
@@ -22,11 +23,20 @@ namespace WotlkCPKTools.MVVM.ViewModel
         CommitInfo infoCommit;
         StoredAddonInfo oldInfo = new StoredAddonInfo();
 
+        
+        public RelayCommand OpenAddAddonWindowCommand { get; set; } //Button to open the AddAddonWindow
+
         public AddonsViewModel()
         {
             
             LoadInfoAsync();
-            
+
+            OpenAddAddonWindowCommand = new RelayCommand(o =>
+            {
+                var window = new AddAddonWindow();
+                window.ShowDialog(); 
+            });
+
         }
 
         private async void LoadInfoAsync()

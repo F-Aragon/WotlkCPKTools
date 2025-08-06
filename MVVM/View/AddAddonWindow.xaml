@@ -1,0 +1,31 @@
+﻿<Window x:Class="WotlkCPKTools.MVVM.View.AddAddonWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:WotlkCPKTools.MVVM.ViewModel"
+        mc:Ignorable="d"
+        Title="AddAddonWindow" Height="250" Width="500"
+        WindowStartupLocation="CenterOwner">
+
+    <Window.DataContext>
+        <vm:AddAddonWindowModel />
+    </Window.DataContext>
+
+    <Grid Background="Black">
+        <TextBox HorizontalAlignment="Left"
+                 VerticalAlignment="Center"
+                 Margin="30,0,0,0"
+                 VerticalContentAlignment="Center"
+                 HorizontalContentAlignment="Left"
+                 Style="{StaticResource ModernTextBox}"
+                 Text="{Binding GitHubUrl, UpdateSourceTrigger=PropertyChanged}" />
+
+        <Button Content="Add Addon"
+                HorizontalAlignment="Left"
+                Margin="368,0,0,0"
+                VerticalAlignment="Center"
+                Command="{Binding AddAddonCommand}" />
+    </Grid>
+</Window>
+

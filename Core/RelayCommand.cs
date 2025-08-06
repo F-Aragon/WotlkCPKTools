@@ -9,7 +9,7 @@ namespace WotlkCPKTools.Core
         private Func<object, bool> _canExecute;
 
         public event EventHandler CanExecuteChanged
-        { 
+        {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
@@ -29,5 +29,12 @@ namespace WotlkCPKTools.Core
         {
             _execute(parameter);
         }
+
+        /*private event EventHandler InternalCanExecuteChanged;
+        public void RaiseCanExecuteChanged()
+        {
+            InternalCanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            CommandManager.InvalidateRequerySuggested();
+        }*/
     }
 }

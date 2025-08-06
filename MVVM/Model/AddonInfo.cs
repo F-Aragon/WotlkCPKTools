@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WotlkCPKTools.Core;
 
 namespace WotlkCPKTools.MVVM.Model
 {
-    public class AddonInfo
+    public class AddonInfo 
     {
-        public string Name { get; set; } //ok
+        public string? Name { get; set; } //ok
         public string GitHubUrl { get; set; } //ok
-        public string LocalPath { get; set; } //ok
-        public string NewSha { get; set; } //ok
-        public string OldSha { get; set; }  //ok
-        public DateTime LastUpdated { get; set; } //ok
-        public DateTime NewCommitDate { get; set; } //ok
+        public string? LocalPath { get; set; } //ok
+        public string? NewSha { get; set; } //ok
+        public string? OldSha { get; set; }  //ok
+        public DateTime? LastUpdated { get; set; } //ok
+        public DateTime? NewCommitDate { get; set; } //ok
     }
 
 

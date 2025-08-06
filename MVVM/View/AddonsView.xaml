@@ -9,11 +9,29 @@
              Background="#1b1b1b">
     <Grid>
         <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="70"/>
+            </Grid.RowDefinitions>
+            
             <TextBlock Text="Addons"
                        FontSize="24"
                        FontWeight="Bold"
                        Foreground="White"
-                       Margin="10"/>
+                       Margin="10"
+                       Grid.Row="0"/>
+            
+            <Button Content="Add New" 
+                    Command="{Binding OpenAddAddonWindowCommand}"
+                    HorizontalAlignment="Left" 
+                    Margin="10,0,0,0" 
+                    Grid.Row="1" 
+                    VerticalAlignment="Center" 
+                    Height="50" Width="71"/>
+
+            
+
         </Grid>
     </Grid>
 </UserControl>
