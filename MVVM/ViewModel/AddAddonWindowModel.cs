@@ -1,48 +1,86 @@
-﻿using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+using System.Windows.Media;
 using WotlkCPKTools.Core;
+using WotlkCPKTools.Services;
 
 namespace WotlkCPKTools.MVVM.ViewModel
 {
     internal class AddAddonWindowModel : ObservableObject
     {
-        private string _gitHubUrl;
+        private string _githubUrl;
+        private string _statusMessage;
+        private SolidColorBrush _statusColor;
+        private readonly AddonService _addonService = new AddonService();
+        private readonly GitHubService _gitHubService = new GitHubService();
 
         public string GitHubUrl
         {
-            get => _gitHubUrl;
-            set
-            {
-                if (SetProperty(ref _gitHubUrl, value))
-                {
-                    OnPropertyChanged(nameof(CanAddAddon));
-                    // Force re-evaluation of the button
-                    CommandManager.InvalidateRequerySuggested();
-                }
-            }
+            get => _githubUrl;
+            set => SetProperty(ref _githubUrl, value);
+        }
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set => SetProperty(ref _statusMessage, value);
         }
 
-        public bool CanAddAddon => IsValidGitHubRepoUrl(GitHubUrl);
+        public SolidColorBrush StatusColor
+        {
+            get => _statusColor;
+            set => SetProperty(ref _statusColor, value);
+        }
 
-        public RelayCommand AddAddonCommand { get; }
+        public ICommand AddAddonCommand { get; }
 
-
-        /*
         public AddAddonWindowModel()
         {
-            AddAddonCommand = new RelayCommand(
-                //test msgbox, change for addaddon() when ready--- execute: o => MessageBox.Show($"URL: {GitHubUrl}", "GitHub URL"),
-                canExecute: o => CanAddAddon
-            );
+            AddAddonCommand = new RelayCommand(async (obj) => await ExecuteAddCommand(obj));
         }
-        */
 
-
-        private bool IsValidGitHubRepoUrl(string url)
+        private async Task ExecuteAddCommand(object parameter)
         {
-            if (string.IsNullOrWhiteSpace(url)) return false;
-            return Regex.IsMatch(url, @"^https:\/\/github\.com\/[\w\-]+\/[\w\-]+$");
+            if (string.IsNullOrWhiteSpace(GitHubUrl))
+            {
+                StatusMessage = "URL cannot be empty";
+                StatusColor = Brushes.Red;
+                return;
+            }
+
+            if (!_gitHubService.IsValidGitHubRepoUrl(GitHubUrl))
+            {
+                StatusMessage = "Invalid URL format";
+                StatusColor = Brushes.Red;
+                return;
+            }
+
+            if (await _addonService.AddonExistsAsync(GitHubUrl))
+            {
+                StatusMessage = "This addon is already added";
+                StatusColor = Brushes.Orange;
+                return;
+            }
+
+            var addon = await _addonService.CreateAddonInfoFromGitHubUrl(GitHubUrl);
+
+            if (addon == null)
+            {
+                StatusMessage = "Could not find repo information";
+                StatusColor = Brushes.Red;
+                return;
+            }
+
+            bool added = await _addonService.AddAddonToLocalJsonAsync(addon);
+            if (added)
+            {
+                StatusMessage = "Addon successfully added";
+                StatusColor = Brushes.Green;
+            }
+            else
+            {
+                StatusMessage = "Failed to add addon";
+                StatusColor = Brushes.Orange;
+            }
+
         }
     }
 }

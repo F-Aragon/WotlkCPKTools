@@ -23,10 +23,21 @@
 
         <Button Content="Add Addon"
                 Command="{Binding AddAddonCommand}"
-                IsEnabled="{Binding CanAddAddon}"
+                
                 HorizontalAlignment="Left"
                 Margin="368,0,0,0"
                 VerticalAlignment="Center" />
+
+        <TextBlock Text="{Binding StatusMessage}"
+                   Foreground="{Binding StatusColor}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
+                   Width="300"
+                   Height="25"
+                   Background="Transparent" 
+                   Margin="0,150,0,0"
+                   
+                   />
     </Grid>
 </Window>
 

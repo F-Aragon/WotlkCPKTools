@@ -26,10 +26,13 @@ namespace WotlkCPKTools.MVVM.ViewModel
         
         public RelayCommand OpenAddAddonWindowCommand { get; set; } //Button to open the AddAddonWindow
 
+
+
+
         public AddonsViewModel()
         {
             
-            LoadInfoAsync();
+           // LoadInfoAsync();
 
             OpenAddAddonWindowCommand = new RelayCommand(o =>
             {
@@ -39,33 +42,8 @@ namespace WotlkCPKTools.MVVM.ViewModel
 
         }
 
-        private async void LoadInfoAsync()
-        {
-            try
-            {
-                var builder = new AddonInfoBuilder();
-                infoCommit = await builder.GetShaAndCommitDateAsync(testApiUrl);
-                oldInfo = await builder.GetLocalAddonInfoAsync(testRepoUrl);
 
-
-                addon.NewCommitDate = infoCommit.Date;
-                addon.NewSha = infoCommit.Sha;
-                addon.Name = AddonInfoBuilder.GetName(testRepoUrl);
-                addon.GitHubUrl = AddonInfoBuilder.GetUrl(testRepoUrl);
-                addon.OldSha = oldInfo.Sha;
-                addon.LocalPath = oldInfo.LocalPath;
-                addon.LastUpdated = oldInfo.LastUpdated;
-
-
-                
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error when loading addon info: {ex.Message}");
-            }
-
-        }
-
+        
         
 
 

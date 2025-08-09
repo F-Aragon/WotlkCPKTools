@@ -12,7 +12,7 @@ namespace WotlkCPKTools.MVVM.Model
         public string GitHubUrl { get; set; }
         public string LocalPath { get; set; }
         public string Sha { get; set; }
-        public DateTime LastUpdated { get; set; }
+        public DateTime? LastUpdated { get; set; }
 
     }
 }
