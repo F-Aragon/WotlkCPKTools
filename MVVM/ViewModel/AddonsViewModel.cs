@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Input;
 using WotlkCPKTools.Core;
 using WotlkCPKTools.MVVM.Model;
 using WotlkCPKTools.MVVM.View;
@@ -10,42 +9,73 @@ using WotlkCPKTools.Services;
 
 namespace WotlkCPKTools.MVVM.ViewModel
 {
-    class AddonsViewModel : ObservableObject
+    public class AddonsViewModel : ObservableObject
     {
-        //For testing, remove later
-        string testApiUrl = "https://api.github.com/repos/NoM0Re/WeakAuras-WotLK/commits";
-        string testRepoUrl = "https://github.com/NoM0Re/WeakAuras-WotLK";
-        string localAddonsFolder = "C:\\Users\\f\\Desktop\\TestWOW\\Interface\\AddOns";
-        //Remove later
+        private readonly AddonService _addonService;
+        private readonly GridManagerService _gridManagerService;
 
+        public ObservableCollection<AddonGroup> AddonGroups { get; set; } = new();
 
-        AddonInfo addon = new AddonInfo();
-        CommitInfo infoCommit;
-        StoredAddonInfo oldInfo = new StoredAddonInfo();
-
-        
-        public RelayCommand OpenAddAddonWindowCommand { get; set; } //Button to open the AddAddonWindow
-
-
-
+        public ICommand OpenAddAddonWindowCommand { get; }
+        public ICommand UpdateCommand { get; }
+        public ICommand DeleteCommand { get; }
+        public ICommand RefreshCommand { get; }
 
         public AddonsViewModel()
         {
-            
-           // LoadInfoAsync();
+            _addonService = new AddonService();
+            _gridManagerService = new GridManagerService(_addonService, new GitHubService());
 
+            // Open window to add a new addon
             OpenAddAddonWindowCommand = new RelayCommand(o =>
             {
                 var window = new AddAddonWindow();
-                window.ShowDialog(); 
+                window.ShowDialog();
+                LoadAddons();
             });
 
+            // Delete an addon
+            DeleteCommand = new RelayCommand(o =>
+            {
+                _gridManagerService.DeleteAddon((AddonItem)o);
+                LoadAddons();
+            });
+
+            // Update an addon
+            UpdateCommand = new RelayCommand(async o =>
+            {
+                if (o is AddonItem addonItem)
+                {
+                    var addonInfo = _addonService.LoadAddonsFromLocal()
+                                                 .FirstOrDefault(a => a.Name == addonItem.Name);
+                    if (addonInfo != null)
+                    {
+                        await _addonService.UpdateAddonAndSaveAsync(addonInfo);
+                        LoadAddons();
+                    }
+                }
+            });
+
+            // Refresh all addons from GitHub
+            RefreshCommand = new RelayCommand(async o =>
+            {
+                var completedList = await _addonService.CreateCompleteListAsync();
+                LoadAddons();
+            });
+
+            // Load the initial list of addons
+            LoadAddons();
         }
 
+        private void LoadAddons()
+        {
+            AddonGroups.Clear();
 
-        
-        
-
-
+            var groups = _gridManagerService.GetAddonGroups();
+            foreach (var group in groups)
+            {
+                AddonGroups.Add(group);
+            }
+        }
     }
 }

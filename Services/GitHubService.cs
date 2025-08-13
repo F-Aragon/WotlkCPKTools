@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -93,5 +94,85 @@ namespace WotlkCPKTools.Services
             return Regex.IsMatch(url, @"^https:\/\/github\.com\/[\w\-]+\/[\w\-]+(\.git)?$");
 
         }
+
+
+        public async Task<string?> GetDefaultBranchAsync(string repoUrl)
+        {
+            try
+            {
+                string repoApiBase = ConvertRepoUrlToApiUrl(repoUrl).Replace("/commits", "");
+                var response = await _httpClient.GetAsync(repoApiBase);
+                if (!response.IsSuccessStatusCode)
+                    return null;
+
+                string json = await response.Content.ReadAsStringAsync();
+                using var doc = JsonDocument.Parse(json);
+                if (doc.RootElement.TryGetProperty("default_branch", out var branchElement))
+                {
+                    return branchElement.GetString();
+                }
+
+                return null;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Error fetching default branch: " + repoUrl);
+                return null;
+            }
+        }
+
+
+
+        public static (string owner, string repo) GetOwnerAndRepo(string repoUrl)
+        {
+            Uri uri = new Uri(repoUrl);
+            var segments = uri.Segments.Select(s => s.Trim('/')).Where(s => s != "").ToArray();
+  
+            return (segments[0], segments[1]);
+        }
+
+
+
+        
+        public async Task<string?> DownloadZipAsync(string repoUrl, string tempFolderPath = @"C:\Users\f\Desktop\TestWOW\CPKtemp") 
+        {
+
+            //https://github.com/ElvUI-WotLK/ElvUI
+
+            string _repoName = GetName(repoUrl);
+            string _repoMainBranch = await GetDefaultBranchAsync(repoUrl);
+            var (_owner, _repo) = GetOwnerAndRepo(repoUrl);
+
+            string zipUrl = $"https://github.com/{_owner}/{_repo}/archive/refs/heads/{_repoMainBranch}.zip";
+
+
+            try
+            {
+
+                if (!Directory.Exists(tempFolderPath)) 
+                {
+                    Directory.CreateDirectory(tempFolderPath);
+                }
+
+
+                // Temp Zip file path
+                string zipFilePath = Path.Combine(tempFolderPath, _repoName+".zip");
+
+                using var response = await _httpClient.GetAsync(zipUrl);
+                if (!response.IsSuccessStatusCode)
+                    return null;
+
+                await using var fs = new FileStream(zipFilePath, FileMode.Create, FileAccess.Write, FileShare.None);
+                await response.Content.CopyToAsync(fs);
+
+                return zipFilePath;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+
     }
 }

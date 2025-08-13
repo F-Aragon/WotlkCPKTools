@@ -3,35 +3,114 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WotlkCPKTools.MVVM.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="#1b1b1b">
-    <Grid>
-        <Grid>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="70"/>
-            </Grid.RowDefinitions>
-            
-            <TextBlock Text="Addons"
-                       FontSize="24"
-                       FontWeight="Bold"
-                       Foreground="White"
-                       Margin="10"
-                       Grid.Row="0"/>
-            
+        <!-- Scroll  -->
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl ItemsSource="{Binding AddonGroups}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,0,0,20">
+
+                            <TextBlock Text="{Binding GroupName}"
+                                       FontSize="18"
+                                       FontWeight="SemiBold"
+                                       Foreground="White"
+                                       Margin="0,0,0,5"/>
+
+                            <!-- Addons DataGrid -->
+                            <DataGrid ItemsSource="{Binding Addons}"
+                                      AutoGenerateColumns="False"
+                                      CanUserAddRows="False"
+                                      HeadersVisibility="Column"
+                                      Background="#2b2b2b"
+                                      Foreground="Gray"
+                                      RowHeight="30"
+                                      IsReadOnly="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="2*"/>
+                                    <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubLink}" Width="3*"/>
+                                    <DataGridTextColumn Header="Last Update" Binding="{Binding LastUpdate, StringFormat=yyyy-MM-dd HH:mm}" Width="1.5*"/>
+                                    
+                                    <!-- Up Column -->
+                                    <DataGridTemplateColumn Header="Up" Width="0.25*">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Rectangle Width="20" Height="20" RadiusX="3" RadiusY="3">
+                                                    <Rectangle.Style>
+                                                        <Style TargetType="Rectangle">
+                                                            <Setter Property="Fill" Value="Blue"/>
+                                                            <!-- default null -->
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsUpdated}" Value="True">
+                                                                    <Setter Property="Fill" Value="Green"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsUpdated}" Value="False">
+                                                                    <Setter Property="Fill" Value="Red"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Rectangle.Style>
+                                                </Rectangle>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <!-- Actions -->
+                                    <DataGridTemplateColumn Header="Actions" Width="Auto">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <Button Content="Update"
+                                                            Command="{Binding DataContext.UpdateCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}"
+                                                            Background="#007ACC"
+                                                            Foreground="White"
+                                                            Padding="5,0"
+                                                            Width="60"
+                                                            Margin="0,0,5,0"/>
+                                                    <Button Content="Delete"
+                                                            Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}"
+                                                            Background="Red"
+                                                            Foreground="White"
+                                                            Padding="5,0"
+                                                            Width="60"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,10,0,0">
             <Button Content="Add New" 
-                    Command="{Binding OpenAddAddonWindowCommand}"
-                    HorizontalAlignment="Left" 
-                    Margin="10,0,0,0" 
-                    Grid.Row="1" 
-                    VerticalAlignment="Center" 
-                    Height="50" Width="71"/>
+            Command="{Binding OpenAddAddonWindowCommand}" 
+            Height="40"
+            Width="100"
+            Background="#007ACC"
+            Foreground="White"
+            Margin="0,0,10,0"/>
 
-            
-
-        </Grid>
+            <Button Content="Refresh" 
+            Command="{Binding RefreshCommand}" 
+            Height="40"
+            Width="100"
+            Background="#4CAF50"
+            Foreground="White"/>
+        </StackPanel>
     </Grid>
 </UserControl>
