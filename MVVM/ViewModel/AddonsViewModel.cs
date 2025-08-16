@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using WotlkCPKTools.Core;
 using WotlkCPKTools.MVVM.Model;
@@ -16,11 +18,23 @@ namespace WotlkCPKTools.MVVM.ViewModel
 
         public ObservableCollection<AddonGroup> AddonGroups { get; set; } = new();
 
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                _isLoading = value;
+                OnPropertyChanged();
+            }
+        }
+
+
         public ICommand OpenAddAddonWindowCommand { get; }
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand RefreshCommand { get; }
-
+        public ICommand UpdateAllCommand { get; }
         public AddonsViewModel()
         {
             _addonService = new AddonService();
@@ -63,8 +77,22 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 LoadAddons();
             });
 
-            // Load the initial list of addons
-            LoadAddons();
+
+
+            UpdateAllCommand = new RelayCommand(async o =>
+            {
+                var allAddons = _addonService.LoadAddonsFromLocal();
+                await _addonService.UpdateAllAddonsAndSaveAsync(allAddons);
+
+                Debug.WriteLine("UpdateAllCommand - All addons have been checked and updated if necessary.");
+
+                LoadAddons();
+            });
+
+
+            // Execute initial load of addons
+            
+            _ = InitialLoadAddonsAsync();
         }
 
         private void LoadAddons()
@@ -77,5 +105,29 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 AddonGroups.Add(group);
             }
         }
+
+        private async Task InitialLoadAddonsAsync()
+        {
+            try
+            {
+                IsLoading = true;
+                AddonGroups.Clear();
+                // Get complete list with GitHub status
+                var completedList = await _addonService.CreateCompleteListAsync();
+                // Save updated list to local JSON
+                await _addonService.SaveAddonsListToJson(completedList);
+                // Group addons for the UI
+                var groups = _gridManagerService.GetAddonGroups(completedList);
+                foreach (var group in groups)
+                {
+                    AddonGroups.Add(group);
+                }
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
     }
 }
+

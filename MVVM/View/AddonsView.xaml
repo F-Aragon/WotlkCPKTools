@@ -3,22 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WotlkCPKTools.MVVM.ViewModel"
+             xmlns:conv="clr-namespace:WotlkCPKTools.Services"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="#1b1b1b">
+
+    <UserControl.Resources>
+        <!-- Bool to Visibility converter -->
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Scroll  -->
+        <!-- Scroll -->
         <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <ItemsControl ItemsSource="{Binding AddonGroups}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="0,0,0,20">
-
                             <TextBlock Text="{Binding GroupName}"
                                        FontSize="18"
                                        FontWeight="SemiBold"
@@ -38,7 +45,7 @@
                                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="2*"/>
                                     <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubLink}" Width="3*"/>
                                     <DataGridTextColumn Header="Last Update" Binding="{Binding LastUpdate, StringFormat=yyyy-MM-dd HH:mm}" Width="1.5*"/>
-                                    
+
                                     <!-- Up Column -->
                                     <DataGridTemplateColumn Header="Up" Width="0.25*">
                                         <DataGridTemplateColumn.CellTemplate>
@@ -47,7 +54,6 @@
                                                     <Rectangle.Style>
                                                         <Style TargetType="Rectangle">
                                                             <Setter Property="Fill" Value="Blue"/>
-                                                            <!-- default null -->
                                                             <Style.Triggers>
                                                                 <DataTrigger Binding="{Binding IsUpdated}" Value="True">
                                                                     <Setter Property="Fill" Value="Green"/>
@@ -87,7 +93,6 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
-
                                 </DataGrid.Columns>
                             </DataGrid>
                         </StackPanel>
@@ -98,19 +103,34 @@
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,10,0,0">
             <Button Content="Add New" 
-            Command="{Binding OpenAddAddonWindowCommand}" 
-            Height="40"
-            Width="100"
-            Background="#007ACC"
-            Foreground="White"
-            Margin="0,0,10,0"/>
+                    Command="{Binding OpenAddAddonWindowCommand}" 
+                    Height="40"
+                    Width="100"
+                    Background="#007ACC"
+                    Foreground="White"
+                    Margin="0,0,10,0"/>
 
             <Button Content="Refresh" 
-            Command="{Binding RefreshCommand}" 
-            Height="40"
-            Width="100"
-            Background="#4CAF50"
-            Foreground="White"/>
+                    Command="{Binding RefreshCommand}" 
+                    Height="40"
+                    Width="100"
+                    Background="#4CAF50"
+                    Foreground="White"/>
+
+            <Button Content="Update All" 
+                    Command="{Binding UpdateAllCommand}"
+                    Height="40"
+                    Width="120"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left" 
+                    Background="Green"
+                    Foreground="White"/>
         </StackPanel>
+
+        <!-- Spinner overlay -->
+        <Grid Background="#80000000" Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <ProgressBar Width="150" Height="20" IsIndeterminate="True" 
+                         VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
     </Grid>
 </UserControl>

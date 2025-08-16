@@ -59,6 +59,39 @@ namespace WotlkCPKTools.Services
             return groups;
         }
 
+        // Overload of GetAddonGroups(); Creates addon groups from a given list (instead of always reading local). Mainly for InitialLoad
+        public ObservableCollection<AddonGroup> GetAddonGroups(List<AddonInfo> addons)
+        {
+            var groups = new ObservableCollection<AddonGroup>();
+            var installedGroup = new AddonGroup
+            {
+                GroupName = "Installed",
+                Addons = new ObservableCollection<AddonItem>(
+                    addons.Select(a => new AddonItem
+                    {
+                        Name = a.Name,
+                        IsUpdated = a.IsUpdated,
+                        GitHubLink = a.GitHubUrl,
+                        LastUpdate = a.LastUpdateDate
+                    })
+                )
+            };
+
+            var availableGroup = new AddonGroup
+            {
+                GroupName = "Available",
+                Addons = new ObservableCollection<AddonItem>
+        {
+            new AddonItem { Name = "Questie" },
+            new AddonItem { Name = "AtlasLoot" }
+        }
+            };
+
+            groups.Add(installedGroup);
+            groups.Add(availableGroup);
+
+            return groups;
+        }
         public async Task UpdateAddon(AddonItem addonItem)
         {
             // 1. Get LocalAddons

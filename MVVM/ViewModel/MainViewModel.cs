@@ -1,12 +1,15 @@
 ﻿using System;
 
 using WotlkCPKTools.Core;
+using WotlkCPKTools.MVVM.Model;
+using WotlkCPKTools.Services;
 
 namespace WotlkCPKTools.MVVM.ViewModel
 {
     class MainViewModel : ObservableObject
     {
-
+        private readonly AppConfigService _appConfigService;
+        private AppConfig _appConfig;
 
 
 
@@ -37,6 +40,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
             BackUpVM = new BackUpViewModel();
             ExtrasVM = new ExtrasViewModel();
 
+
             CurrentView = AddonsVM;
 
             AddonsViewCommand = new RelayCommand(o =>
@@ -53,6 +57,12 @@ namespace WotlkCPKTools.MVVM.ViewModel
             {
                 CurrentView = ExtrasVM;
             });
+
+            _appConfigService = new AppConfigService();
+            InitializeAsync();
+
+
+
         }
 
     }
