@@ -59,7 +59,9 @@ namespace WotlkCPKTools.MVVM.ViewModel
             });
 
             _appConfigService = new AppConfigService();
-            InitializeAsync();
+
+
+            //InitializeAsync();
 
 
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -6,34 +7,23 @@ namespace WotlkCPKTools.Services
 {
     public class FilesManagerService
     {
-        private readonly string _backupBasePath;
-
-        public FilesManagerService(string backupBasePath = @"C:\Users\f\Desktop\TestWOW\testData\BackUps\WTFBackUps")
-        {
-            _backupBasePath = backupBasePath;
-        }
-
         /// <summary>
         /// Asynchronously backs up the given folder to a timestamped backup folder, reporting progress.
         /// </summary>
-        public async Task<string> BackupFolderAsync(
-            string sourceFolder = @"E:\Juegos\Warmane WoW\World of Warcraft 3.3.5a\WTF",
-            string backupTypeSuffix = "-Full",
-            IProgress<string>? progress = null)
+        public async Task<string> BackupFolderAsync(string backupTypeSuffix = "-Full", IProgress<string>? progress = null)
         {
             return await Task.Run(() =>
             {
-                if (!Directory.Exists(sourceFolder))
-                    throw new DirectoryNotFoundException($"Source folder not found: {sourceFolder}");
+                if (!Directory.Exists(Pathing.WTF))
+                    throw new DirectoryNotFoundException($"Source folder not found: {Pathing.WTF}");
+
+                if (!Directory.Exists(Pathing.BackupsFolder))
+                    Directory.CreateDirectory(Pathing.BackupsFolder);
 
                 string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-                string backupFolderName = $"{timestamp}{backupTypeSuffix}";
-                string backupFolderPath = Path.Combine(_backupBasePath, backupFolderName);
+                string backupFolderPath = Path.Combine(Pathing.BackupsFolder, $"{timestamp}{backupTypeSuffix}");
 
-                if (!Directory.Exists(_backupBasePath))
-                    Directory.CreateDirectory(_backupBasePath);
-
-                CopyDirectoryWithProgress(sourceFolder, backupFolderPath, progress);
+                CopyDirectoryWithProgress(Pathing.WTF, backupFolderPath, progress);
 
                 return backupFolderPath;
             });

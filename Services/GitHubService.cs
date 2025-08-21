@@ -16,8 +16,11 @@ namespace WotlkCPKTools.Services
         {
             _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("WotlkCPKTools");
+
+            // Asegurar que la carpeta temp exista
+            Directory.CreateDirectory(Pathing.TempFolder);
         }
-        
+
         public async Task<CommitInfo?> GetLatestCommitInfoAsync(string repoUrl)
         {
             string repoApiUrl = ConvertRepoUrlToApiUrl(repoUrl);
@@ -55,9 +58,7 @@ namespace WotlkCPKTools.Services
         public static string ConvertRepoUrlToApiUrl(string repoUrl)
         {
             if (repoUrl.EndsWith(".git", StringComparison.OrdinalIgnoreCase))
-            {
                 repoUrl = repoUrl.Substring(0, repoUrl.Length - 4);
-            }
 
             var uri = new Uri(repoUrl);
             var segments = uri.Segments;
@@ -66,8 +67,7 @@ namespace WotlkCPKTools.Services
             {
                 string owner = segments[1].TrimEnd('/');
                 string repo = segments[2].TrimEnd('/');
-
-                return ($"https://api.github.com/repos/{owner}/{repo}/commits");
+                return $"https://api.github.com/repos/{owner}/{repo}/commits";
             }
             else
             {
@@ -78,23 +78,16 @@ namespace WotlkCPKTools.Services
         public static string GetName(string gitHubUrl)
         {
             if (gitHubUrl.EndsWith(".git"))
-            {
                 gitHubUrl = gitHubUrl.Substring(0, gitHubUrl.Length - 4);
-            }
 
-            string name = gitHubUrl.Split('/')[^1]; // gitHubUrl.Split('/') returns an array of strings and [^1] gets the last element of the array
-            return name; 
+            return gitHubUrl.Split('/')[^1];
         }
-
 
         public bool IsValidGitHubRepoUrl(string url)
         {
             if (string.IsNullOrWhiteSpace(url)) return false;
-
             return Regex.IsMatch(url, @"^https:\/\/github\.com\/[\w\-]+\/[\w\-]+(\.git)?$");
-
         }
-
 
         public async Task<string?> GetDefaultBranchAsync(string repoUrl)
         {
@@ -108,56 +101,35 @@ namespace WotlkCPKTools.Services
                 string json = await response.Content.ReadAsStringAsync();
                 using var doc = JsonDocument.Parse(json);
                 if (doc.RootElement.TryGetProperty("default_branch", out var branchElement))
-                {
                     return branchElement.GetString();
-                }
 
                 return null;
             }
-            catch (Exception)
+            catch
             {
                 Console.WriteLine("Error fetching default branch: " + repoUrl);
                 return null;
             }
         }
 
-
-
         public static (string owner, string repo) GetOwnerAndRepo(string repoUrl)
         {
             Uri uri = new Uri(repoUrl);
             var segments = uri.Segments.Select(s => s.Trim('/')).Where(s => s != "").ToArray();
-  
             return (segments[0], segments[1]);
         }
 
-
-
-        
-        public async Task<string?> DownloadZipAsync(string repoUrl, string tempFolderPath = @"C:\Users\f\Desktop\TestWOW\CPKtemp") 
+        public async Task<string?> DownloadZipAsync(string repoUrl)
         {
+            string repoName = GetName(repoUrl);
+            string repoMainBranch = await GetDefaultBranchAsync(repoUrl);
+            var (owner, repo) = GetOwnerAndRepo(repoUrl);
 
-            //https://github.com/ElvUI-WotLK/ElvUI
-
-            string _repoName = GetName(repoUrl);
-            string _repoMainBranch = await GetDefaultBranchAsync(repoUrl);
-            var (_owner, _repo) = GetOwnerAndRepo(repoUrl);
-
-            string zipUrl = $"https://github.com/{_owner}/{_repo}/archive/refs/heads/{_repoMainBranch}.zip";
-
+            string zipUrl = $"https://github.com/{owner}/{repo}/archive/refs/heads/{repoMainBranch}.zip";
+            string zipFilePath = Path.Combine(Pathing.TempFolder, repoName + ".zip");
 
             try
             {
-
-                if (!Directory.Exists(tempFolderPath)) 
-                {
-                    Directory.CreateDirectory(tempFolderPath);
-                }
-
-
-                // Temp Zip file path
-                string zipFilePath = Path.Combine(tempFolderPath, _repoName+".zip");
-
                 using var response = await _httpClient.GetAsync(zipUrl);
                 if (!response.IsSuccessStatusCode)
                     return null;
@@ -172,7 +144,5 @@ namespace WotlkCPKTools.Services
                 return null;
             }
         }
-
-
     }
 }
