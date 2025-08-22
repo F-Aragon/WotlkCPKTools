@@ -15,7 +15,7 @@ namespace WotlkCPKTools.MVVM.Model
         public bool IsUpdated { get; set; }
 
         public DateTime? LastUpdate { get; set; }
-        public ObservableCollection<AddonFolder> Folders { get; set; } = new();
+        //public ObservableCollection<AddonFolder> Folders { get; set; } = new();
 
     }
 }

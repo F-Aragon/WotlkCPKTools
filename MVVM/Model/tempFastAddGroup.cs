@@ -2,9 +2,10 @@
 
 namespace WotlkCPKTools.MVVM.Model
 {
-    public class AddonGroup
+    public class tempFastAddGroup
     {
         public string GroupName { get; set; }
-        public ObservableCollection<AddonItem> Addons { get; set; } = new();
+        public ObservableCollection<FastAddAddonInfo> Addons { get; set; } = new();
     }
 }
+

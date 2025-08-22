@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using WotlkCPKTools.MVVM.Model;
 
@@ -14,6 +8,8 @@ namespace WotlkCPKTools.Services
     {
         private readonly AddonService _addonService;
         private readonly GitHubService _gitHubService;
+        private readonly FastAddAddonsService _fastAddAddonsService = new FastAddAddonsService();
+
 
         public GridManagerService(AddonService addonService, GitHubService gitHubService)
         {
@@ -42,19 +38,24 @@ namespace WotlkCPKTools.Services
                 )
             };
 
-            // Available (TO DO)
-            var availableGroup = new AddonGroup
+            // Group Fast Add
+            var fastAddAddons = _fastAddAddonsService.LoadFastAddAddonsLocal();
+
+            var fastAddAddonsGroup = new AddonGroup
             {
-                GroupName = "Available",
-                Addons = new ObservableCollection<AddonItem>
-                {
-                    new AddonItem { Name = "Questie" },
-                    new AddonItem { Name = "AtlasLoot" }
-                }
+                GroupName = "Fast Add",
+                Addons = new ObservableCollection<AddonItem>(
+                    fastAddAddons.Select(f => new AddonItem
+                    {
+                        Name = f.Name,
+                        GitHubLink = f.GitHubUrl,
+                        IsUpdated = false
+                    })
+                )
             };
 
             groups.Add(installedGroup);
-            groups.Add(availableGroup);
+            groups.Add(fastAddAddonsGroup);
 
             return groups;
         }
@@ -63,6 +64,7 @@ namespace WotlkCPKTools.Services
         public ObservableCollection<AddonGroup> GetAddonGroups(List<AddonInfo> addons)
         {
             var groups = new ObservableCollection<AddonGroup>();
+
             var installedGroup = new AddonGroup
             {
                 GroupName = "Installed",
@@ -77,18 +79,23 @@ namespace WotlkCPKTools.Services
                 )
             };
 
-            var availableGroup = new AddonGroup
+            var fastAddAddons = _fastAddAddonsService.LoadFastAddAddonsLocal();
+
+            var fastAddAddonsGroup = new AddonGroup
             {
-                GroupName = "Available",
-                Addons = new ObservableCollection<AddonItem>
-        {
-            new AddonItem { Name = "Questie" },
-            new AddonItem { Name = "AtlasLoot" }
-        }
+                GroupName = "Fast Add",
+                Addons = new ObservableCollection<AddonItem>(
+                    fastAddAddons.Select(f => new AddonItem
+                    {
+                        Name = f.Name,
+                        GitHubLink = f.GitHubUrl,
+                        IsUpdated = false
+                    })
+                )
             };
 
             groups.Add(installedGroup);
-            groups.Add(availableGroup);
+            groups.Add(fastAddAddonsGroup);
 
             return groups;
         }
