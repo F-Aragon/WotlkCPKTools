@@ -19,27 +19,34 @@ namespace WotlkCPKTools.Services
 
         //CPKTools Folders
 
-        // Carpeta base CPKTools relativa al ejecutable
+        // Base CPKTools folder, relative to WoW Folder
         public static readonly string BaseFolder = Path.Combine(WoWFolder, "CPKTools");
-        // Subcarpeta para archivos temporales
+        // Subfolder for temp files
         public static readonly string TempFolder = Path.Combine(BaseFolder, "temp");
-        // Subcarpeta para backups
+        // Subfolder for backups
         public static readonly string BackupsFolder = Path.Combine(BaseFolder, "BackUps");
         // storedAddons.json folder
         public static readonly string storedAddons = Path.Combine(WoWFolder, "CPKTools");
         // storedAddons.json file
         public static readonly string storedAddonsFile = Path.Combine(storedAddons, "storedAddons.json");
+        // SubFolder for Data
+        public static readonly string DataFolder = Path.Combine(BaseFolder, "Data");
+        // fastAddAddons.json file
+        public static readonly string fastAddAddonsFile = Path.Combine(DataFolder, "fastAddAddons.json");
 
-        // Asegura que existan todas las carpetas necesarias
+
+
         static Pathing()
         {
             Directory.CreateDirectory(BaseFolder);
             Directory.CreateDirectory(TempFolder);
             Directory.CreateDirectory(BackupsFolder);
+            Directory.CreateDirectory(DataFolder);
 
             // WoW Folders
             Directory.CreateDirectory(WTF);
             Directory.CreateDirectory(AddOns);
+
 
         }
     }
