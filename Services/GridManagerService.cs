@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using WotlkCPKTools.MVVM.Model;
 
@@ -8,120 +10,78 @@ namespace WotlkCPKTools.Services
     {
         private readonly AddonService _addonService;
         private readonly GitHubService _gitHubService;
-        private readonly FastAddAddonsService _fastAddAddonsService = new FastAddAddonsService();
+        public readonly FastAddAddonsService _fastAddAddonsService;
 
-
-        public GridManagerService(AddonService addonService, GitHubService gitHubService)
+        public GridManagerService(AddonService addonService, GitHubService gitHubService, FastAddAddonsService? fastAddAddonsService = null)
         {
             _addonService = addonService;
             _gitHubService = gitHubService;
+            _fastAddAddonsService = fastAddAddonsService ?? new FastAddAddonsService();
         }
 
-        public ObservableCollection<AddonGroup> GetAddonGroups()
+        /// <summary>
+        /// Builds the Installed addons list from local JSON.
+        /// </summary>
+        public ObservableCollection<AddonItem> BuildInstalledItems()
         {
-            var groups = new ObservableCollection<AddonGroup>();
+            var installed = new ObservableCollection<AddonItem>(
+                _addonService.LoadAddonsFromLocal().Select(a => new AddonItem
+                {
+                    Name = a.Name,
+                    GitHubLink = a.GitHubUrl,
+                    LastUpdate = a.LastUpdateDate,
+                    IsUpdated = a.IsUpdated
+                })
+            );
 
-            // Group Installed
-            var installedGroup = new AddonGroup
-            {
-                GroupName = "Installed",
-                Addons = new ObservableCollection<AddonItem>(
-                    _addonService.LoadAddonsFromLocal().Select(a => new AddonItem
-                    {
-                        Name = a.Name,
-                        //IconPath = a.IconPath,
-                        IsUpdated = a.IsUpdated,
-                        GitHubLink = a.GitHubUrl,
-                        LastUpdate = a.LastUpdateDate,
-                        //Folders = new ObservableCollection<AddonFolder>(a.Folders.Select(f => new AddonFolder { FolderName = f }))
-                    })
-                )
-            };
+            return installed;
+        }
 
-            // Group Fast Add
-            var fastAddAddons = _fastAddAddonsService.LoadFastAddAddonsLocal();
+        /// <summary>
+        /// Builds the Fast Add list from local JSON and filters out any item already installed (by GitHub link).
+        /// </summary>
+        public ObservableCollection<AddonItem> BuildFastAddItemsFiltered(ObservableCollection<AddonItem> installed)
+        {
+            var installedLinks = installed.Select(i => i.GitHubLink).ToHashSet();
 
-            var fastAddAddonsGroup = new AddonGroup
-            {
-                GroupName = "Fast Add",
-                Addons = new ObservableCollection<AddonItem>(
-                    fastAddAddons.Select(f => new AddonItem
+            var fastAddLocal = _fastAddAddonsService.LoadFastAddAddonsLocal();
+            var fastAdd = new ObservableCollection<AddonItem>(
+                fastAddLocal
+                    .Where(f => !installedLinks.Contains(f.GitHubUrl))
+                    .Select(f => new AddonItem
                     {
                         Name = f.Name,
                         GitHubLink = f.GitHubUrl,
                         IsUpdated = false
                     })
-                )
-            };
+            );
 
-            groups.Add(installedGroup);
-            groups.Add(fastAddAddonsGroup);
-
-            return groups;
+            return fastAdd;
         }
 
-        // Overload of GetAddonGroups(); Creates addon groups from a given list (instead of always reading local). Mainly for InitialLoad
-        public ObservableCollection<AddonGroup> GetAddonGroups(List<AddonInfo> addons)
+        /// <summary>
+        /// Updates a single installed addon (delegates to AddonService).
+        /// </summary>
+        public async Task UpdateAddonAsync(AddonItem addonItem)
         {
-            var groups = new ObservableCollection<AddonGroup>();
-
-            var installedGroup = new AddonGroup
-            {
-                GroupName = "Installed",
-                Addons = new ObservableCollection<AddonItem>(
-                    addons.Select(a => new AddonItem
-                    {
-                        Name = a.Name,
-                        IsUpdated = a.IsUpdated,
-                        GitHubLink = a.GitHubUrl,
-                        LastUpdate = a.LastUpdateDate
-                    })
-                )
-            };
-
-            var fastAddAddons = _fastAddAddonsService.LoadFastAddAddonsLocal();
-
-            var fastAddAddonsGroup = new AddonGroup
-            {
-                GroupName = "Fast Add",
-                Addons = new ObservableCollection<AddonItem>(
-                    fastAddAddons.Select(f => new AddonItem
-                    {
-                        Name = f.Name,
-                        GitHubLink = f.GitHubUrl,
-                        IsUpdated = false
-                    })
-                )
-            };
-
-            groups.Add(installedGroup);
-            groups.Add(fastAddAddonsGroup);
-
-            return groups;
-        }
-        public async Task UpdateAddon(AddonItem addonItem)
-        {
-            // 1. Get LocalAddons
             var allAddons = _addonService.LoadAddonsFromLocal();
-
-            // 2. Find AddonItem match in (AddonInfo)allAddons
-            var addonInfo = allAddons.FirstOrDefault(a => a.Name.Equals(addonItem.Name, StringComparison.OrdinalIgnoreCase));
+            var addonInfo = allAddons.FirstOrDefault(a => a.Name.Equals(addonItem.Name, System.StringComparison.OrdinalIgnoreCase));
 
             if (addonInfo == null)
             {
-                MessageBox.Show($"Addon {addonItem.Name} not in local json.");
+                MessageBox.Show($"Addon {addonItem.Name} not found in local JSON.");
                 return;
             }
 
-            // 3. Update this addon.
             await _addonService.UpdateAddonAndSaveAsync(addonInfo);
         }
 
-        public void DeleteAddon(AddonItem addonItem)
+        /// <summary>
+        /// Removes an installed addon by name (delegates to AddonService).
+        /// </summary>
+        public void RemoveInstalled(AddonItem addonItem)
         {
-            string _addonName = addonItem.Name;
-            _addonService.RemoveAddonWithButton(_addonName);
+            _addonService.RemoveAddonWithButton(addonItem.Name);
         }
     }
-
 }

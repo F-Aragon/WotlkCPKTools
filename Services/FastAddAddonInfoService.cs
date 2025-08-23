@@ -65,5 +65,34 @@ namespace WotlkCPKTools.Services
             }
         }
 
+        // In FastAddAddonsService
+        public async Task AddFastAddAddonAsync(string name, string gitHubUrl)
+        {
+            var fastAddList = LoadFastAddAddonsLocal();
+            if (fastAddList.Any(f => f.GitHubUrl == gitHubUrl))
+                return; // If already exists, do nothing
+
+            fastAddList.Add(new FastAddAddonInfo { Name = name, GitHubUrl = gitHubUrl });
+            string json = JsonSerializer.Serialize(fastAddList, new JsonSerializerOptions { WriteIndented = true });
+            await File.WriteAllTextAsync(Pathing.fastAddAddonsFile, json);
+        }
+
+        public async Task RemoveFastAddAddonAsync(string githubUrl)
+        {
+            var list = await LoadFastAddAddonsLocalAsync();
+            var item = list.FirstOrDefault(a => a.GitHubUrl == githubUrl);
+            if (item != null)
+            {
+                list.Remove(item);
+                await SaveFastAddAddonsLocalAsync(list);
+            }
+        }
+
+        public async Task SaveFastAddAddonsLocalAsync(List<FastAddAddonInfo> list)
+        {
+            string json = JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true });
+            await File.WriteAllTextAsync(Pathing.fastAddAddonsFile, json);
+        }
+
     }
 }
