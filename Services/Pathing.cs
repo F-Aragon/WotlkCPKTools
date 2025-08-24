@@ -32,9 +32,9 @@ namespace WotlkCPKTools.Services
         // SubFolder for Data
         public static readonly string DataFolder = Path.Combine(BaseFolder, "Data");
         // fastAddAddons.json file
-        public static readonly string fastAddAddonsFile = Path.Combine(DataFolder, "fastAddAddons.json");
-
-
+        public static readonly string fastAddAddonsFile = Path.Combine(storedAddons, "fastAddAddons.json");
+        // CustomAddOns Folder
+        public static readonly string CustomAddOnsLists = Path.Combine(BaseFolder, "Data", "CustomAddOnsLists");
 
         static Pathing()
         {
@@ -42,6 +42,8 @@ namespace WotlkCPKTools.Services
             Directory.CreateDirectory(TempFolder);
             Directory.CreateDirectory(BackupsFolder);
             Directory.CreateDirectory(DataFolder);
+            Directory.CreateDirectory(CustomAddOnsLists);
+            Directory.CreateDirectory(BackupsFolder);
 
             // WoW Folders
             Directory.CreateDirectory(WTF);

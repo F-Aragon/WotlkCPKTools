@@ -21,6 +21,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
         // Collections bound to XAML
         public ObservableCollection<AddonItem> InstalledAddons { get; } = new();
         public ObservableCollection<AddonItem> FastAddAddons { get; } = new();
+        public ObservableCollection<CustomAddonList> CustomAddonLists { get; set; } = new();
 
         private bool _isLoading;
         public bool IsLoading
@@ -42,7 +43,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
         public ICommand RefreshCommand { get; }
         public ICommand UpdateAllCommand { get; }
         public ICommand MoveToFastAddCommand { get; }
-
+        public ICommand AddFromCustomListFileCommand { get; }
         public AddonsViewModel()
         {
             _addonService = new AddonService();
@@ -74,40 +75,6 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 {
                     _gridManagerService.RemoveInstalled(item);
                     _ = ReloadBothAsync();
-                }
-            });
-
-            // Add from Fast Add to Installed
-            // TODO: Needs an Add/Install method in AddonService; for now show a message.
-            AddFromFastAddCommand = new RelayCommand(async o =>
-            {
-                if (o is AddonItem item)
-                {
-                    try
-                    {
-                        // If you have a method like InstallAddonFromGitHubAsync, call it here.
-                        // await _addonService.InstallAddonFromGitHubAsync(item.GitHubLink);
-                        MessageBox.Show("Add from Fast Add is not implemented yet."); // placeholder
-                        await Task.CompletedTask;
-                    }
-                    finally
-                    {
-                        _ = ReloadBothAsync();
-                    }
-                }
-            });
-
-            // Delete from Fast Add list (file write not implemented in FastAddAddonsService yet)
-            DeleteFastAddCommand = new RelayCommand(o =>
-            {
-                if (o is AddonItem item)
-                {
-                    // UI-only removal for now; reloading from disk will bring it back until you implement save.
-                    var toRemove = FastAddAddons.FirstOrDefault(x => x.GitHubLink == item.GitHubLink);
-                    if (toRemove != null)
-                        FastAddAddons.Remove(toRemove);
-
-                    MessageBox.Show("Delete from Fast Add is UI-only for now. Implement file save to persist.");
                 }
             });
 
@@ -186,7 +153,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
                         {
                             Name = item.Name,
                             GitHubUrl = item.GitHubLink,
-                            OldSha = "000000000", // SHA ficticio
+                            OldSha = "000000000", // SHA to get IsUpdated
                             IsUpdated = false
                         });
                         await _addonService.SaveAddonsListToJson(installed);
@@ -201,31 +168,12 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 }
             });
 
-            // Delete from Fast Add
-            DeleteFastAddCommand = new RelayCommand(async o =>
-            {
-                if (o is AddonItem item)
-                {
-                    try
-                    {
-                        // 1. Quitar del JSON
-                        var fastAddList = _gridManagerService._fastAddAddonsService.LoadFastAddAddonsLocal();
-                        fastAddList.RemoveAll(f => f.GitHubUrl == item.GitHubLink);
-                        await _gridManagerService._fastAddAddonsService.SaveFastAddAddonsLocalAsync(fastAddList);
-
-                        // 2. Recargar UI
-                        await ReloadBothAsync();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Error deleting addon: {ex.Message}");
-                    }
-                }
-            });
+            
 
 
             // Initial load
             _ = InitialLoadAsync();
+            _ = LoadCustomListsAsync();
         }
 
         /// <summary>
@@ -282,6 +230,16 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 target.Add(item);
         }
 
-        
+        /// <summary>
+        /// Loads X amount of list equal to the .txt in CustomLists Folder
+        /// </summary>
+        private async Task LoadCustomListsAsync()
+        {
+            var lists = AddonService.LoadAllCustomAddonLists();
+            CustomAddonLists.Clear();
+            foreach (var list in lists)
+                CustomAddonLists.Add(list);
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -55,8 +56,6 @@ namespace WotlkCPKTools.Services
 
                         addon.NewSha = commitInfo.Sha;
                         addon.NewCommitDate = commitInfo.Date;
-                        MessageBox.Show("New SHA: " + addon.NewSha + "\n" +
-                                        "commit SHA: " + commitInfo.Sha);
                     }
                 }
                 addon.RefreshUpdateStatus();
@@ -354,6 +353,62 @@ namespace WotlkCPKTools.Services
             {
                 Debug.WriteLine($"Error when saving addons: {ex.Message}");
             }
+        }
+
+
+
+
+        //CustomList Methods
+        /// <summary>
+        /// Loads a single custom addon list from a file.
+        /// Each line must be in the format: Name: GitHubURL
+        /// </summary>
+        public static CustomAddonList LoadCustomAddonList(string filePath)
+        {
+            var listName = Path.GetFileNameWithoutExtension(filePath);
+            var lines = File.ReadAllLines(filePath);
+            var addons = new ObservableCollection<FastAddAddonInfo>();
+            
+            foreach (var line in lines)
+            {
+
+
+                var index = line.IndexOf(':');
+                if (index > 0)
+                {
+                    var name = line.Substring(0, index).Trim();
+                    var url = line.Substring(index + 1).Trim();
+
+                    addons.Add(new FastAddAddonInfo
+                    {
+                        Name = name,
+                        GitHubUrl = url
+                    });
+                }
+            }
+
+            CustomAddonList result = new CustomAddonList { ListName = listName, Addons = addons };
+
+            return result; 
+        }
+
+        /// <summary>
+        /// Loads all custom addon lists from Pathing.CustomAddOnsLists directory.
+        /// </summary>
+        public static ObservableCollection<CustomAddonList> LoadAllCustomAddonLists()
+        {
+            var allLists = new ObservableCollection<CustomAddonList>();
+            
+            if (!Directory.Exists(Pathing.CustomAddOnsLists))
+                return allLists;
+            
+            foreach (var file in Directory.GetFiles(Pathing.CustomAddOnsLists, "*.txt"))
+            {
+                var customList = LoadCustomAddonList(file); // Reuse method
+                allLists.Add(customList);
+            }
+
+            return allLists;
         }
     }
 }
