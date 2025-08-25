@@ -99,7 +99,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
                     try
                     {
                         // 1. Eliminar del Fast Add JSON
-                        await _gridManagerService._fastAddAddonsService.RemoveFastAddAddonAsync(item.GitHubLink);
+                        await _gridManagerService._fastAddAddonsService.RemoveFastAddAddonAsync(item.GitHubUrl);
 
                         // 2. Recargar UI
                         await ReloadBothAsync();
@@ -119,10 +119,10 @@ namespace WotlkCPKTools.MVVM.ViewModel
                     try
                     {
                         // 1. Agregar a Fast Add JSON
-                        await _gridManagerService._fastAddAddonsService.AddFastAddAddonAsync(item.Name, item.GitHubLink);
+                        await _gridManagerService._fastAddAddonsService.AddFastAddAddonAsync(item.Name, item.GitHubUrl);
                         
                         // 2. Eliminar del Installed (archivos y JSON)
-                        await _addonService.RemoveAddonWithButton(item.GitHubLink);
+                        await _addonService.RemoveAddonWithButton(item.GitHubUrl);
 
                         // 3. Recargar las colecciones para UI 
                         await ReloadBothAsync();
@@ -144,7 +144,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
                     {
                         // 1. Quitar de Fast Add
                         var fastAddList = _gridManagerService._fastAddAddonsService.LoadFastAddAddonsLocal();
-                        fastAddList.RemoveAll(f => f.GitHubUrl == item.GitHubLink);
+                        fastAddList.RemoveAll(f => f.GitHubUrl == item.GitHubUrl);
                         await _gridManagerService._fastAddAddonsService.SaveFastAddAddonsLocalAsync(fastAddList);
 
                         // 2. Agregar a Installed con SHA ficticio
@@ -152,7 +152,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
                         installed.Add(new AddonInfo
                         {
                             Name = item.Name,
-                            GitHubUrl = item.GitHubLink,
+                            GitHubUrl = item.GitHubUrl,
                             OldSha = "000000000", // SHA to get IsUpdated
                             IsUpdated = false
                         });

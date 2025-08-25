@@ -44,7 +44,7 @@
                               PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="SizeToCells"/>
-                            <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubLink}" Width="*"/>
+                            <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubUrl}" Width="*"/>
                             <DataGridTextColumn Header="Last Update" Binding="{Binding LastUpdate, StringFormat=yyyy-MM-dd HH:mm}" Width="SizeToCells"/>
 
                             <DataGridTemplateColumn Header="Status" Width="SizeToCells">
@@ -121,7 +121,7 @@
                               PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="SizeToCells"/>
-                            <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubLink}" Width="*"/>
+                            <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubUrl}" Width="*"/>
 
                             <DataGridTemplateColumn Header="Actions" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>

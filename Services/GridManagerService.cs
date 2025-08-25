@@ -28,7 +28,7 @@ namespace WotlkCPKTools.Services
                 _addonService.LoadAddonsFromLocal().Select(a => new AddonItem
                 {
                     Name = a.Name,
-                    GitHubLink = a.GitHubUrl,
+                    GitHubUrl = a.GitHubUrl,
                     LastUpdate = a.LastUpdateDate,
                     IsUpdated = a.IsUpdated
                 })
@@ -42,7 +42,7 @@ namespace WotlkCPKTools.Services
         /// </summary>
         public ObservableCollection<AddonItem> BuildFastAddItemsFiltered(ObservableCollection<AddonItem> installed)
         {
-            var installedLinks = installed.Select(i => i.GitHubLink).ToHashSet();
+            var installedLinks = installed.Select(i => i.GitHubUrl).ToHashSet();
 
             var fastAddLocal = _fastAddAddonsService.LoadFastAddAddonsLocal();
             var fastAdd = new ObservableCollection<AddonItem>(
@@ -51,7 +51,7 @@ namespace WotlkCPKTools.Services
                     .Select(f => new AddonItem
                     {
                         Name = f.Name,
-                        GitHubLink = f.GitHubUrl,
+                        GitHubUrl = f.GitHubUrl,
                         IsUpdated = false
                     })
             );
@@ -81,7 +81,7 @@ namespace WotlkCPKTools.Services
         /// </summary>
         public void RemoveInstalled(AddonItem addonItem)
         {
-            _addonService.RemoveAddonWithButton(addonItem.GitHubLink);
+            _addonService.RemoveAddonWithButton(addonItem.GitHubUrl);
         }
     }
 }

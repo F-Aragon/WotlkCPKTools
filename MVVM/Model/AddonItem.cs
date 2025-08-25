@@ -11,7 +11,7 @@ namespace WotlkCPKTools.MVVM.Model
     {
         public string Name { get; set; }
         public string IconPath { get; set; }
-        public string GitHubLink { get; set; }
+        public string GitHubUrl { get; set; }
         public bool IsUpdated { get; set; }
 
         public DateTime? LastUpdate { get; set; }
