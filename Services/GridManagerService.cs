@@ -81,7 +81,7 @@ namespace WotlkCPKTools.Services
         /// </summary>
         public void RemoveInstalled(AddonItem addonItem)
         {
-            _addonService.RemoveAddonWithButton(addonItem.Name);
+            _addonService.RemoveAddonWithButton(addonItem.GitHubLink);
         }
     }
 }

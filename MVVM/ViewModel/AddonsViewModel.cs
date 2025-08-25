@@ -122,7 +122,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
                         await _gridManagerService._fastAddAddonsService.AddFastAddAddonAsync(item.Name, item.GitHubLink);
                         
                         // 2. Eliminar del Installed (archivos y JSON)
-                        await _addonService.RemoveAddonWithButton(item.Name);
+                        await _addonService.RemoveAddonWithButton(item.GitHubLink);
 
                         // 3. Recargar las colecciones para UI 
                         await ReloadBothAsync();

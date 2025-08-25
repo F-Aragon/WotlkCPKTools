@@ -118,18 +118,18 @@ namespace WotlkCPKTools.Services
             return addons.Any(a => a.GitHubUrl.Equals(gitHubUrl, StringComparison.OrdinalIgnoreCase));
         }
 
-        public async Task<bool> RemoveAddonWithButton(string addonName)
+        public async Task<bool> RemoveAddonWithButton(string gitHubUrl)
         {
             try
             {
                 List<AddonInfo> storedAddons = LoadAddonsFromLocal();
-                var match = storedAddons.Find(o => o.Name.Equals(addonName, StringComparison.OrdinalIgnoreCase));
+                var match = storedAddons.Find(o => o.GitHubUrl.Equals(gitHubUrl, StringComparison.OrdinalIgnoreCase));
                 if (match != null)
                 {
                     RemoveAddonFolders(match);
                 }
 
-                storedAddons.RemoveAll(o => o.Name.Equals(addonName, StringComparison.OrdinalIgnoreCase));
+                storedAddons.RemoveAll(o => o.GitHubUrl.Equals(gitHubUrl, StringComparison.OrdinalIgnoreCase));
                 await SaveAddonsListToJson(storedAddons);
                 return true;
             }
