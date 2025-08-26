@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <Folder Include="Images\" />
+    <Folder Include="Resources\Data\" />
   </ItemGroup>
 
 </Project>

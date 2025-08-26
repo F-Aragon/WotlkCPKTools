@@ -390,7 +390,10 @@ namespace WotlkCPKTools.Services
             
             foreach (var line in lines)
             {
-
+                if (String.IsNullOrEmpty(line)) continue; // Skip empty lines
+                if (line[0] == '#') continue; // Skip comments
+                if (line[0] == '@') continue; // Skip list url
+                
 
                 var index = line.IndexOf(':');
                 if (index > 0)

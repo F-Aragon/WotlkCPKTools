@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -44,6 +46,8 @@ namespace WotlkCPKTools.MVVM.ViewModel
         public ICommand UpdateAllCommand { get; }
         public ICommand MoveToFastAddCommand { get; }
         public ICommand MoveFromCustomListFileCommand { get; }
+        public ICommand DownloadRecommendedList { get; }
+        
         public AddonsViewModel()
         {
             _addonService = new AddonService();
@@ -97,10 +101,10 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 {
                     try
                     {
-                        // 1. Eliminar del Fast Add JSON
+                        // 1. Remove from Fast Add JSON
                         await _gridManagerService._fastAddAddonsService.RemoveFastAddAddonAsync(item.GitHubUrl);
 
-                        // 2. Recargar UI
+                        // 2. Reload both collections for UI
                         await ReloadBothAsync();
                     }
                     catch (Exception ex)
@@ -117,13 +121,13 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 {
                     try
                     {
-                        // 1. Agregar a Fast Add JSON
+                        // 1. Add to Fast Add JSON
                         await _gridManagerService._fastAddAddonsService.AddFastAddAddonAsync(item.Name, item.GitHubUrl);
                         
-                        // 2. Eliminar del Installed (archivos y JSON)
+                        // 2. Remove from Installed (Files and JSON)
                         await _addonService.RemoveAddonWithButton(item.GitHubUrl);
 
-                        // 3. Recargar las colecciones para UI 
+                        // 3. Reload both collections for UI
                         await ReloadBothAsync();
                     }
                     catch (Exception ex)
@@ -141,12 +145,12 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 {
                     try
                     {
-                        // 1. Quitar de Fast Add
+                        // 1. Remove from fast add Json
                         var fastAddList = _gridManagerService._fastAddAddonsService.LoadFastAddAddonsLocal();
                         fastAddList.RemoveAll(f => f.GitHubUrl == item.GitHubUrl);
                         await _gridManagerService._fastAddAddonsService.SaveFastAddAddonsLocalAsync(fastAddList);
 
-                        // 2. Agregar a Installed con SHA ficticio
+                        // 2. Add to installed Json
                         var installed = _addonService.LoadAddonsFromLocal();
                         installed.Add(new AddonInfo
                         {
@@ -157,7 +161,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
                         });
                         await _addonService.SaveAddonsListToJson(installed);
 
-                        // 3. Recargar colecciones
+                        // 3. Reload both collections for UI
                         await ReloadBothAsync();
                     }
                     catch (Exception ex)
@@ -200,6 +204,43 @@ namespace WotlkCPKTools.MVVM.ViewModel
                     }
                 }
             });
+
+            // Download reccomended list and save to CustomLists folder
+            DownloadRecommendedList = new RelayCommand(async o =>
+            {
+                try
+                {
+                    IsLoading = true; // Show Spinner
+
+                    using (var client = new HttpClient())
+                    {
+                        var content = await client.GetStringAsync(Pathing.RecommendedListUrl);
+                        
+                        string customListsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomLists");
+                        if (!Directory.Exists(Pathing.CustomAddOnsLists))
+                            Directory.CreateDirectory(Pathing.CustomAddOnsLists);
+
+                        await File.WriteAllTextAsync(Pathing.RecommendedFile, content);
+                    }
+
+                    // Reload Custom Lists
+                    await LoadCustomListsAsync();
+
+                    Debug.WriteLine("Recommended list downloaded successfully.");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error downloading recommended list: {ex.Message}");
+                }
+                finally
+                {
+                    IsLoading = false;
+                }
+            });
+
+
+
+
 
 
             // Initial load

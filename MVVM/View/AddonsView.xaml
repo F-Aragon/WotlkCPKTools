@@ -29,9 +29,9 @@
                           Background="Transparent"
                           FontSize="14" 
                           FontWeight="Bold" 
-                          Margin="0,0,0,5"
+                          Margin="0,0,0,0"
                           IsExpanded="True">
-                    <!-- Por defecto abierto -->
+                    <!-- Default: open -->
                     <DataGrid x:Name="InstalledAddonsGrid"
                               ItemsSource="{Binding InstalledAddons}"
                               AutoGenerateColumns="False"
@@ -42,7 +42,7 @@
                               RowHeight="30"
                               IsReadOnly="False"
                               ColumnWidth="SizeToCells"
-                              Margin="0,0,0,20"
+                              Margin="0,0,0,5"
                               PreviewMouseWheel="DataGrid_PreviewMouseWheel"
                               CellEditEnding="DataGrid_CellEditEnding">
                         <DataGrid.Columns>
@@ -111,7 +111,7 @@
                           FontWeight="Bold" 
                           Margin="0,0,0,5"
                           IsExpanded="True">
-                    <!-- Por defecto abierto -->
+                    <!-- Default: open -->
                     <DataGrid x:Name="FastAddAddonsGrid"
                               ItemsSource="{Binding FastAddAddons}"
                               AutoGenerateColumns="False"
@@ -120,7 +120,7 @@
                               Background="#2b2b2b"
                               Foreground="Gray"
                               RowHeight="30"
-                              Margin="0,0,0,20"
+                              Margin="0,0,0,5"
                               IsReadOnly="False"
                               PreviewMouseWheel="DataGrid_PreviewMouseWheel"
                               CellEditEnding="DataGrid_CellEditEnding">
@@ -132,7 +132,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                            <Button Content="⬆️"
+                                            <Button Content="+"
                                                     Command="{Binding DataContext.AddFromFastAddCommand, ElementName=Root}"
                                                     CommandParameter="{Binding}"
                                                     Background="#4CAF50" Foreground="White"
@@ -150,7 +150,7 @@
                     </DataGrid>
                 </Expander>
                 
-                <!-- Extra Lists -->
+                <!-- Custom Lists -->
                 <ItemsControl ItemsSource="{Binding CustomAddonLists}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -164,7 +164,7 @@
                                           Background="#2b2b2b"
                                           Foreground="Gray"
                                           RowHeight="30"
-                                          Margin="0,0,0,20"
+                                          Margin="0,0,0,5"
                                           IsReadOnly="True"
                                           PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                                     <DataGrid.Columns>
@@ -181,19 +181,19 @@
                                                                 Margin="0,0,5,0">
                                                             <Button.Style>
                                                                 <Style TargetType="Button">
-                                                                    <Setter Property="Content" Value="⬆️"/>
+                                                                    <Setter Property="Content" Value="+"/>
                                                                     <Style.Triggers>
                                                                         <DataTrigger Value="True">
                                                                             <DataTrigger.Binding>
                                                                                 <MultiBinding Converter="{StaticResource IsInstalledConverter}">
-                                                                                    <!-- Addon de la fila -->
+                                                                                    <!-- Row Addon -->
                                                                                     <Binding />
-                                                                                    <!-- Colección InstalledAddons desde ViewModel -->
+                                                                                    <!-- Installed addon collection, from the ViewModel -->
                                                                                     <Binding Path="DataContext.InstalledAddons" ElementName="Root"/>
                                                                                 </MultiBinding>
                                                                             </DataTrigger.Binding>
                                                                             <Setter Property="Content" Value="✔️"/>
-                                                                            <!-- Cambia icono si ya está instalado -->
+                                                                            <!-- Change button icon if it is in installed -->
                                                                         </DataTrigger>
                                                                     </Style.Triggers>
                                                                 </Style>
@@ -217,16 +217,20 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,10,0,0">
             <Button Content="Add New"
                     Command="{Binding DataContext.OpenAddAddonWindowCommand, ElementName=Root}"
-                    Height="40" Width="100"
+                    Height="40" Width="80"
                     Background="#007ACC" Foreground="White" Margin="0,0,10,0"/>
             <Button Content="Refresh"
                     Command="{Binding DataContext.RefreshCommand, ElementName=Root}"
-                    Height="40" Width="100"
+                    Height="40" Width="80"
                     Background="#4CAF50" Foreground="White"/>
             <Button Content="Update All"
                     Command="{Binding DataContext.UpdateAllCommand, ElementName=Root}"
-                    Height="40" Width="120" Margin="10,0,0,0"
+                    Height="40" Width="80" Margin="10,0,0,0"
                     Background="Green" Foreground="White"/>
+            <Button Content="Download&#x0a;RecommendedList"
+                    Command="{Binding DataContext.DownloadRecommendedList, ElementName=Root}"
+                    Height="40" Width="80" Margin="10,0,0,0"
+                    Background="DarkBlue" Foreground="White"/>
         </StackPanel>
 
         <!-- Loading overlay -->
