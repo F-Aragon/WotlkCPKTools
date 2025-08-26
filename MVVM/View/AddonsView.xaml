@@ -4,13 +4,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:conv="clr-namespace:WotlkCPKTools.Services"
+             xmlns:conv="clr-namespace:WotlkCPKTools.Core"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="900"
              Background="#1b1b1b">
 
     <UserControl.Resources>
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <conv:IsInstalledConverter x:Key="IsInstalledConverter"/>
     </UserControl.Resources>
 
     <Grid Margin="10">
@@ -21,8 +22,8 @@
 
         <!-- Scrollable content -->
         <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-            <StackPanel>
-
+            <StackPanel HorizontalAlignment="Stretch">
+                <!-- Installed AddOns -->
                 <Expander Header="Installed Addons" 
                           Foreground="White" 
                           Background="Transparent"
@@ -31,21 +32,23 @@
                           Margin="0,0,0,5"
                           IsExpanded="True">
                     <!-- Por defecto abierto -->
-                    <DataGrid ItemsSource="{Binding InstalledAddons}"
+                    <DataGrid x:Name="InstalledAddonsGrid"
+                              ItemsSource="{Binding InstalledAddons}"
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               HeadersVisibility="Column"
                               Background="#2b2b2b"
                               Foreground="Gray"
                               RowHeight="30"
-                              IsReadOnly="True"
+                              IsReadOnly="False"
                               ColumnWidth="SizeToCells"
                               Margin="0,0,0,20"
-                              PreviewMouseWheel="DataGrid_PreviewMouseWheel">
+                              PreviewMouseWheel="DataGrid_PreviewMouseWheel"
+                              CellEditEnding="DataGrid_CellEditEnding">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="SizeToCells"/>
-                            <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubUrl}" Width="*"/>
-                            <DataGridTextColumn Header="Last Update" Binding="{Binding LastUpdate, StringFormat=yyyy-MM-dd HH:mm}" Width="SizeToCells"/>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="SizeToCells" IsReadOnly="False"/>
+                            <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubUrl}" Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Last Update" Binding="{Binding LastUpdate, StringFormat=yyyy-MM-dd HH:mm}" Width="SizeToCells" IsReadOnly="True"/>
 
                             <DataGridTemplateColumn Header="Status" Width="SizeToCells">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -69,7 +72,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn Header="Actions" Width="150">
+                            <DataGridTemplateColumn Header="Actions" Width="120" MinWidth="120" MaxWidth="120">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -109,7 +112,8 @@
                           Margin="0,0,0,5"
                           IsExpanded="True">
                     <!-- Por defecto abierto -->
-                    <DataGrid ItemsSource="{Binding FastAddAddons}"
+                    <DataGrid x:Name="FastAddAddonsGrid"
+                              ItemsSource="{Binding FastAddAddons}"
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               HeadersVisibility="Column"
@@ -117,11 +121,12 @@
                               Foreground="Gray"
                               RowHeight="30"
                               Margin="0,0,0,20"
-                              IsReadOnly="True"
-                              PreviewMouseWheel="DataGrid_PreviewMouseWheel">
+                              IsReadOnly="False"
+                              PreviewMouseWheel="DataGrid_PreviewMouseWheel"
+                              CellEditEnding="DataGrid_CellEditEnding">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="SizeToCells"/>
-                            <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubUrl}" Width="*"/>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="SizeToCells" IsReadOnly="False"/>
+                            <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubUrl}" Width="*" IsReadOnly="True"/>
 
                             <DataGridTemplateColumn Header="Actions" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -163,22 +168,37 @@
                                           IsReadOnly="True"
                                           PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="SizeToCells"/>
-                                        <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubUrl}" Width="*"/>
+                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="SizeToCells" />
+                                        <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubUrl}" Width="*" />
                                         <DataGridTemplateColumn Header="Actions" Width="80">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                                        <Button Content="⬆️"
-                                                Command="{Binding DataContext.AddFromCustomListCommand, ElementName=Root}"
-                                                CommandParameter="{Binding}" 
-                                                Background="#4CAF50" Foreground="White"
-                                                Padding="5,0" Width="30" Margin="0,0,5,0"/>
-                                                        <Button Content="🗑️"
-                                                Command="{Binding DataContext.DeleteFromCustomListCommand, ElementName=Root}"
-                                                CommandParameter="{Binding}" 
-                                                Background="Red" Foreground="White"
-                                                Padding="5,0" Width="30"/>
+                                                        <Button Command="{Binding DataContext.MoveFromCustomListFileCommand, ElementName=Root}"
+                                                                CommandParameter="{Binding}" 
+                                                                Background="#4CAF50" Foreground="White"
+                                                                Padding="5,0" Width="30" 
+                                                                Margin="0,0,5,0">
+                                                            <Button.Style>
+                                                                <Style TargetType="Button">
+                                                                    <Setter Property="Content" Value="⬆️"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Value="True">
+                                                                            <DataTrigger.Binding>
+                                                                                <MultiBinding Converter="{StaticResource IsInstalledConverter}">
+                                                                                    <!-- Addon de la fila -->
+                                                                                    <Binding />
+                                                                                    <!-- Colección InstalledAddons desde ViewModel -->
+                                                                                    <Binding Path="DataContext.InstalledAddons" ElementName="Root"/>
+                                                                                </MultiBinding>
+                                                                            </DataTrigger.Binding>
+                                                                            <Setter Property="Content" Value="✔️"/>
+                                                                            <!-- Cambia icono si ya está instalado -->
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Button.Style>
+                                                        </Button>
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>

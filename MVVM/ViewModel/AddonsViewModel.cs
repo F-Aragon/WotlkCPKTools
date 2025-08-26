@@ -43,11 +43,11 @@ namespace WotlkCPKTools.MVVM.ViewModel
         public ICommand RefreshCommand { get; }
         public ICommand UpdateAllCommand { get; }
         public ICommand MoveToFastAddCommand { get; }
-        public ICommand AddFromCustomListFileCommand { get; }
+        public ICommand MoveFromCustomListFileCommand { get; }
         public AddonsViewModel()
         {
             _addonService = new AddonService();
-            _gridManagerService = new GridManagerService(_addonService, new GitHubService(), new FastAddAddonsService());
+            _gridManagerService = new GridManagerService(_addonService, new GitHubService(), new FastAddAddonInfoService());
 
             // Open window to add a new addon
             OpenAddAddonWindowCommand = new RelayCommand(_ =>
@@ -68,7 +68,6 @@ namespace WotlkCPKTools.MVVM.ViewModel
             });
 
             // Remove from Installed (current behavior: just remove files/entry)
-            // TODO: If later you want to also append it to FastAdd file, add that logic.
             RemoveInstalledCommand = new RelayCommand(o =>
             {
                 if (o is AddonItem item)
@@ -168,7 +167,39 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 }
             });
 
-            
+            MoveFromCustomListFileCommand = new RelayCommand(async o =>
+            {
+                if (o is FastAddAddonInfo item)
+                {
+                    try
+                    {
+                        var installedAddons = _addonService.LoadAddonsFromLocal();
+                        if (installedAddons.Any(a => a.GitHubUrl.Equals(item.GitHubUrl, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            MessageBox.Show("This addon is already installed.");
+                            return;
+                        }
+
+                        var newAddon = new AddonInfo
+                        {
+                            Name = item.Name,
+                            GitHubUrl = item.GitHubUrl,
+                            OldSha = "000000000",
+                            IsUpdated = false
+                        };
+
+                        installedAddons.Add(newAddon);
+                        await _addonService.SaveAddonsListToJson(installedAddons);
+
+
+                        await ReloadBothAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error moving addon from custom list: {ex.Message}");
+                    }
+                }
+            });
 
 
             // Initial load
@@ -188,8 +219,11 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 // Rebuild installed
                 ReplaceCollection(InstalledAddons, _gridManagerService.BuildInstalledItems());
 
-                // Rebuild fast add filtered by installed
+                // Rebuild fastadd filtered by installed
                 ReplaceCollection(FastAddAddons, _gridManagerService.BuildFastAddItemsFiltered(InstalledAddons));
+
+                OnPropertyChanged(nameof(InstalledAddons));
+                OnPropertyChanged(nameof(FastAddAddons));
 
                 await Task.CompletedTask;
             }
@@ -210,7 +244,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
 
                 // Pull latest status and save to local JSON
                 var completedList = await _addonService.CreateCompleteListAsync();
-                await _addonService.SaveAddonsListToJson(completedList);
+                //await _addonService.SaveAddonsListToJson(completedList); done in CreateCompleteListAsync()
 
                 await ReloadBothAsync();
             }
@@ -240,6 +274,8 @@ namespace WotlkCPKTools.MVVM.ViewModel
             foreach (var list in lists)
                 CustomAddonLists.Add(list);
         }
+
+
 
     }
 }

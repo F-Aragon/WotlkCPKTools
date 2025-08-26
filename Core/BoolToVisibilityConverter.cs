@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
-namespace WotlkCPKTools.Services
+namespace WotlkCPKTools.Core
 {
     public class BoolToVisibilityConverter : IValueConverter
     {

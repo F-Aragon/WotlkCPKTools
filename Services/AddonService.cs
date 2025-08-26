@@ -56,6 +56,7 @@ namespace WotlkCPKTools.Services
 
                         addon.NewSha = commitInfo.Sha;
                         addon.NewCommitDate = commitInfo.Date;
+                        Debug.WriteLine("i am here (CreateCompleteListAsync)");
                     }
                 }
                 addon.RefreshUpdateStatus();
@@ -64,7 +65,7 @@ namespace WotlkCPKTools.Services
             return completedList;
         }
 
-        public async Task DownloadAddonsAsync(AddonInfo AddonInfo)
+        public async Task DownloadAddonAsync(AddonInfo AddonInfo)
         {
             GitHubService _gitHubService = new GitHubService();
 
@@ -276,23 +277,38 @@ namespace WotlkCPKTools.Services
         {
             if (addon.IsUpdated && !_forceUpdate)
             {
-                Debug.WriteLine($"Addon {addon.Name} ya está actualizado.");
+                Debug.WriteLine($"Addon {addon.Name} already updated.");
                 return false;
             }
 
-            await DownloadAddonsAsync(addon);
+            GitHubService gitHubService = new GitHubService();
+            var commitInfo = await gitHubService.GetLatestCommitInfoAsync(addon.GitHubUrl);
+            if (commitInfo != null)
+            {
+                await DownloadAddonAsync(addon);
+                addon.NewSha = commitInfo.Sha;
+                addon.NewCommitDate = commitInfo.Date;
+                addon.OldSha = addon.NewSha;
+                addon.OldCommitDate = addon.NewCommitDate;
+                addon.LastUpdateDate = DateTime.Now;
+                addon.IsUpdated = true;
+                Debug.WriteLine($"Addon {addon.Name} updated. (UpdateAddonAsync) ");
+            }
+            else
+            {
+                Debug.WriteLine($"No commit info found for {addon.Name}");
+                return false;
+            }
 
-            addon.OldSha = addon.NewSha;
-            addon.OldCommitDate = addon.NewCommitDate;
-            addon.LastUpdateDate = DateTime.Now;
             addon.RefreshUpdateStatus();
-            Debug.WriteLine($"Addon {addon.Name} actualizado correctamente.");
+            
             return true;
         }
 
         public async Task UpdateAddonAndSaveAsync(AddonInfo addon, bool _forceUpdate = false)
         {
             bool changed = await UpdateAddonAsync(addon, _forceUpdate);
+            
             if (!changed) return;
 
             var allAddons = LoadAddonsFromLocal();
@@ -340,20 +356,23 @@ namespace WotlkCPKTools.Services
             await SaveAddonsListToJson(fullAddonInfoList);
             return true;
         }
-
+        
         public async Task SaveAddonsListToJson(List<AddonInfo> AddonInfoList, bool _download = false)
         {
+
             try
             {
                 string json = JsonSerializer.Serialize(AddonInfoList, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(Pathing.storedAddonsFile, json);
-                Debug.WriteLine("Addons saved successfully.");
+                Debug.WriteLine("Json saved successfully. (SaveAddonsListToJson)");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error when saving addons: {ex.Message}");
+                Debug.WriteLine($"Error when saving addons: {ex.Message} (SaveAddonsListToJson)");
             }
         }
+
+        
 
 
 
@@ -409,6 +428,19 @@ namespace WotlkCPKTools.Services
             }
 
             return allLists;
+        }
+
+        // Info from datagrid
+        public async Task UpdateAddonFromDataGridAsync(string githubUrl, string newName)
+        {
+            var addons = LoadAddonsFromLocal(); 
+            var existing = addons.FirstOrDefault(a => a.GitHubUrl.Equals(githubUrl, StringComparison.OrdinalIgnoreCase));
+
+            if (existing != null)
+            {
+                existing.Name = newName; 
+                await SaveAddonsListToJson(addons); 
+            }
         }
     }
 }

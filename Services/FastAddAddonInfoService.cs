@@ -8,12 +8,12 @@ using WotlkCPKTools.MVVM.Model;
 
 namespace WotlkCPKTools.Services
 {
-    public class FastAddAddonsService
+    public class FastAddAddonInfoService
     {
         private readonly HttpClient _httpClient;
         private const string FastAddJsonUrl = "https://raw.githubusercontent.com/FranciscoRAragon/WotlkCPKTools/master/Resources/Data/fastAddAddons.json";
 
-        public FastAddAddonsService(HttpClient? httpClient = null)
+        public FastAddAddonInfoService(HttpClient? httpClient = null)
         {
             _httpClient = httpClient ?? new HttpClient();
         }
@@ -92,6 +92,19 @@ namespace WotlkCPKTools.Services
         {
             string json = JsonSerializer.Serialize(list, new JsonSerializerOptions { WriteIndented = true });
             await File.WriteAllTextAsync(Pathing.fastAddAddonsFile, json);
+        }
+
+        public async Task UpdateFastAddonFromDataGridAsync(FastAddAddonInfo updatedAddon)
+        {
+            var fastAddList = LoadFastAddAddonsLocal();
+            var existing = fastAddList.FirstOrDefault(f => f.GitHubUrl.Equals(updatedAddon.GitHubUrl, StringComparison.OrdinalIgnoreCase));
+
+            if (existing != null)
+            {
+                existing.Name = updatedAddon.Name;
+                await File.WriteAllTextAsync(Pathing.fastAddAddonsFile,
+                    JsonSerializer.Serialize(fastAddList, new JsonSerializerOptions { WriteIndented = true }));
+            }
         }
 
     }

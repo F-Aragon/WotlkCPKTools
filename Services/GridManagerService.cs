@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using WotlkCPKTools.MVVM.Model;
@@ -10,13 +12,13 @@ namespace WotlkCPKTools.Services
     {
         private readonly AddonService _addonService;
         private readonly GitHubService _gitHubService;
-        public readonly FastAddAddonsService _fastAddAddonsService;
+        public readonly FastAddAddonInfoService _fastAddAddonsService;
 
-        public GridManagerService(AddonService addonService, GitHubService gitHubService, FastAddAddonsService? fastAddAddonsService = null)
+        public GridManagerService(AddonService addonService, GitHubService gitHubService, FastAddAddonInfoService? fastAddAddonsService = null)
         {
             _addonService = addonService;
             _gitHubService = gitHubService;
-            _fastAddAddonsService = fastAddAddonsService ?? new FastAddAddonsService();
+            _fastAddAddonsService = fastAddAddonsService ?? new FastAddAddonInfoService();
         }
 
         /// <summary>
@@ -24,6 +26,8 @@ namespace WotlkCPKTools.Services
         /// </summary>
         public ObservableCollection<AddonItem> BuildInstalledItems()
         {
+            GitHubService _gitHubService = new GitHubService();
+
             var installed = new ObservableCollection<AddonItem>(
                 _addonService.LoadAddonsFromLocal().Select(a => new AddonItem
                 {
@@ -65,14 +69,14 @@ namespace WotlkCPKTools.Services
         public async Task UpdateAddonAsync(AddonItem addonItem)
         {
             var allAddons = _addonService.LoadAddonsFromLocal();
-            var addonInfo = allAddons.FirstOrDefault(a => a.Name.Equals(addonItem.Name, System.StringComparison.OrdinalIgnoreCase));
+            var addonInfo = allAddons.FirstOrDefault(a => a.GitHubUrl.Equals(addonItem.GitHubUrl, System.StringComparison.OrdinalIgnoreCase));
 
             if (addonInfo == null)
             {
                 MessageBox.Show($"Addon {addonItem.Name} not found in local JSON.");
                 return;
             }
-
+ 
             await _addonService.UpdateAddonAndSaveAsync(addonInfo);
         }
 
