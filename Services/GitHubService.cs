@@ -144,5 +144,30 @@ namespace WotlkCPKTools.Services
                 return null;
             }
         }
+
+        public static async Task<List<string>> GetRawLinesAsync(string rawUrl)
+        {
+            using (var client = new HttpClient())
+            {
+                var content = await client.GetStringAsync(rawUrl);
+
+                var lines = content.Split(new[] { '\r', '\n' });
+                return new List<string>(lines);
+            }
+        }
+
+        public static string ConvertToRawUrl(string githubUrl)
+        {
+            if (string.IsNullOrWhiteSpace(githubUrl))
+                throw new ArgumentException("error: empty url");
+
+            string rawUrl = githubUrl.Replace("github.com", "raw.githubusercontent.com")
+                                     .Replace("/blob/", "/");
+
+            return rawUrl;
+        }
+
+
+
     }
 }

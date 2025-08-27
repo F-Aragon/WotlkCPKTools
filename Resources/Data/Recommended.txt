@@ -1,4 +1,5 @@
 #
+@https://github.com/FranciscoRAragon/WotlkCPKTools/blob/master/Resources/Data/Recommended.txt
 WeakAuras-WotLK:https://github.com/NoM0Re/WeakAuras-WotLK
 
 

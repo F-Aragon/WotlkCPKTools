@@ -47,7 +47,9 @@ namespace WotlkCPKTools.MVVM.ViewModel
         public ICommand MoveToFastAddCommand { get; }
         public ICommand MoveFromCustomListFileCommand { get; }
         public ICommand DownloadRecommendedList { get; }
-        
+        public ICommand DownloadCustomList { get; }
+
+
         public AddonsViewModel()
         {
             _addonService = new AddonService();
@@ -215,8 +217,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
                     using (var client = new HttpClient())
                     {
                         var content = await client.GetStringAsync(Pathing.RecommendedListUrl);
-                        
-                        string customListsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CustomLists");
+
                         if (!Directory.Exists(Pathing.CustomAddOnsLists))
                             Directory.CreateDirectory(Pathing.CustomAddOnsLists);
 
@@ -238,8 +239,50 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 }
             });
 
+            //Downloads a custom list and save to CustomLists folder
+            DownloadCustomList = new RelayCommand(async o =>
+            {
+                try
+                {
 
+                    if (o is not CustomAddonList list)
+                    {
+                        MessageBox.Show("Invalid custom list.");
+                        return;
+                    }
 
+                    string filePath = Path.Combine(Pathing.CustomAddOnsLists, list.ListName + ".txt");
+
+                    string? repoUrl = CustomAddonList.GetRepoFileUrl(filePath);
+                    // Button should be disable if no URL, just in case
+                    if (string.IsNullOrEmpty(repoUrl))
+                    {
+                        MessageBox.Show("No file URL found in the custom list.");
+                        return;
+                    }
+
+                    // Transforms to RAW URL
+                    string rawUrl = GitHubService.ConvertToRawUrl(repoUrl);
+
+                    using var client = new HttpClient();
+                    string content = await client.GetStringAsync(rawUrl);
+
+                    // Overwrite local file
+                    await File.WriteAllTextAsync(filePath, content);
+
+                    // Reload Custom Lists
+                    await LoadCustomListsAsync();
+
+                    Debug.WriteLine("Custom list downloaded successfully.");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error downloading custom list: {ex.Message}");
+                }
+
+            });
+
+            
 
 
 

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
 using WotlkCPKTools.MVVM.Model;
 
 namespace WotlkCPKTools.Services
@@ -107,5 +109,32 @@ namespace WotlkCPKTools.Services
             }
         }
 
+        // For string lists and string[]
+        public static ObservableCollection<FastAddAddonInfo> ParseAddonFileLines(IEnumerable<string> rawLines)
+        {
+            var addons = new ObservableCollection<FastAddAddonInfo>();
+
+            foreach (var line in rawLines)
+            {
+                if (string.IsNullOrWhiteSpace(line)) continue;
+
+                var trimmedLine = line.Trim();
+                if (trimmedLine.StartsWith("#") || trimmedLine.StartsWith("@")) continue;
+
+                var index = trimmedLine.IndexOf(':');
+                if (index > 0)
+                {
+                    var name = trimmedLine.Substring(0, index).Trim();
+                    var url = trimmedLine.Substring(index + 1).Trim();
+
+                    addons.Add(new FastAddAddonInfo
+                    {
+                        Name = name,
+                        GitHubUrl = url
+                    });
+                }
+            }
+            return addons;
+        }
     }
 }

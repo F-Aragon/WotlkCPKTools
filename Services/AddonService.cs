@@ -372,7 +372,7 @@ namespace WotlkCPKTools.Services
             }
         }
 
-        
+
 
 
 
@@ -380,38 +380,25 @@ namespace WotlkCPKTools.Services
         //CustomList Methods
         /// <summary>
         /// Loads a single custom addon list from a file.
-        /// Each line must be in the format: Name: GitHubURL
+        /// Each addon line must be in the format: Name: GitHubURL
         /// </summary>
         public static CustomAddonList LoadCustomAddonList(string filePath)
         {
             var listName = Path.GetFileNameWithoutExtension(filePath);
-            var lines = File.ReadAllLines(filePath);
-            var addons = new ObservableCollection<FastAddAddonInfo>();
-            
-            foreach (var line in lines)
+            string[] lines;
+
+            try
             {
-                if (String.IsNullOrEmpty(line)) continue; // Skip empty lines
-                if (line[0] == '#') continue; // Skip comments
-                if (line[0] == '@') continue; // Skip list url
-                
-
-                var index = line.IndexOf(':');
-                if (index > 0)
-                {
-                    var name = line.Substring(0, index).Trim();
-                    var url = line.Substring(index + 1).Trim();
-
-                    addons.Add(new FastAddAddonInfo
-                    {
-                        Name = name,
-                        GitHubUrl = url
-                    });
-                }
+                lines = File.ReadAllLines(filePath);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error reading customlist {filePath}: {ex.Message}");
+                return new CustomAddonList { ListName = listName, Addons = new ObservableCollection<FastAddAddonInfo>() };
             }
 
-            CustomAddonList result = new CustomAddonList { ListName = listName, Addons = addons };
-
-            return result; 
+            var addons = FastAddAddonInfoService.ParseAddonFileLines(lines);
+            return new CustomAddonList { ListName = listName, Addons = addons };
         }
 
         /// <summary>

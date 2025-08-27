@@ -154,9 +154,25 @@
                 <ItemsControl ItemsSource="{Binding CustomAddonLists}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Expander Header="{Binding ListName}" 
-                                      Foreground="White" Background="Transparent"
-                                      FontSize="14" FontWeight="Bold" Margin="0,0,0,5">
+                            <Expander FontSize="14" FontWeight="Bold" Margin="0,0,0,5" Foreground="White" Background="Transparent">
+                                <Expander.Header>
+                                    <DockPanel LastChildFill="False">
+                                        <!-- Nombre de la lista -->
+                                        <TextBlock Text="{Binding ListName}" 
+                                                   FontSize="14" FontWeight="Bold"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="White"
+                                                   DockPanel.Dock="Left" />
+
+                                        <!-- Botón de refresh -->
+                                        <Button Content="⟳" Width="30" Height="25"
+                                                Margin="10,0,0,0"
+                                                Command="{Binding DataContext.DownloadCustomList, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                CommandParameter="{Binding}" 
+                                                DockPanel.Dock="Right"
+                                                Background="#4CAF50" Foreground="White"/>
+                                    </DockPanel>
+                                </Expander.Header>
                                 <DataGrid ItemsSource="{Binding Addons}"
                                           AutoGenerateColumns="False"
                                           CanUserAddRows="False"
