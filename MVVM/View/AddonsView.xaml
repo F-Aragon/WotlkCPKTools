@@ -164,22 +164,35 @@
                                                    Foreground="White"
                                                    DockPanel.Dock="Left" />
                                         <!-- For texting  <TextBlock Text="{Binding RepoFileUrl}" Foreground="Yellow" Margin="10,0,0,0"/> -->
+                                        <!-- For texting<TextBlock Text="{Binding IsUpToDate}" Foreground="Yellow" Margin="10,0,0,0"/> -->
+
                                         <!-- Download list button -->
-                                        <Button Content="⟳" Width="30" Height="25"
+                                        <Button Width="30" Height="25"
                                                 Command="{Binding DataContext.DownloadCustomList, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                 CommandParameter="{Binding}" 
                                                 DockPanel.Dock="Right"
-                                                Background="#4CAF50" Foreground="White">
+                                                Foreground="White">
                                             <Button.Style>
                                                 <Style TargetType="Button">
+                                                    <!-- Default: Visible and icon ⟳ -->
                                                     <Setter Property="Visibility" Value="Visible"/>
+                                                    <Setter Property="Content" Value="⟳"/>
+                                                    <Setter Property="Background" Value="Red"/>
                                                     <Style.Triggers>
+                                                        <!-- Hide button if no RepoFileUrl -->
                                                         <DataTrigger Binding="{Binding RepoFileUrl}" Value="{x:Null}">
                                                             <Setter Property="Visibility" Value="Collapsed"/>
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding RepoFileUrl}" Value="">
                                                             <Setter Property="Visibility" Value="Collapsed"/>
                                                         </DataTrigger>
+
+                                                        <!-- Change icon if IsUpToDate -->
+                                                        <DataTrigger Binding="{Binding IsUpToDate}" Value="True">
+                                                            <Setter Property="Content" Value="✔️"/>
+                                                            <Setter Property="Background" Value="#4CAF50"/>
+                                                        </DataTrigger>
+                                                        
                                                     </Style.Triggers>
                                                 </Style>
                                             </Button.Style>

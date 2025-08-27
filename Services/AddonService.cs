@@ -412,10 +412,11 @@ namespace WotlkCPKTools.Services
             
             if (!Directory.Exists(Pathing.CustomAddOnsLists))
                 return allLists;
-            
+
             foreach (var file in Directory.GetFiles(Pathing.CustomAddOnsLists, "*.txt"))
             {
                 var customList = LoadCustomAddonList(file); // Reuse method
+
                 allLists.Add(customList);
             }
 

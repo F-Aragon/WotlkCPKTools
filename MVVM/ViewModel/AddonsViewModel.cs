@@ -244,7 +244,6 @@ namespace WotlkCPKTools.MVVM.ViewModel
             {
                 try
                 {
-
                     if (o is not CustomAddonList list)
                     {
                         MessageBox.Show("Invalid custom list.");
@@ -254,11 +253,20 @@ namespace WotlkCPKTools.MVVM.ViewModel
                     string filePath = Path.Combine(Pathing.CustomAddOnsLists, list.ListName + ".txt");
 
                     string? repoUrl = CustomAddonList.GetRepoFileUrl(filePath);
-                    // Button should be disable if no URL, just in case
                     if (string.IsNullOrEmpty(repoUrl))
                     {
                         MessageBox.Show("No file URL found in the custom list.");
                         return;
+                    }
+
+                    // Check if local file is already up-to-date
+                    bool isUpToDate = await CustomAddonList.IsUpdated(repoUrl);
+                    Debug.WriteLine($"Checking custom list '{list.ListName}': IsUpToDate = {isUpToDate}");
+
+                    if (isUpToDate)
+                    {
+                        Debug.WriteLine($"Custom list '{list.ListName}' is already up-to-date. No download needed.");
+                        return; // Do nothing
                     }
 
                     // Transforms to RAW URL
@@ -272,16 +280,18 @@ namespace WotlkCPKTools.MVVM.ViewModel
                     // Reload Custom Lists
                     await LoadCustomListsAsync();
 
-                    Debug.WriteLine("Custom list downloaded successfully.");
+                    Debug.WriteLine($"Custom list '{list.ListName}' downloaded and updated successfully.");
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Error downloading custom list: {ex.Message}");
                 }
-
             });
 
-            
+
+
+
+
 
 
 
@@ -353,6 +363,14 @@ namespace WotlkCPKTools.MVVM.ViewModel
         private async Task LoadCustomListsAsync()
         {
             var lists = AddonService.LoadAllCustomAddonLists();
+
+            foreach (var list in lists)
+            {
+                if (!string.IsNullOrEmpty(list.RepoFileUrl))
+                {
+                    list.IsUpToDate = await CustomAddonList.IsUpdated(list.RepoFileUrl);
+                }
+            }
             CustomAddonLists.Clear();
             foreach (var list in lists)
                 CustomAddonLists.Add(list);
