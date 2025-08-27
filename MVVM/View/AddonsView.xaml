@@ -163,14 +163,28 @@
                                                    VerticalAlignment="Center"
                                                    Foreground="White"
                                                    DockPanel.Dock="Left" />
-
-                                        <!-- Botón de refresh -->
+                                        <!-- For texting  <TextBlock Text="{Binding RepoFileUrl}" Foreground="Yellow" Margin="10,0,0,0"/> -->
+                                        <!-- Download list button -->
                                         <Button Content="⟳" Width="30" Height="25"
-                                                Margin="10,0,0,0"
                                                 Command="{Binding DataContext.DownloadCustomList, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                 CommandParameter="{Binding}" 
                                                 DockPanel.Dock="Right"
-                                                Background="#4CAF50" Foreground="White"/>
+                                                Background="#4CAF50" Foreground="White">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding RepoFileUrl}" Value="{x:Null}">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding RepoFileUrl}" Value="">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+
                                     </DockPanel>
                                 </Expander.Header>
                                 <DataGrid ItemsSource="{Binding Addons}"

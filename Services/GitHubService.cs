@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using WotlkCPKTools.MVVM.Model;
 
 namespace WotlkCPKTools.Services
@@ -163,7 +165,7 @@ namespace WotlkCPKTools.Services
 
             string rawUrl = githubUrl.Replace("github.com", "raw.githubusercontent.com")
                                      .Replace("/blob/", "/");
-
+            Debug.WriteLine("Converted raw URL: " + rawUrl);
             return rawUrl;
         }
 

@@ -263,7 +263,6 @@ namespace WotlkCPKTools.MVVM.ViewModel
 
                     // Transforms to RAW URL
                     string rawUrl = GitHubService.ConvertToRawUrl(repoUrl);
-
                     using var client = new HttpClient();
                     string content = await client.GetStringAsync(rawUrl);
 

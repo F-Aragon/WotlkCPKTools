@@ -398,7 +398,9 @@ namespace WotlkCPKTools.Services
             }
 
             var addons = FastAddAddonInfoService.ParseAddonFileLines(lines);
-            return new CustomAddonList { ListName = listName, Addons = addons };
+            string? repoFileUrl = CustomAddonList.GetRepoFileUrl(filePath);
+
+            return new CustomAddonList { ListName = listName, Addons = addons, RepoFileUrl = repoFileUrl };
         }
 
         /// <summary>
