@@ -48,8 +48,8 @@ namespace WotlkCPKTools.MVVM.ViewModel
         public ICommand MoveFromCustomListFileCommand { get; }
         public ICommand DownloadRecommendedList { get; }
         public ICommand DownloadCustomList { get; }
-
-
+        public ICommand OpenAddCustomListWindowCommand { get; }
+        public ICommand RefreshAllListsCommand { get; }
         public AddonsViewModel()
         {
             _addonService = new AddonService();
@@ -62,6 +62,9 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 window.ShowDialog();
                 _ = ReloadBothAsync();
             });
+
+            // Open window to add a new Custom List
+            OpenAddCustomListWindowCommand = new RelayCommand(OpenAddCustomListWindow);
 
             // Update a single installed addon
             UpdateCommand = new RelayCommand(async o =>
@@ -83,8 +86,15 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 }
             });
 
-            // Refresh both lists
+            // Refresh Installed and fast add lists
             RefreshCommand = new RelayCommand(_ => _ = ReloadBothAsync());
+
+            RefreshAllListsCommand = new RelayCommand(async _ =>
+            {
+                await LoadCustomListsAsync();
+                await ReloadBothAsync();
+            });
+
 
             // Update all installed addons
             UpdateAllCommand = new RelayCommand(async _ =>
@@ -376,7 +386,19 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 CustomAddonLists.Add(list);
         }
 
+        private void OpenAddCustomListWindow(object? obj)
+        {
+            var window = new AddCustomListWindow();
+            var vm = new AddCustomListViewModel(this, window);
+            window.DataContext = vm;
 
+            bool? result = window.ShowDialog();
+
+            if (result == true)
+            {
+                LoadCustomListsAsync().ConfigureAwait(false);
+            }
+        }
 
     }
 }

@@ -1,0 +1,63 @@
+﻿<Window x:Class="WotlkCPKTools.MVVM.View.AddCustomListWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WotlkCPKTools.MVVM.View"
+        mc:Ignorable="d"
+        Title="AddCustomListWindow" Height="400" Width="500">
+    
+    
+    
+    <Grid Margin="10" Background="White">
+        <StackPanel>
+            <TextBlock Text="Add a Custom List" FontWeight="Bold" FontSize="16" Margin="0 0 0 10"/>
+
+            <!-- Tabs: From URL / From File / Paste -->
+            <TabControl>
+                <TabItem Header="From URL">
+                    <StackPanel Margin="10">
+                        <TextBox Width="auto" Text="{Binding Url, UpdateSourceTrigger=PropertyChanged}" />
+                        <Button Content="Add" Command="{Binding AddFromUrlCommand}" Margin="0 10 0 0"/>
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem Header="From File">
+                    <StackPanel Margin="10">
+                        <Button Content="Select File" Command="{Binding SelectFileCommand}"/>
+                    </StackPanel>
+                </TabItem>
+
+                <TabItem Header="Paste Content">
+                    <StackPanel Margin="10" VerticalAlignment="Top">
+
+                        <!-- FileName -->
+                        <TextBlock Text="List Name:" Margin="0 0 0 5"/>
+                        <TextBox Width="auto" 
+                                 Text="{Binding ListName_pastedTab, UpdateSourceTrigger=PropertyChanged}" 
+                                 Margin="5 0 5 5"/>
+
+                        <!-- URL -->
+                        <TextBlock Text="GitHub URL (optional):" Margin="0 0 0 5"/>
+                        <TextBox Width="auto" 
+                                 Text="{Binding Url_pastedTab, UpdateSourceTrigger=PropertyChanged}" 
+                                 Margin="5 0 5 5"/>
+
+                        <!-- Addons -->
+                        <TextBlock Text="Paste Addons List:" Margin="0 0 0 5"/>
+                        <TextBox Width="auto" Height="150" 
+                                 Text="{Binding PastedContent_pastedTab}" 
+                                 AcceptsReturn="True" 
+                                 TextWrapping="Wrap" 
+                                 VerticalScrollBarVisibility="Auto"
+                                 Margin="5 0 5 5"/>
+
+                        <Button Content="Add" 
+                                Command="{Binding AddFromPasteCommand}" 
+                                Width="150"/>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+        </StackPanel>
+    </Grid>
+</Window>

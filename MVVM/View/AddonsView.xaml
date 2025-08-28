@@ -257,23 +257,34 @@
         </ScrollViewer>
 
         <!-- Bottom buttons -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,10,0,0">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,5,0,0">
             <Button Content="Add New"
                     Command="{Binding DataContext.OpenAddAddonWindowCommand, ElementName=Root}"
                     Height="40" Width="80"
-                    Background="#007ACC" Foreground="White" Margin="0,0,10,0"/>
+                    Background="#007ACC" Foreground="White" Margin="0,0,5,0"/>
             <Button Content="Refresh"
                     Command="{Binding DataContext.RefreshCommand, ElementName=Root}"
                     Height="40" Width="80"
-                    Background="#4CAF50" Foreground="White"/>
+                    Background="#4CAF50" Foreground="White" Margin="0,0,5,0"/>
+            <Button Content="Refresh&#x0a;All Lists"
+                    Command="{Binding DataContext.RefreshAllListsCommand, ElementName=Root}"
+                    Height="40" Width="80"
+                    Background="Red" Foreground="White" Margin="0,0,5,0"/>
             <Button Content="Update All"
                     Command="{Binding DataContext.UpdateAllCommand, ElementName=Root}"
-                    Height="40" Width="80" Margin="10,0,0,0"
+                    Height="40" Width="80" Margin="0,0,5,0"
                     Background="Green" Foreground="White"/>
             <Button Content="Download&#x0a;RecommendedList"
                     Command="{Binding DataContext.DownloadRecommendedList, ElementName=Root}"
-                    Height="40" Width="80" Margin="10,0,0,0"
+                    Height="40" Width="80" Margin="0,0,5,0"
                     Background="DarkBlue" Foreground="White"/>
+            <Button Content="Add&#x0a;CustomList"
+                    Command="{Binding DataContext.OpenAddCustomListWindowCommand, ElementName=Root}"
+                    Height="40" Width="80" Margin="0,0,5,0"
+                    Background="DarkBlue" Foreground="White"/>
+
+
+            
         </StackPanel>
 
         <!-- Loading overlay -->
