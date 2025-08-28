@@ -8,17 +8,23 @@
         mc:Ignorable="d"
         Height="600" Width="800"
         WindowStyle="None"
-        ResizeMode="NoResize"
-        Background="Transparent"
-        AllowsTransparency="True">
+        ResizeMode="CanResize"
+        Background="Black">
 
+    <WindowChrome.WindowChrome>
+        <WindowChrome
+            CaptionHeight="0"
+            ResizeBorderThickness="5"
+            GlassFrameThickness="0"
+            UseAeroCaptionButtons="False"/>
+    </WindowChrome.WindowChrome>
     <Window.DataContext>
         <viewModel:MainViewModel/>
     </Window.DataContext>
 
-    <Border Background="Black" CornerRadius="10" MouseDown="_MouseDown">
+    <Border Background="Black" MouseDown="_MouseDown"  BorderThickness="5">
         <Grid>
-            <Grid Margin="5" Background="#272537">
+            <Grid Margin="2" Background="#272537">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
                     <RowDefinition/>

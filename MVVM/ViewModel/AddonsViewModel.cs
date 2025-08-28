@@ -85,7 +85,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
             {
                 if (o is AddonItem item)
                 {
-                    await _gridManagerService.UpdateAddonAsync(item);
+                    await _gridManagerService.UpdateAddonAsync(item, InstalledAddons);
                     _ = ReloadBothAsync();
                 }
             });
@@ -114,7 +114,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
             UpdateAllCommand = new RelayCommand(async _ =>
             {
                 var allAddons = _addonService.LoadAddonsFromLocal();
-                await _addonService.UpdateAllAddonsAndSaveAsync(allAddons);
+                await _addonService.UpdateAllAddonsAndSaveAsync(allAddons, InstalledAddons);
                 Debug.WriteLine("UpdateAllCommand - All addons have been checked and updated if necessary.");
                 _ = ReloadBothAsync();
             });

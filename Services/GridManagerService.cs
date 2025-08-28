@@ -66,7 +66,7 @@ namespace WotlkCPKTools.Services
         /// <summary>
         /// Updates a single installed addon (delegates to AddonService).
         /// </summary>
-        public async Task UpdateAddonAsync(AddonItem addonItem)
+        public async Task UpdateAddonAsync(AddonItem addonItem, ObservableCollection<AddonItem> installedItems)
         {
             var allAddons = _addonService.LoadAddonsFromLocal();
             var addonInfo = allAddons.FirstOrDefault(a => a.GitHubUrl.Equals(addonItem.GitHubUrl, System.StringComparison.OrdinalIgnoreCase));
@@ -77,7 +77,7 @@ namespace WotlkCPKTools.Services
                 return;
             }
  
-            await _addonService.UpdateAddonAndSaveAsync(addonInfo);
+            await _addonService.UpdateAddonAndSaveAsync(addonInfo, installedItems);
         }
 
         /// <summary>

@@ -56,7 +56,6 @@ namespace WotlkCPKTools.Services
 
                         addon.NewSha = commitInfo.Sha;
                         addon.NewCommitDate = commitInfo.Date;
-                        Debug.WriteLine("i am here (CreateCompleteListAsync)");
                     }
                 }
                 addon.RefreshUpdateStatus();
@@ -65,27 +64,42 @@ namespace WotlkCPKTools.Services
             return completedList;
         }
 
-        public async Task DownloadAddonAsync(AddonInfo AddonInfo)
+        public async Task DownloadAddonAsync(AddonInfo addonInfo, ObservableCollection<AddonItem> installedItems)
         {
+            // Find the correct AddonItme in the InstalledAddons list
+            var addonItem = installedItems.FirstOrDefault(a => a.GitHubUrl == addonInfo.GitHubUrl);
+            if (addonItem == null) return;
+
             GitHubService _gitHubService = new GitHubService();
 
-            string? zipPath = await _gitHubService.DownloadZipAsync(AddonInfo.GitHubUrl);
-
-            if (zipPath == null)
+            try
             {
-                Debug.WriteLine($"Failed to download zip for addon: {AddonInfo.Name}");
-                return;
+                addonItem.DownloadStatus = "Downloading...";
+                string? zipPath = await _gitHubService.DownloadZipAsync(addonInfo.GitHubUrl);
+
+                if (zipPath == null)
+                {
+                    addonItem.DownloadStatus = "DownloadError";
+                    return;
+                }
+
+                addonItem.DownloadStatus = "Uziping...";
+                string extractPath = ExtractZipToTempFolder(zipPath);
+
+                addonItem.DownloadStatus = "Deleting Old...";
+                RemoveAddonFolders(addonInfo);
+
+                addonItem.DownloadStatus = "Copying...";
+                List<string> copiedAddonFolders = CopyAddonToAddonsFolder(extractPath);
+                addonInfo.LocalFolders = copiedAddonFolders;
+
+                addonItem.DownloadStatus = "Done!";
+                DeleteTemporaryFiles(zipPath, extractPath);
             }
-
-            string extractPath = ExtractZipToTempFolder(zipPath);
-
-            RemoveAddonFolders(AddonInfo);
-
-            List<string> copiedAddonFolders = CopyAddonToAddonsFolder(extractPath);
-
-            AddonInfo.LocalFolders = copiedAddonFolders;
-
-            DeleteTemporaryFiles(zipPath, extractPath);
+            catch (Exception ex)
+            {
+                addonItem.DownloadStatus = $"Error: {ex.Message}";
+            }
         }
 
         public async Task<AddonInfo>? CreateAddonInfoFromGitHubUrl(string gitHubUrl)
@@ -273,7 +287,7 @@ namespace WotlkCPKTools.Services
             }
         }
 
-        private async Task<bool> UpdateAddonAsync(AddonInfo addon, bool _forceUpdate = false)
+        private async Task<bool> UpdateAddonAsync(AddonInfo addon, ObservableCollection<AddonItem> installedItems, bool _forceUpdate = false)
         {
             if (addon.IsUpdated && !_forceUpdate)
             {
@@ -285,7 +299,7 @@ namespace WotlkCPKTools.Services
             var commitInfo = await gitHubService.GetLatestCommitInfoAsync(addon.GitHubUrl);
             if (commitInfo != null)
             {
-                await DownloadAddonAsync(addon);
+                await DownloadAddonAsync(addon, installedItems);
                 addon.NewSha = commitInfo.Sha;
                 addon.NewCommitDate = commitInfo.Date;
                 addon.OldSha = addon.NewSha;
@@ -305,9 +319,9 @@ namespace WotlkCPKTools.Services
             return true;
         }
 
-        public async Task UpdateAddonAndSaveAsync(AddonInfo addon, bool _forceUpdate = false)
+        public async Task UpdateAddonAndSaveAsync(AddonInfo addon, ObservableCollection<AddonItem> installedItems, bool _forceUpdate = false)
         {
-            bool changed = await UpdateAddonAsync(addon, _forceUpdate);
+            bool changed = await UpdateAddonAsync(addon, installedItems, _forceUpdate);
             
             if (!changed) return;
 
@@ -321,7 +335,7 @@ namespace WotlkCPKTools.Services
             await SaveAddonsListToJson(allAddons);
         }
 
-        public async Task UpdateAllAddonsAndSaveAsync(List<AddonInfo> addons, bool _forceUpdate = false)
+        public async Task UpdateAllAddonsAndSaveAsync(List<AddonInfo> addons, ObservableCollection<AddonItem> installedItems, bool _forceUpdate = false)
         {
             bool anyChanged = false;
             var allAddons = LoadAddonsFromLocal();
@@ -329,7 +343,7 @@ namespace WotlkCPKTools.Services
             foreach (var addon in addons)
             {
                 Debug.WriteLine($"Updating addon: {addon.Name}...");
-                bool changed = await UpdateAddonAsync(addon, _forceUpdate);
+                bool changed = await UpdateAddonAsync(addon, installedItems, _forceUpdate);
                 if (changed)
                 {
                     var index = allAddons.FindIndex(a => a.GitHubUrl == addon.GitHubUrl);

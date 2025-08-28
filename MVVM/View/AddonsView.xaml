@@ -48,8 +48,26 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="SizeToCells" IsReadOnly="False"/>
                             <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubUrl}" Width="*" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Last Update" Binding="{Binding LastUpdate, StringFormat=yyyy-MM-dd HH:mm}" Width="SizeToCells" IsReadOnly="True"/>
-
+                            <DataGridTemplateColumn Header="Last Update" Width="SizeToCells">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding>
+                                                    <MultiBinding.Converter>
+                                                        <conv:DownloadStatusToTextConverter />
+                                                    </MultiBinding.Converter>
+                                                    <!-- LastUpdate Date -->
+                                                    <Binding Path="LastUpdate" />
+                                                    <!-- Download Status -->
+                                                    <Binding Path="DownloadStatus" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            
                             <DataGridTemplateColumn Header="Status" Width="SizeToCells">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
