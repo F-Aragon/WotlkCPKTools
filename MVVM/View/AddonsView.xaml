@@ -282,9 +282,12 @@
                     Command="{Binding DataContext.OpenAddCustomListWindowCommand, ElementName=Root}"
                     Height="40" Width="80" Margin="0,0,5,0"
                     Background="DarkBlue" Foreground="White"/>
-
-
+            <Button Content="C.List📂"
+                    Command="{Binding DataContext.OpenCustomListFolderCommand, ElementName=Root}"
+                    Height="40" Width="50" Margin="0,0,5,0"
+                    Background="#f5cb42" Foreground="Black"/>
             
+
         </StackPanel>
 
         <!-- Loading overlay -->

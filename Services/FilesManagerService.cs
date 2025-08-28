@@ -50,5 +50,7 @@ namespace WotlkCPKTools.Services
                 progress?.Report($"Copying {count}/{total} files...");
             }
         }
+
+
     }
 }

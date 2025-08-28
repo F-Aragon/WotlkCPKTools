@@ -50,6 +50,8 @@ namespace WotlkCPKTools.MVVM.ViewModel
         public ICommand DownloadCustomList { get; }
         public ICommand OpenAddCustomListWindowCommand { get; }
         public ICommand RefreshAllListsCommand { get; }
+        public ICommand OpenCustomListFolderCommand { get; }
+
         public AddonsViewModel()
         {
             _addonService = new AddonService();
@@ -65,6 +67,18 @@ namespace WotlkCPKTools.MVVM.ViewModel
 
             // Open window to add a new Custom List
             OpenAddCustomListWindowCommand = new RelayCommand(OpenAddCustomListWindow);
+
+            // Open Custom Lists Folder in Explorer
+            OpenCustomListFolderCommand = new RelayCommand(_ =>
+            {
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = Pathing.CustomAddOnsLists,
+                    UseShellExecute = true,
+                    Verb = "open"
+                });
+            });
+
 
             // Update a single installed addon
             UpdateCommand = new RelayCommand(async o =>
