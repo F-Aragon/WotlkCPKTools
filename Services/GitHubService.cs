@@ -25,9 +25,11 @@ namespace WotlkCPKTools.Services
 
         public async Task<CommitInfo?> GetLatestCommitInfoAsync(string repoUrl)
         {
-            string repoApiUrl = ConvertRepoUrlToApiUrl(repoUrl);
+            
             try
             {
+                string repoApiUrl = ConvertRepoUrlToApiUrl(repoUrl);
+
                 var response = await _httpClient.GetAsync(repoApiUrl);
                 response.EnsureSuccessStatusCode();
 
@@ -59,22 +61,33 @@ namespace WotlkCPKTools.Services
 
         public static string ConvertRepoUrlToApiUrl(string repoUrl)
         {
-            if (repoUrl.EndsWith(".git", StringComparison.OrdinalIgnoreCase))
-                repoUrl = repoUrl.Substring(0, repoUrl.Length - 4);
-
-            var uri = new Uri(repoUrl);
-            var segments = uri.Segments;
-
-            if (segments.Length >= 3)
+            try
             {
-                string owner = segments[1].TrimEnd('/');
-                string repo = segments[2].TrimEnd('/');
-                return $"https://api.github.com/repos/{owner}/{repo}/commits";
+                if (repoUrl.EndsWith(".git", StringComparison.OrdinalIgnoreCase))
+                    repoUrl = repoUrl.Substring(0, repoUrl.Length - 4);
+
+                if (!GitHubService.IsValidGitHubRepoUrl(repoUrl))
+                    throw new ArgumentException("Invalid GitHub repository URL format.");
+
+                var uri = new Uri(repoUrl);
+                var segments = uri.Segments;
+
+                if (segments.Length >= 3)
+                {
+                    string owner = segments[1].TrimEnd('/');
+                    string repo = segments[2].TrimEnd('/');
+                    return $"https://api.github.com/repos/{owner}/{repo}/commits";
+                }
+                else
+                {
+                    throw new ArgumentException("Invalid GitHub repository URL format.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                throw new ArgumentException("Invalid GitHub repository URL format.");
+                throw new InvalidOperationException($"Error while converting repo URL '{repoUrl}'", ex);
             }
+            
         }
 
         public static string GetName(string gitHubUrl)
@@ -85,7 +98,7 @@ namespace WotlkCPKTools.Services
             return gitHubUrl.Split('/')[^1];
         }
 
-        public bool IsValidGitHubRepoUrl(string url)
+        public static bool IsValidGitHubRepoUrl(string url)
         {
             if (string.IsNullOrWhiteSpace(url)) return false;
             return Regex.IsMatch(url, @"^https:\/\/github\.com\/[\w\-]+\/[\w\-]+(\.git)?$");

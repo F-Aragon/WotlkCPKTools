@@ -214,10 +214,13 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 {
                     try
                     {
+                        if(!GitHubService.IsValidGitHubRepoUrl(item.GitHubUrl))
+                            throw new ArgumentException("Invalid URL format.");
+
                         var installedAddons = _addonService.LoadAddonsFromLocal();
                         if (installedAddons.Any(a => a.GitHubUrl.Equals(item.GitHubUrl, StringComparison.OrdinalIgnoreCase)))
                         {
-                            MessageBox.Show("This addon is already installed.");
+                            MessageBox.Show("This addon is already in installed AddOns.");
                             return;
                         }
 

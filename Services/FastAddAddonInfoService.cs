@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
@@ -121,11 +122,13 @@ namespace WotlkCPKTools.Services
                 var trimmedLine = line.Trim();
                 if (trimmedLine.StartsWith("#") || trimmedLine.StartsWith("@")) continue;
 
-                var index = trimmedLine.IndexOf(':');
-                if (index > 0)
+
+                // Addons
+
+                if (GitHubService.IsValidGitHubRepoUrl(trimmedLine))
                 {
-                    var name = trimmedLine.Substring(0, index).Trim();
-                    var url = trimmedLine.Substring(index + 1).Trim();
+                    var name = GitHubService.GetName(trimmedLine.Trim());
+                    var url = trimmedLine.Trim();
 
                     addons.Add(new FastAddAddonInfo
                     {
@@ -133,6 +136,31 @@ namespace WotlkCPKTools.Services
                         GitHubUrl = url
                     });
                 }
+                else
+                {
+                    var index = trimmedLine.IndexOf(':');
+                    if (index > 0)
+                    {
+                        var name = trimmedLine.Substring(0, index).Trim();
+                        var url = trimmedLine.Substring(index + 1).Trim();
+                        if (!GitHubService.IsValidGitHubRepoUrl(url))
+                        {
+                            url = "Format ERROR: " + url;
+                        }
+
+                        addons.Add(new FastAddAddonInfo
+                        {
+                            Name = name,
+                            GitHubUrl = url
+                        });
+                    }
+                    else
+                    {
+                        // Wrong format, ignore
+                        Debug.WriteLine("Ignoring invalid line: " + trimmedLine);
+                    }
+                }
+                    
             }
             return addons;
         }

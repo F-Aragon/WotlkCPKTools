@@ -46,7 +46,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 return;
             }
 
-            if (!_gitHubService.IsValidGitHubRepoUrl(GitHubUrl))
+            if (!GitHubService.IsValidGitHubRepoUrl(GitHubUrl))
             {
                 StatusMessage = "Invalid URL format";
                 StatusColor = Brushes.Red;
