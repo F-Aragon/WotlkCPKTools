@@ -51,6 +51,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
         public ICommand OpenAddCustomListWindowCommand { get; }
         public ICommand RefreshAllListsCommand { get; }
         public ICommand OpenCustomListFolderCommand { get; }
+        public ICommand DeleteList { get; }
 
         public AddonsViewModel()
         {
@@ -109,6 +110,16 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 await ReloadBothAsync();
             });
 
+            // Delete a custom list file
+            DeleteList = new RelayCommand(async _ =>
+            {
+                if (_ is CustomAddonList) 
+                {
+                    if(CustomAddonList.DeleteCustomList((CustomAddonList)_))
+                        await LoadCustomListsAsync();
+                }
+                
+            });
 
             // Update all installed addons
             UpdateAllCommand = new RelayCommand(async _ =>

@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using WotlkCPKTools.Services;
 
 namespace WotlkCPKTools.MVVM.Model
@@ -125,6 +126,36 @@ namespace WotlkCPKTools.MVVM.Model
             return null;
         }
 
+
+        public static bool DeleteCustomList(CustomAddonList aList)
+        {
+
+            if (string.IsNullOrWhiteSpace(aList.ListName))
+                return false;
+
+            var result = MessageBox.Show(
+                         $"Are you sure you want to delete the list \"{aList.ListName}\"?",
+                         "Confirm Deletion",
+                         MessageBoxButton.YesNo,MessageBoxImage.Warning);
+
+            if (result != MessageBoxResult.Yes)
+                return false;
+
+            string filePath = Path.Combine(Pathing.CustomAddOnsLists, (aList.ListName+".txt"));
+
+            if (File.Exists(filePath)) 
+            {
+                File.Delete(filePath);
+                Debug.WriteLine($"List: {aList.ListName}.txt file deleted");
+                return true;
+            }
+            else
+            {
+                Debug.WriteLine($"ERROR: List: {aList.ListName}.txt file not found");
+                return false;
+            }
+                
+        }
     }
 }
 

@@ -126,8 +126,9 @@ namespace WotlkCPKTools.Services
             string repoName = GetName(repoUrl);
             string repoMainBranch = await GetDefaultBranchAsync(repoUrl);
             var (owner, repo) = GetOwnerAndRepo(repoUrl);
-
-            string zipUrl = $"https://github.com/{owner}/{repo}/archive/refs/heads/{repoMainBranch}.zip";
+            
+            //string zipUrl = $"https://github.com/{owner}/{repo}/archive/refs/heads/{repoMainBranch}.zip";
+            string zipUrl = $"https://github.com/{owner}/{repo.Replace(".git", "")}/archive/refs/heads/{repoMainBranch}.zip";
             string zipFilePath = Path.Combine(Pathing.TempFolder, repoName + ".zip");
 
             try

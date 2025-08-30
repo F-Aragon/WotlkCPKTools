@@ -64,11 +64,11 @@ namespace WotlkCPKTools.Services
             return completedList;
         }
 
-        public async Task DownloadAddonAsync(AddonInfo addonInfo, ObservableCollection<AddonItem> installedItems)
+        public async Task<bool> DownloadAddonAsync(AddonInfo addonInfo, ObservableCollection<AddonItem> installedItems)
         {
             // Find the correct AddonItme in the InstalledAddons list
             var addonItem = installedItems.FirstOrDefault(a => a.GitHubUrl == addonInfo.GitHubUrl);
-            if (addonItem == null) return;
+            if (addonItem == null) return false;
 
             GitHubService _gitHubService = new GitHubService();
 
@@ -80,7 +80,7 @@ namespace WotlkCPKTools.Services
                 if (zipPath == null)
                 {
                     addonItem.DownloadStatus = "DownloadError";
-                    return;
+                    return false;
                 }
 
                 addonItem.DownloadStatus = "Uziping...";
@@ -95,10 +95,13 @@ namespace WotlkCPKTools.Services
 
                 addonItem.DownloadStatus = "Done!";
                 DeleteTemporaryFiles(zipPath, extractPath);
+
+                return true;
             }
             catch (Exception ex)
             {
                 addonItem.DownloadStatus = $"Error: {ex.Message}";
+                return false;
             }
         }
 
@@ -299,14 +302,22 @@ namespace WotlkCPKTools.Services
             var commitInfo = await gitHubService.GetLatestCommitInfoAsync(addon.GitHubUrl);
             if (commitInfo != null)
             {
-                await DownloadAddonAsync(addon, installedItems);
-                addon.NewSha = commitInfo.Sha;
-                addon.NewCommitDate = commitInfo.Date;
-                addon.OldSha = addon.NewSha;
-                addon.OldCommitDate = addon.NewCommitDate;
-                addon.LastUpdateDate = DateTime.Now;
-                addon.IsUpdated = true;
-                Debug.WriteLine($"Addon {addon.Name} updated. (UpdateAddonAsync) ");
+                bool succesDownloading = await DownloadAddonAsync(addon, installedItems);
+                if (succesDownloading)
+                {
+                    addon.NewSha = commitInfo.Sha;
+                    addon.NewCommitDate = commitInfo.Date;
+                    addon.OldSha = addon.NewSha;
+                    addon.OldCommitDate = addon.NewCommitDate;
+                    addon.LastUpdateDate = DateTime.Now;
+                    addon.IsUpdated = true;
+                    Debug.WriteLine($"Addon {addon.Name} updated. (UpdateAddonAsync) ");
+                }
+                else
+                {
+                    Debug.WriteLine($"ERROR: Addon {addon.Name} NOT updated. (UpdateAddonAsync) ");
+                    return false;
+                }
             }
             else
             {
