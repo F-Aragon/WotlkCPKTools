@@ -102,6 +102,28 @@ namespace WotlkCPKTools.MVVM.ViewModel
             set => SetProperty(ref _restoreProgress, value);
         }
 
+        // Progres bar
+        private double _backupProgressPercentage;
+        public double BackupProgressPercentage
+        {
+            get => _backupProgressPercentage;
+            set => SetProperty(ref _backupProgressPercentage, value);
+        }
+        // Progres bar
+        private double _restoreProgressPercentage;
+        public double RestoreProgressPercentage
+        {
+            get => _restoreProgressPercentage;
+            set => SetProperty(ref _restoreProgressPercentage, value);
+        }
+
+        private bool _isRestoring;
+        public bool IsRestoring
+        {
+            get => _isRestoring;
+            set => SetProperty(ref _isRestoring, value);
+        }
+
         // Commands
         public ICommand BackupWtfCommand { get; }
         public ICommand OpenBackupsFolder { get; }
@@ -170,14 +192,28 @@ namespace WotlkCPKTools.MVVM.ViewModel
             {
                 CurrentBackupPath = string.Empty;
 
-                var progress = new Progress<string>(s => BackupProgress = s);
+                // Progress %
+                var progress = new Progress<string>(s =>
+                {
+                    BackupProgress = s;
 
+                    var percentIndex = s.IndexOf('%');
+                    if (percentIndex > 0)
+                    {
+                        var parts = s.Substring(0, percentIndex).Split('(');
+                        if (parts.Length > 1 && double.TryParse(parts[1], out double pct))
+                            BackupProgressPercentage = pct;
+                    }
+                });
+
+                
                 string backupPath = await _filesManagerService.BackupFolderAsync(
                     backupTitle: BackupTitle,
                     backupComment: BackupComments,
                     progress: progress
                 );
 
+                
                 var newBackup = new BackupInfo
                 {
                     FolderPath = backupPath,
@@ -190,8 +226,10 @@ namespace WotlkCPKTools.MVVM.ViewModel
 
                 Backups.Add(newBackup);
 
+                // Inputs Reset
                 BackupTitle = string.Empty;
                 BackupComments = string.Empty;
+
                 CurrentBackupPath = backupPath;
             }
             catch (Exception ex)
@@ -199,7 +237,12 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 BackupProgress = "Error";
                 CurrentBackupPath = ex.Message;
             }
+            finally
+            {
+                BackupProgress = string.Empty;
+            }
         }
+
 
         private double GetFolderSizeInMB(string folderPath)
         {
@@ -321,22 +364,44 @@ namespace WotlkCPKTools.MVVM.ViewModel
 
             try
             {
-                var progress = new Progress<string>(s => RestoreProgress = s);
+                IsRestoring = true; // <-- mostrar ProgressBar
+
+                var progress = new Progress<string>(s =>
+                {
+                    RestoreProgress = s;
+
+                    // Extraer porcentaje
+                    var percentIndex = s.IndexOf('%');
+                    if (percentIndex > 0)
+                    {
+                        var parts = s.Substring(0, percentIndex).Split('(');
+                        if (parts.Length > 1 && double.TryParse(parts[1], out double pct))
+                            RestoreProgressPercentage = pct;
+                    }
+                });
+
+                // Borra la carpeta WTF actual
+                if (Directory.Exists(Pathing.WTF))
+                    Directory.Delete(Pathing.WTF, recursive: true);
+
+                // Restaurar backup con progreso
                 await _filesManagerService.RestoreBackupAsync(backup.FolderPath, progress);
 
-                System.Windows.MessageBox.Show($"Backup '{backup.Title}' restored successfully.", "Success",
-                                               System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                System.Windows.MessageBox.Show($"Backup '{backup.Title}' restored successfully.", "Success", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show($"Failed to restore backup: {ex.Message}", "Error",
-                                               System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                System.Windows.MessageBox.Show($"Failed to restore backup: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
             finally
             {
+                IsRestoring = false; // <-- ocultar ProgressBar
                 RestoreProgress = string.Empty;
+                RestoreProgressPercentage = 0;
             }
         }
+
+
 
     }
 }

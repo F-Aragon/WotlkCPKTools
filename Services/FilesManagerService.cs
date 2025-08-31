@@ -73,7 +73,7 @@ namespace WotlkCPKTools.Services
                 progress?.Report($"{copiedMb:F2}/{totalMb:F2} MB ({percent:F1}%)");
             }
 
-            progress?.Report($"Done! - Size: {totalBytes / 1024.0 / 1024.0:F2} MB");
+            progress?.Report($"Done!: {totalBytes / 1024.0 / 1024.0:F2} MB");
         }
 
         /// <summary>

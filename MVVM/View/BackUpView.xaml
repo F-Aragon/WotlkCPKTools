@@ -10,6 +10,7 @@
 
     <UserControl.Resources>
         <conv:StringNullOrEmptyToVisibilityConverter x:Key="StringNullOrEmptyToVisibilityConverter"/>
+        <conv:BoolToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
 
     <Grid Background="Black">
@@ -92,7 +93,10 @@
                           Grid.Column="1"
                           ItemsSource="{Binding Backups}"
                           SelectedItem="{Binding SelectedBackup, Mode=TwoWay}"
-                          SizeChanged="BackupsListView_SizeChanged">
+                          SizeChanged="BackupsListView_SizeChanged"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    
                     <ListView.View>
                         <GridView>
                             <GridViewColumn x:Name="DateColumn" Header="Date" Width="45">
@@ -126,7 +130,17 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <GridViewColumn Header="Fav" Width="50">
+                            <!-- Size MB -->
+                            <GridViewColumn Header="MB" Width="40" >
+                                <GridViewColumn.CellTemplate >
+                                    <DataTemplate >
+                                        <TextBlock Text="{Binding SizeMB, StringFormat={}{0:F1}}"
+                                                   VerticalAlignment="Center" HorizontalAlignment="Right" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            
+                            <GridViewColumn Header="Fav" Width="30">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding IsFavorite, Mode=TwoWay}"/>
@@ -134,7 +148,7 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <GridViewColumn Header="Open" Width="40">
+                            <GridViewColumn Header="Open" Width="45">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="📂" Command="{Binding DataContext.OpenBackupFolderCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
@@ -180,13 +194,13 @@
                     <Grid Grid.Row="5" Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
                             <!-- Date TextBox -->
-                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="105"/>
                             <!-- Now Button -->
                             <ColumnDefinition Width="Auto"/>
-                            <!-- Backup size -->
+                            <!-- Backup size/Backup Progress -->
                             <ColumnDefinition Width="*"/>
-                            <!-- Backup Progress -->
-                            <ColumnDefinition Width="50"/>
+
+                            
                         </Grid.ColumnDefinitions>
 
                         <!-- TextBox for date -->
@@ -194,6 +208,7 @@
                             <TextBox x:Name="DateTextBox"
                                      Text="{Binding EditDate, StringFormat=dd/MM/yyyy HH:mm, UpdateSourceTrigger=PropertyChanged}"
                                      VerticalContentAlignment="Center"
+                                     HorizontalContentAlignment="Center"
                                      Foreground="White"
                                      Background="Black"
                                      Margin="0"/>
@@ -208,13 +223,27 @@
                         <!-- Button 'Now' -->
                         <Button Grid.Column="1" Content="Now" Width="40" Height="25" Margin="5,0,0,0"
                                 Command="{Binding SetBackupDateToNowCommand}"/>
+                        
+                        <Grid Grid.Column="2">
+                            <StackPanel Orientation="Vertical">
+                                <!-- Texto del progreso -->
+                                <TextBlock Text="{Binding RestoreProgress}" 
+                                           Foreground="White" 
+                                           VerticalAlignment="Center" 
+                                           Margin="0,0,0,0"
+                                           HorizontalAlignment="Center"/>
 
-                        <!-- Backup size info -->
-                        <TextBlock Grid.Column="2" Foreground="White" VerticalAlignment="Center" 
-                                   Text="{Binding SelectedBackup.SizeMB, StringFormat=WTF Size: {0:F2} MB}"/>
-                        <!-- Backup Progress -->
-                        <TextBlock Grid.Column="3" Foreground="White" VerticalAlignment="Center" 
-                                   Text="{Binding RestoreProgress}"/>
+                                <!-- Barra de progreso -->
+                                <ProgressBar Height="10"
+                                             Minimum="0"
+                                             Maximum="100"
+                                             Margin="5,0,0,0"
+                                             Value="{Binding RestoreProgressPercentage}"
+                                             Visibility="{Binding IsRestoring, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                            </StackPanel>
+                        </Grid>
+
                     </Grid>
 
                     <!-- Buttons -->
@@ -232,3 +261,9 @@
         </Border>
     </Grid>
 </UserControl>
+
+
+<!-- Backup size info -->
+<!-- <TextBlock Grid.Column="2" Foreground="White" VerticalAlignment="Center" 
+                Text="{Binding SelectedBackup.SizeMB, StringFormat=WTF Size: {0:F2} MB}"/> 
+    -->
