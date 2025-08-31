@@ -23,26 +23,23 @@ namespace WotlkCPKTools.MVVM.ViewModel
             {
                 if (SetProperty(ref _selectedBackup, value))
                 {
-                    // Reset edit buffers
                     if (value != null)
                     {
                         EditTitle = value.Title;
                         EditComments = value.Comments;
-                        EditDate = value.Date; 
+                        EditDate = value.Date;
                     }
                     else
                     {
                         EditTitle = string.Empty;
                         EditComments = string.Empty;
-                        EditDate = default; 
+                        EditDate = default;
                     }
 
-                    // Force command re-evaluation
                     CommandManager.InvalidateRequerySuggested();
                 }
             }
         }
-
 
         // Edit buffers
         private string _editTitle = string.Empty;
@@ -65,7 +62,6 @@ namespace WotlkCPKTools.MVVM.ViewModel
             get => _editDate;
             set => SetProperty(ref _editDate, value);
         }
-
 
         private string _backupTitle = string.Empty;
         public string BackupTitle
@@ -99,13 +95,20 @@ namespace WotlkCPKTools.MVVM.ViewModel
             set => SetProperty(ref _backupProgress, value);
         }
 
+        private string _restoreProgress = string.Empty;
+        public string RestoreProgress
+        {
+            get => _restoreProgress;
+            set => SetProperty(ref _restoreProgress, value);
+        }
+
         // Commands
         public ICommand BackupWtfCommand { get; }
         public ICommand OpenBackupsFolder { get; }
         public ICommand OpenBackupFolderCommand { get; }
         public ICommand UpdateBackupCommand { get; }
         public ICommand DeleteBackupCommand { get; }
-        public ICommand ActivateBackupCommand { get; }
+        public ICommand RestoreBackupCommand { get; }
         public ICommand SetBackupDateToNowCommand { get; }
 
         public BackUpViewModel()
@@ -120,13 +123,11 @@ namespace WotlkCPKTools.MVVM.ViewModel
             var service = new BackupService();
             foreach (var backup in service.LoadBackups())
             {
-                // Sub to IsFavorite changes to update the list
                 backup.PropertyChanged += (s, e) =>
                 {
                     if (e.PropertyName == nameof(BackupInfo.IsFavorite))
                         UpdateFavorite(backup);
                 };
-
                 Backups.Add(backup);
             }
 
@@ -152,32 +153,17 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 p => SelectedBackup != null
             );
 
-            ActivateBackupCommand = new RelayCommand(
-                p => ActivateBackup(SelectedBackup),
-                p => SelectedBackup != null
+            RestoreBackupCommand = new RelayCommand(
+                async _ => await RestoreBackupAsync(SelectedBackup),
+                _ => SelectedBackup != null
             );
 
-            /*SetBackupDateToNowCommand = new RelayCommand(
-                p => EditDate = DateTime.Now,
-                p => SelectedBackup != null
-            );*/
-            // Button now
             SetBackupDateToNowCommand = new RelayCommand(
                 _ => { if (SelectedBackup != null) EditDate = DateTime.Now; },
                 _ => SelectedBackup != null
             );
-
-
-
         }
 
-
-
-
-
-        /// <summary>
-        /// Performs a backup of the WTF folder, updating status and path properties.
-        /// </summary>
         private async Task BackupWtfAsync()
         {
             try
@@ -186,31 +172,26 @@ namespace WotlkCPKTools.MVVM.ViewModel
 
                 var progress = new Progress<string>(s => BackupProgress = s);
 
-                // Pass title and comment from bindings
                 string backupPath = await _filesManagerService.BackupFolderAsync(
                     backupTitle: BackupTitle,
                     backupComment: BackupComments,
                     progress: progress
                 );
 
-                // Create a new BackupInfo for the freshly created backup
                 var newBackup = new BackupInfo
                 {
                     FolderPath = backupPath,
                     Title = BackupTitle,
                     Comments = BackupComments,
-                    Date = DateTime.Now, // Or whatever the actual backup date is
+                    Date = DateTime.Now,
                     IsFavorite = false,
                     SizeMB = GetFolderSizeInMB(backupPath)
                 };
 
-                // Add to the collection so UI updates
                 Backups.Add(newBackup);
 
-                // Reset inputs
                 BackupTitle = string.Empty;
                 BackupComments = string.Empty;
-
                 CurrentBackupPath = backupPath;
             }
             catch (Exception ex)
@@ -225,11 +206,8 @@ namespace WotlkCPKTools.MVVM.ViewModel
             if (!Directory.Exists(folderPath)) return 0;
 
             long totalBytes = 0;
-            var files = Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories);
-            foreach (var file in files)
-            {
+            foreach (var file in Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories))
                 totalBytes += new FileInfo(file).Length;
-            }
 
             return Math.Round(totalBytes / 1024.0 / 1024.0, 2);
         }
@@ -261,9 +239,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
         private void OpenBackupsFolderExecute()
         {
             if (!Directory.Exists(Pathing.BackupsFolder))
-            {
                 Directory.CreateDirectory(Pathing.BackupsFolder);
-            }
 
             Process.Start(new ProcessStartInfo
             {
@@ -273,13 +249,9 @@ namespace WotlkCPKTools.MVVM.ViewModel
             });
         }
 
-        /// <summary>
-        /// Updates the selected backup with the values from edit buffers.
-        /// </summary>
         private void UpdateBackup()
         {
-            var backup = SelectedBackup;  // local copy
-
+            var backup = SelectedBackup;
             if (backup == null) return;
 
             backup.Title = EditTitle;
@@ -297,11 +269,8 @@ namespace WotlkCPKTools.MVVM.ViewModel
                     writer.WriteLine(backup.Comments);
                 }
 
-                // Refresh UI
                 var index = Backups.IndexOf(backup);
                 if (index >= 0) Backups[index] = backup;
-
-                Debug.WriteLine($"Backup '{backup.Title}' updated successfully.");
             }
             catch (Exception ex)
             {
@@ -309,11 +278,6 @@ namespace WotlkCPKTools.MVVM.ViewModel
             }
         }
 
-
-
-        /// <summary>
-        /// Deletes the selected backup folder from disk and removes it from the collection.
-        /// </summary>
         private void DeleteBackup()
         {
             if (SelectedBackup == null) return;
@@ -325,8 +289,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 System.Windows.MessageBoxImage.Warning
             );
 
-            if (result != System.Windows.MessageBoxResult.Yes)
-                return; // Cancelled by user
+            if (result != System.Windows.MessageBoxResult.Yes) return;
 
             try
             {
@@ -335,8 +298,6 @@ namespace WotlkCPKTools.MVVM.ViewModel
 
                 Backups.Remove(SelectedBackup);
                 SelectedBackup = null;
-
-                Debug.WriteLine($"Backup deleted successfully.");
             }
             catch (Exception ex)
             {
@@ -344,11 +305,38 @@ namespace WotlkCPKTools.MVVM.ViewModel
             }
         }
 
-
-        private void ActivateBackup(BackupInfo backup)
+        private async Task RestoreBackupAsync(BackupInfo backup)
         {
             if (backup == null) return;
-            Debug.WriteLine($"Backup '{backup.Title}' activated.");
+
+            var result = System.Windows.MessageBox.Show(
+                $"Are you sure you want to restore backup '{backup.Title}'?\nThis will overwrite your current WTF folder.",
+                "Restore Backup",
+                System.Windows.MessageBoxButton.YesNo,
+                System.Windows.MessageBoxImage.Warning
+            );
+
+            if (result != System.Windows.MessageBoxResult.Yes)
+                return;
+
+            try
+            {
+                var progress = new Progress<string>(s => RestoreProgress = s);
+                await _filesManagerService.RestoreBackupAsync(backup.FolderPath, progress);
+
+                System.Windows.MessageBox.Show($"Backup '{backup.Title}' restored successfully.", "Success",
+                                               System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Failed to restore backup: {ex.Message}", "Error",
+                                               System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            }
+            finally
+            {
+                RestoreProgress = string.Empty;
+            }
         }
+
     }
 }

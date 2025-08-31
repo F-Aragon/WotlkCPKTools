@@ -179,12 +179,14 @@
                     <TextBlock Grid.Row="4" Text="Date:" Foreground="White" Margin="0,0,0,5"/>
                     <Grid Grid.Row="5" Margin="0,0,0,10">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150"/>
                             <!-- Date TextBox -->
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="150"/>
                             <!-- Now Button -->
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                             <!-- Backup size -->
+                            <ColumnDefinition Width="*"/>
+                            <!-- Backup Progress -->
+                            <ColumnDefinition Width="50"/>
                         </Grid.ColumnDefinitions>
 
                         <!-- TextBox for date -->
@@ -210,7 +212,9 @@
                         <!-- Backup size info -->
                         <TextBlock Grid.Column="2" Foreground="White" VerticalAlignment="Center" 
                                    Text="{Binding SelectedBackup.SizeMB, StringFormat=WTF Size: {0:F2} MB}"/>
-
+                        <!-- Backup Progress -->
+                        <TextBlock Grid.Column="3" Foreground="White" VerticalAlignment="Center" 
+                                   Text="{Binding RestoreProgress}"/>
                     </Grid>
 
                     <!-- Buttons -->
@@ -219,8 +223,8 @@
                                 Command="{Binding UpdateBackupCommand}"/>
                         <Button Content="Delete Backup" Width="120" Margin="0,0,5,0" 
                                 Command="{Binding DeleteBackupCommand}"/>
-                        <Button Content="Activate Backup" Width="120"
-                                Command="{Binding ActivateBackupCommand}"/>
+                        <Button Content="Restore Backup" Width="120"
+                                Command="{Binding RestoreBackupCommand}"/>
                     </StackPanel>
                 </Grid>
 

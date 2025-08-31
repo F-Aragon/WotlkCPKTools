@@ -23,10 +23,10 @@ namespace WotlkCPKTools.Services
                 string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
                 string backupFolderPath = Path.Combine(Pathing.BackupsFolder, $"{timestamp}");
 
-                // Copy files
+                // Copia todos los archivos con progreso
                 CopyDirectoryWithProgress(Pathing.WTF, backupFolderPath, progress);
 
-                // Create CPKToolsInfo.txt
+                // Crea CPKToolsInfo.txt
                 string infoFilePath = Path.Combine(backupFolderPath, "CPKToolsInfo.txt");
                 bool isFavorite = false; // Default
                 using (var writer = new StreamWriter(infoFilePath))
@@ -34,24 +34,21 @@ namespace WotlkCPKTools.Services
                     writer.WriteLine($"@{DateTime.Now:yyyy-MM-dd HH:mm:ss}"); // Date
                     writer.WriteLine($"#{backupTitle}");                      // Title
                     writer.WriteLine($"!Favorite:{isFavorite}");
-                    writer.WriteLine(backupComment);                          // Comment (multiline supported)
-                                        ;
+                    writer.WriteLine(backupComment);                          // Comment
                 }
 
                 return backupFolderPath;
             });
         }
 
-
         /// <summary>
-        /// Recursively copies a directory and reports progress.
+        /// Recursively copies a directory y reporta progreso.
         /// </summary>
         private void CopyDirectoryWithProgress(string sourceDir, string destinationDir, IProgress<string>? progress)
         {
             Directory.CreateDirectory(destinationDir);
             var files = Directory.GetFiles(sourceDir, "*", SearchOption.AllDirectories);
 
-            // Calculate total size
             long totalBytes = 0;
             foreach (var file in files)
                 totalBytes += new FileInfo(file).Length;
@@ -63,10 +60,12 @@ namespace WotlkCPKTools.Services
                 string relativePath = Path.GetRelativePath(sourceDir, file);
                 string destFile = Path.Combine(destinationDir, relativePath);
                 Directory.CreateDirectory(Path.GetDirectoryName(destFile)!);
+
                 File.Copy(file, destFile, overwrite: true);
 
                 copiedBytes += new FileInfo(file).Length;
 
+                // Report progress
                 double percent = (double)copiedBytes / totalBytes * 100;
                 double copiedMb = copiedBytes / 1024.0 / 1024.0;
                 double totalMb = totalBytes / 1024.0 / 1024.0;
@@ -77,7 +76,23 @@ namespace WotlkCPKTools.Services
             progress?.Report($"Done! - Size: {totalBytes / 1024.0 / 1024.0:F2} MB");
         }
 
+        /// <summary>
+        /// Restaura un backup: siempre borra lo que hay en WTF y luego copia el backup, reportando progreso.
+        /// </summary>
+        public async Task RestoreBackupAsync(string backupFolder, IProgress<string>? progress = null)
+        {
+            if (!Directory.Exists(backupFolder))
+                throw new DirectoryNotFoundException($"Backup folder not found: {backupFolder}");
 
+            // Borra la carpeta WTF actual si existe
+            if (Directory.Exists(Pathing.WTF))
+                Directory.Delete(Pathing.WTF, recursive: true);
 
+            // Crear WTF vacío
+            Directory.CreateDirectory(Pathing.WTF);
+
+            // Copiar backup con progreso
+            await Task.Run(() => CopyDirectoryWithProgress(backupFolder, Pathing.WTF, progress));
+        }
     }
 }
