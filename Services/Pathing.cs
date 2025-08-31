@@ -37,7 +37,7 @@ namespace WotlkCPKTools.Services
         public static readonly string CustomAddOnsLists = Path.Combine(BaseFolder, "Data", "CustomAddOnsLists");
         // Recommended.txt File
         public static readonly string RecommendedFile = Path.Combine(BaseFolder, "Data", "CustomAddOnsLists", "Recommended.txt");
-
+        
 
 
 

@@ -10,7 +10,7 @@ namespace WotlkCPKTools.Services
         /// <summary>
         /// Asynchronously backs up the given folder to a timestamped backup folder, reporting progress.
         /// </summary>
-        public async Task<string> BackupFolderAsync(string backupTypeSuffix = "-Full", IProgress<string>? progress = null)
+        public async Task<string> BackupFolderAsync(string backupTitle, string backupComment, IProgress<string>? progress = null)
         {
             return await Task.Run(() =>
             {
@@ -21,13 +21,27 @@ namespace WotlkCPKTools.Services
                     Directory.CreateDirectory(Pathing.BackupsFolder);
 
                 string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-                string backupFolderPath = Path.Combine(Pathing.BackupsFolder, $"{timestamp}{backupTypeSuffix}");
+                string backupFolderPath = Path.Combine(Pathing.BackupsFolder, $"{timestamp}");
 
+                // Copy files
                 CopyDirectoryWithProgress(Pathing.WTF, backupFolderPath, progress);
+
+                // Create CPKToolsInfo.txt
+                string infoFilePath = Path.Combine(backupFolderPath, "CPKToolsInfo.txt");
+                bool isFavorite = false; // Default
+                using (var writer = new StreamWriter(infoFilePath))
+                {
+                    writer.WriteLine($"@{DateTime.Now:yyyy-MM-dd HH:mm:ss}"); // Date
+                    writer.WriteLine($"#{backupTitle}");                      // Title
+                    writer.WriteLine($"!Favorite:{isFavorite}");
+                    writer.WriteLine(backupComment);                          // Comment (multiline supported)
+                                        ;
+                }
 
                 return backupFolderPath;
             });
         }
+
 
         /// <summary>
         /// Recursively copies a directory and reports progress.
@@ -36,8 +50,13 @@ namespace WotlkCPKTools.Services
         {
             Directory.CreateDirectory(destinationDir);
             var files = Directory.GetFiles(sourceDir, "*", SearchOption.AllDirectories);
-            int total = files.Length;
-            int count = 0;
+
+            // Calculate total size
+            long totalBytes = 0;
+            foreach (var file in files)
+                totalBytes += new FileInfo(file).Length;
+
+            long copiedBytes = 0;
 
             foreach (var file in files)
             {
@@ -46,10 +65,18 @@ namespace WotlkCPKTools.Services
                 Directory.CreateDirectory(Path.GetDirectoryName(destFile)!);
                 File.Copy(file, destFile, overwrite: true);
 
-                count++;
-                progress?.Report($"Copying {count}/{total} files...");
+                copiedBytes += new FileInfo(file).Length;
+
+                double percent = (double)copiedBytes / totalBytes * 100;
+                double copiedMb = copiedBytes / 1024.0 / 1024.0;
+                double totalMb = totalBytes / 1024.0 / 1024.0;
+
+                progress?.Report($"{copiedMb:F2}/{totalMb:F2} MB ({percent:F1}%)");
             }
+
+            progress?.Report($"Done! - Size: {totalBytes / 1024.0 / 1024.0:F2} MB");
         }
+
 
 
     }

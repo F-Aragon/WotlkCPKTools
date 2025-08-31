@@ -20,6 +20,29 @@ namespace WotlkCPKTools.MVVM.View
         public BackUpView()
         {
             InitializeComponent();
+
         }
+
+        private void AdjustTitleColumnWidth()
+        {
+            if (BackupsListView.ActualWidth > 0)
+            {
+                double otherColumnsWidth = DateColumn.ActualWidth + 50 + 40; // Date + Fav + Open
+                double newWidth = BackupsListView.ActualWidth - otherColumnsWidth - 5; // margen interno
+                if (newWidth > 0)
+                    TitleColumn.Width = newWidth;
+            }
+        }
+
+        private void BackupsListView_Loaded(object sender, RoutedEventArgs e)
+        {
+            AdjustTitleColumnWidth();
+        }
+
+        private void BackupsListView_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            AdjustTitleColumnWidth();
+        }
+
     }
 }
