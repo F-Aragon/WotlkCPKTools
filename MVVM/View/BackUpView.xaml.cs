@@ -12,13 +12,27 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WotlkCPKTools.Core;
+using WotlkCPKTools.MVVM.Model;
 
 namespace WotlkCPKTools.MVVM.View
 {
     public partial class BackUpView : UserControl
     {
+        public ICommand SetBackupDateToNowCommand { get; }
+
+
         public BackUpView()
         {
+            SetBackupDateToNowCommand = new RelayCommand(param =>
+            {
+                if (param is BackupInfo backup)
+                {
+                    backup.Date = DateTime.Now;
+                }
+            });
+
+
             InitializeComponent();
 
         }
@@ -43,6 +57,8 @@ namespace WotlkCPKTools.MVVM.View
         {
             AdjustTitleColumnWidth();
         }
+        
 
+        
     }
 }
