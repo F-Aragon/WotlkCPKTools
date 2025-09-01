@@ -63,12 +63,12 @@
                                      Style="{StaticResource MenuButtonTheme}"
                                      Command="{Binding BackUpViewCommand}"/>
 
-                        <RadioButton Content="Extra"
+                        <RadioButton Content="More"
                                      Width="140"
                                      Foreground="White"
                                      FontSize="30"
                                      Style="{StaticResource MenuButtonTheme}"
-                                     Command="{Binding ExtrasViewCommand}"/>
+                                     Command="{Binding MoreViewCommand}"/>
                     </StackPanel>
 
                     <!-- Minimize & Close Buttons -->
@@ -96,12 +96,58 @@
                                 Margin="10,10,10,5"
                                 Content="{Binding CurrentView}"/>
 
-                <!-- Footer / Optional controls -->
-                <Grid Grid.Row="2">
+                <!-- Footer -->
+                <Grid Grid.Row="2" Background="#1D1B2B" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
+
+                    <!-- Read-only display of realmlist content, aligned right -->
+                    <TextBlock Grid.Column="1"
+                               Text="{Binding RealmlistContent}"
+                               TextWrapping="Wrap"
+                               TextAlignment="Right"
+                               Background="#2C2A3E"
+                               Foreground="White"
+                               Padding="5"
+                               Margin="5,0"
+                               VerticalAlignment="Top"
+                               IsHitTestVisible="False"/>
+
+
+
+                    <!-- Estado (mensaje inferior) -->
+                    <TextBlock Grid.Column="1"
+               Text="{Binding StatusMessage}"
+               VerticalAlignment="Center"
+               Foreground="LightGray"
+               FontSize="12"
+               Margin="10,0" />
+
+                    <!-- Botón para abrir carpeta realmlist -->
+                    <Button Grid.Column="2"
+            Content="Abrir carpeta"
+            Width="120"
+            Height="25"
+            Margin="5,0"
+            Foreground="White"
+            Background="#444062"
+            BorderBrush="#5A5776"
+            Command="{Binding OpenRealmlistFolderCommand}"/>
+
+                    <!-- Botón para lanzar WoW -->
+                    <Button Grid.Column="3"
+            Content="Launch WoW"
+            Width="120"
+            Height="25"
+            Margin="10,0"
+            Foreground="White"
+            Background="#3A3756"
+            BorderBrush="#5A5776"
+            Command="{Binding LaunchWoWCommand}"/>
                 </Grid>
             </Grid>
         </Grid>

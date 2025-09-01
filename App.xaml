@@ -25,8 +25,8 @@
                 <view:BackUpView/>
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type viewModel:ExtrasViewModel}">
-                <view:ExtrasView/>
+            <DataTemplate DataType="{x:Type viewModel:MoreViewModel}">
+                <view:MoreView/>
             </DataTemplate>
 
         </ResourceDictionary>

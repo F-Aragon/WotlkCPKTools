@@ -14,6 +14,8 @@ namespace WotlkCPKTools.Services
         public static readonly string WTF = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WTF");
         //AddOns
         public static readonly string AddOns = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Interface", "AddOns");
+        //Realmlist.wtf folder
+        public static readonly string RealmlistFolder = Path.Combine(WoWFolder, "Data", "enUS");
 
 
 
@@ -37,7 +39,8 @@ namespace WotlkCPKTools.Services
         public static readonly string CustomAddOnsLists = Path.Combine(BaseFolder, "Data", "CustomAddOnsLists");
         // Recommended.txt File
         public static readonly string RecommendedFile = Path.Combine(BaseFolder, "Data", "CustomAddOnsLists", "Recommended.txt");
-        
+        // AppConfig.txt File
+        public static readonly string AppConfigFile = Path.Combine(BaseFolder, "AppConfig.txt");
 
 
 

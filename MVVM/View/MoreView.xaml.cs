@@ -15,9 +15,12 @@ using System.Windows.Shapes;
 
 namespace WotlkCPKTools.MVVM.View
 {
-    public partial class ExtrasView : UserControl
+    /// <summary>
+    /// Interaction logic for MoreView.xaml
+    /// </summary>
+    public partial class MoreView : UserControl
     {
-        public ExtrasView()
+        public MoreView()
         {
             InitializeComponent();
         }
