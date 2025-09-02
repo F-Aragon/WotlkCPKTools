@@ -76,7 +76,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
             {
                 Title = "Select realmlist.wtf",
                 Filter = "WTF files (*.wtf)|*.wtf|All files (*.*)|*.*",
-                InitialDirectory = Pathing.RealmlistFolder
+                InitialDirectory = Pathing.WoWFolder
             };
 
             if (dialog.ShowDialog() == true)
