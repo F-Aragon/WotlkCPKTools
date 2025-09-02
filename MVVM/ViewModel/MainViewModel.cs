@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Input;
 using WotlkCPKTools.Core;
@@ -60,12 +62,24 @@ namespace WotlkCPKTools.MVVM.ViewModel
 
             _appConfigService = AppConfigService.Instance;
 
+            // Listen to changes in AppConfigService (paths updates)
+            _appConfigService.PropertyChanged += OnAppConfigChanged;
+
             // Footer commands
             LaunchWoWCommand = new RelayCommand(_ => LaunchWoW());
             OpenRealmlistFolderCommand = new RelayCommand(_ => OpenRealmlistFolder());
 
             // Load realmlist content at startup
             LoadRealmlistContent();
+        }
+
+        private void OnAppConfigChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(AppConfigService.RealmlistFolderPath))
+            {
+                // Reload file when folder changes
+                LoadRealmlistContent();
+            }
         }
 
         private void LoadRealmlistContent()
@@ -89,7 +103,6 @@ namespace WotlkCPKTools.MVVM.ViewModel
         {
             try
             {
-                // Always read the latest launcher path from AppConfig
                 var exePath = _appConfigService.LauncherExePath;
                 if (File.Exists(exePath))
                     Process.Start(exePath);

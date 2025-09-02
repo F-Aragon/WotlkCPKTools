@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 
 namespace WotlkCPKTools.Services
@@ -7,24 +8,47 @@ namespace WotlkCPKTools.Services
     /// <summary>
     /// Service to manage AppConfig.txt, storing paths for launcher and realmlist.
     /// Implements singleton so all ViewModels share the same instance.
+    /// Now implements INotifyPropertyChanged to notify UI when paths change.
     /// </summary>
-    public class AppConfigService
+    public class AppConfigService : INotifyPropertyChanged
     {
         private static AppConfigService? _instance;
-
-        /// <summary>
-        /// Singleton instance of AppConfigService
-        /// </summary>
         public static AppConfigService Instance => _instance ??= new AppConfigService();
 
         private readonly string _configFilePath;
 
-        public string LauncherExePath { get; private set; }
-        public string RealmlistFolderPath { get; private set; }
+        private string _launcherExePath;
+        public string LauncherExePath
+        {
+            get => _launcherExePath;
+            private set
+            {
+                if (_launcherExePath != value)
+                {
+                    _launcherExePath = value;
+                    OnPropertyChanged(nameof(LauncherExePath));
+                }
+            }
+        }
 
-        /// <summary>
-        /// Private constructor to enforce singleton pattern
-        /// </summary>
+        private string _realmlistFolderPath;
+        public string RealmlistFolderPath
+        {
+            get => _realmlistFolderPath;
+            private set
+            {
+                if (_realmlistFolderPath != value)
+                {
+                    _realmlistFolderPath = value;
+                    OnPropertyChanged(nameof(RealmlistFolderPath));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
         private AppConfigService()
         {
             _configFilePath = Pathing.AppConfigFile;
@@ -32,16 +56,12 @@ namespace WotlkCPKTools.Services
             LoadConfig();
         }
 
-        /// <summary>
-        /// Ensures that AppConfig.txt exists, creating it with default paths if missing
-        /// </summary>
         private void EnsureAppConfigExists()
         {
             if (!File.Exists(_configFilePath))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(_configFilePath)!);
 
-                // Default paths
                 LauncherExePath = Path.Combine(Pathing.WoWFolder, "wow.exe");
                 RealmlistFolderPath = Pathing.RealmlistFolder;
 
@@ -53,9 +73,6 @@ namespace WotlkCPKTools.Services
             }
         }
 
-        /// <summary>
-        /// Loads AppConfig.txt and stores values into properties
-        /// </summary>
         private void LoadConfig()
         {
             try
@@ -88,9 +105,6 @@ namespace WotlkCPKTools.Services
             }
         }
 
-        /// <summary>
-        /// Saves the given launcher exe and realmlist folder paths to AppConfig.txt
-        /// </summary>
         public void SaveConfig(string launcherExePath, string realmlistFolderPath)
         {
             LauncherExePath = launcherExePath ?? string.Empty;
@@ -105,9 +119,6 @@ namespace WotlkCPKTools.Services
             });
         }
 
-        /// <summary>
-        /// Updates one or both paths and saves immediately
-        /// </summary>
         public void UpdateConfig(string? launcherExe = null, string? realmlistFolder = null)
         {
             if (!string.IsNullOrWhiteSpace(launcherExe))
