@@ -21,7 +21,10 @@
         </Grid.RowDefinitions>
 
         <!-- Scrollable content -->
-        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" 
+                      HorizontalScrollBarVisibility="Disabled"
+                      >
+            
             <StackPanel HorizontalAlignment="Stretch">
                 <!-- Installed AddOns -->
                 <Expander Header="Installed Addons" 
@@ -37,9 +40,9 @@
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               HeadersVisibility="Column"
-                              Background="#2b2b2b"
+                              Background="transparent"
                               Foreground="Gray"
-                              RowHeight="30"
+                              RowHeight="25"
                               IsReadOnly="False"
                               ColumnWidth="SizeToCells"
                               Margin="0,0,0,5"
@@ -318,6 +321,7 @@
         <Grid Grid.RowSpan="2"
               Panel.ZIndex="1"
               IsHitTestVisible="{Binding IsLoading}"
+
               Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
             <Border Background="#80000000"/>
             <ProgressBar Width="150" Height="20" IsIndeterminate="True"

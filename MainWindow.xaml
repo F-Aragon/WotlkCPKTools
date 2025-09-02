@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WotlkCPKTools"
         xmlns:viewModel="clr-namespace:WotlkCPKTools.MVVM.ViewModel"
         mc:Ignorable="d"
-        Height="600" Width="800"
+        Height="620" Width="860"
         WindowStyle="None"
         ResizeMode="CanResize"
         Background="Black">
@@ -22,9 +22,17 @@
         <viewModel:MainViewModel/>
     </Window.DataContext>
 
-    <Border Background="Black" MouseDown="_MouseDown"  BorderThickness="5">
+    <Border  MouseDown="_MouseDown"  BorderThickness="1">
+        <Border.Background>
+            <ImageBrush ImageSource="/Resources/Images/back2.png" 
+                    Stretch="UniformToFill" 
+                    AlignmentX="Center" 
+                    AlignmentY="Center"/>
+        </Border.Background>
         <Grid>
-            <Grid Margin="2" Background="#272537">
+            <!-- Darker Overlay  -->
+            <Rectangle Fill="Black" Opacity="0.4"/>
+            <Grid Margin="2" Background="transparent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
                     <RowDefinition/>
@@ -49,24 +57,24 @@
                     <!-- Menu -->
                     <StackPanel Orientation="Horizontal" Grid.Column="1" >
                         <RadioButton Content="Addons"
-                                     Width="140"
+                                     Width="100"
                                      Foreground="White"
-                                     FontSize="30"
+                                     FontSize="20"
                                      Style="{StaticResource MenuButtonTheme}"
                                      IsChecked="True"
                                      Command="{Binding AddonsViewCommand}"/>
 
                         <RadioButton Content="Backup"
-                                     Width="140"
+                                     Width="100"
                                      Foreground="White"
-                                     FontSize="30"
+                                     FontSize="20"
                                      Style="{StaticResource MenuButtonTheme}"
                                      Command="{Binding BackUpViewCommand}"/>
 
                         <RadioButton Content="More"
-                                     Width="140"
+                                     Width="100"
                                      Foreground="White"
-                                     FontSize="30"
+                                     FontSize="20"
                                      Style="{StaticResource MenuButtonTheme}"
                                      Command="{Binding MoreViewCommand}"/>
                     </StackPanel>
@@ -99,8 +107,8 @@
                 <!-- Footer -->
                 <Grid Grid.Row="2" Background="#1D1B2B" >
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
@@ -119,35 +127,35 @@
 
 
 
-                    <!-- Estado (mensaje inferior) -->
+                    <!-- Realmlist textblock -->
                     <TextBlock Grid.Column="1"
-               Text="{Binding StatusMessage}"
-               VerticalAlignment="Center"
-               Foreground="LightGray"
-               FontSize="12"
-               Margin="10,0" />
+                               Text="{Binding StatusMessage}"
+                               VerticalAlignment="Center"
+                               Foreground="LightGray"
+                               FontSize="12"
+                               Margin="10,0" />
 
-                    <!-- Botón para abrir carpeta realmlist -->
+                    <!-- Realmlist folder button -->
                     <Button Grid.Column="2"
-            Content="Abrir carpeta"
-            Width="120"
-            Height="25"
-            Margin="5,0"
-            Foreground="White"
-            Background="#444062"
-            BorderBrush="#5A5776"
-            Command="{Binding OpenRealmlistFolderCommand}"/>
+                            Content="Realmlist 📁"
+                            Width="90"
+                            Height="25"
+                            Margin="5,0"
+                            Foreground="White"
+                            Background="#444062"
+                            BorderBrush="#5A5776"
+                            Command="{Binding OpenRealmlistFolderCommand}"/>
 
-                    <!-- Botón para lanzar WoW -->
+                    <!-- Launcher button -->
                     <Button Grid.Column="3"
-            Content="Launch WoW"
-            Width="120"
-            Height="25"
-            Margin="10,0"
-            Foreground="White"
-            Background="#3A3756"
-            BorderBrush="#5A5776"
-            Command="{Binding LaunchWoWCommand}"/>
+                            Content="Launch WoW"
+                            Width="120"
+                            Height="25"
+                            Margin="10,0"
+                            Foreground="White"
+                            Background="#3A3756"
+                            BorderBrush="#5A5776"
+                            Command="{Binding LaunchWoWCommand}"/>
                 </Grid>
             </Grid>
         </Grid>

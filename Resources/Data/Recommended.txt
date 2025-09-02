@@ -1,7 +1,0 @@
-#hola
-@https://github.com/FranciscoRAragon/WotlkCPKTools/blob/master/Resources/Data/Recommended.txt
-WeakAuras-WotLK:https://github.com/NoM0Re/WeakAuras-WotLK
-ElvUI:https://github.com/ElvUI-WotLK/ElvUI
-ElvUI_AddOnSkins:https://github.com/ElvUI-WotLK/ElvUI_AddOnSkins
-
-DBM-Zidras:https://github.com/Zidras/DBM-WarmaneDBM-Zidras:https://github.com/Zidras/DBM-Warmane
