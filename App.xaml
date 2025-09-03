@@ -14,9 +14,10 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Theme/MenuButtonTheme.xaml"/>
                 <ResourceDictionary Source="/Theme/TextBoxTheme.xaml"/>
-                <ResourceDictionary Source="/Theme/DataGridTheme.xaml"/>
                 
-                <ResourceDictionary Source="/Theme/ScrollBarTheme.xaml"/>
+                <ResourceDictionary Source="/Theme/DataGridTheme.xaml"/>
+                <ResourceDictionary Source="/Theme/ListExpanderTheme.xaml"/>
+
             </ResourceDictionary.MergedDictionaries>
 
 

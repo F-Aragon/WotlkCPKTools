@@ -31,7 +31,17 @@
         </Border.Background>
         <Grid>
             <!-- Darker Overlay  -->
-            <Rectangle Fill="Black" Opacity="0.4"/>
+            <Rectangle>
+                <Rectangle.Fill>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <!-- Arriba más transparente -->
+                        <GradientStop Color="#50000000" Offset="0"/>
+                        <!-- Abajo más opaco -->
+                        <GradientStop Color="#000000" Offset="1"/>
+                    </LinearGradientBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+
             <Grid Margin="2" Background="transparent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>

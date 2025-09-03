@@ -1,0 +1,67 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Estilo base para todos los Expanders de listas con header personalizable -->
+    <Style x:Key="ListExpanderStyle" TargetType="Expander">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="IsExpanded" Value="True"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Expander">
+                    <Border Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <!-- Header -->
+                                <RowDefinition Height="*"/>
+                                <!-- Contenido -->
+                            </Grid.RowDefinitions>
+
+                            <!-- Header -->
+                            <DockPanel Grid.Row="0" VerticalAlignment="Center">
+                                <!-- ToggleButton que controla la expansión -->
+                                <ToggleButton x:Name="ExpanderToggle"
+                                              IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
+                                              Width="20" Height="20" Margin="2" DockPanel.Dock="Left"
+                                              Background="Transparent" BorderThickness="0">
+                                    <TextBlock x:Name="ArrowIcon" Text="▼" FontWeight="Bold" Foreground="White"/>
+                                </ToggleButton>
+
+                                <!-- Nombre de lista -->
+                                <ContentPresenter ContentSource="Header" VerticalAlignment="Center" Margin="4,0,4,0"/>
+
+                                <!-- Panel de botones/indicadores -->
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+                            </DockPanel>
+
+                            <!-- Contenido del Expander -->
+                            <ContentPresenter x:Name="PART_Content" Grid.Row="1" Visibility="Collapsed" Margin="{TemplateBinding Padding}"/>
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <!-- Mostrar contenido cuando IsExpanded = True -->
+                        <Trigger Property="IsExpanded" Value="True">
+                            <Setter TargetName="PART_Content" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+
+                        <!-- Cambiar el icono según el estado -->
+                        <Trigger SourceName="ExpanderToggle" Property="IsChecked" Value="True">
+                            <Setter TargetName="ArrowIcon" Property="Text" Value="▲"/>
+                        </Trigger>
+                        <Trigger SourceName="ExpanderToggle" Property="IsChecked" Value="False">
+                            <Setter TargetName="ArrowIcon" Property="Text" Value="▼"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

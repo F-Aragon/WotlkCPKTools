@@ -12,10 +12,23 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ScrollViewer">
                     <Grid>
-                        <ScrollContentPresenter Content="{TemplateBinding Content}" 
-                                                CanContentScroll="{TemplateBinding CanContentScroll}" 
-                                                Margin="{TemplateBinding Padding}"/>
-                        
+                        <!-- Grid principal para organizar contenido en columnas -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="6"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Contenido del ScrollViewer en la primera columna -->
+                            <ScrollContentPresenter Grid.Column="0"
+                                                    Content="{TemplateBinding Content}" 
+                                                    CanContentScroll="{TemplateBinding CanContentScroll}" 
+                                                    Margin="{TemplateBinding Padding}"/>
+
+                            <!-- Aquí podrías agregar otro contenido en la segunda columna si quieres -->
+                            <Border Grid.Column="1" Background="Transparent"/>
+                        </Grid>
+
                         <!-- Scroll vertical -->
                         <ScrollBar Name="PART_VerticalScrollBar"
                                    Orientation="Vertical"
