@@ -25,6 +25,7 @@
 
                             <!-- Header -->
                             <DockPanel Grid.Row="0" VerticalAlignment="Center">
+
                                 <!-- ToggleButton que controla la expansión -->
                                 <ToggleButton x:Name="ExpanderToggle"
                                               IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
@@ -36,9 +37,14 @@
                                 <!-- Nombre de lista -->
                                 <ContentPresenter ContentSource="Header" VerticalAlignment="Center" Margin="4,0,4,0"/>
 
-                                <!-- Panel de botones/indicadores -->
-                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right"/>
+                                <!-- Línea que rellena el espacio -->
+                                <Rectangle Height="1" Fill="Gray" VerticalAlignment="Center" Margin="4,0,4,0" HorizontalAlignment="Stretch" DockPanel.Dock="Left"/>
+
+                                <!-- Panel de botones/indicadores <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right"/>-->
+                                
                             </DockPanel>
+
+
 
                             <!-- Contenido del Expander -->
                             <ContentPresenter x:Name="PART_Content" Grid.Row="1" Visibility="Collapsed" Margin="{TemplateBinding Padding}"/>
