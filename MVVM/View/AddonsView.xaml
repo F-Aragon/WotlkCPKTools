@@ -7,39 +7,41 @@
              xmlns:conv="clr-namespace:WotlkCPKTools.Core"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="900"
-             Background="#1b1b1b">
+             Background="Transparent">
 
     <UserControl.Resources>
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <conv:IsInstalledConverter x:Key="IsInstalledConverter"/>
     </UserControl.Resources>
 
-    <Grid Margin="10">
+    
+    <Grid Margin="10,0,0,10">
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
+        <!-- Darker Overlay  -->
+        <Rectangle Fill="Black" Opacity="0.4"/>
         <!-- Scrollable content -->
-        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" 
-                      HorizontalScrollBarVisibility="Disabled"
-                      >
+        <ScrollViewer Grid.Row="0">
             
             <StackPanel HorizontalAlignment="Stretch">
+                
                 <!-- Installed AddOns -->
                 <Expander Header="Installed Addons" 
                           Foreground="White" 
                           Background="Transparent"
                           FontSize="14" 
                           FontWeight="Bold" 
-                          Margin="0,0,0,0"
+                          Margin="0,0,0,2"
                           IsExpanded="True">
                     <!-- Default: open -->
                     <DataGrid x:Name="InstalledAddonsGrid"
                               ItemsSource="{Binding InstalledAddons}"
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
-                              HeadersVisibility="Column"
+                              HeadersVisibility="None"
                               Background="transparent"
                               Foreground="Gray"
                               RowHeight="25"
@@ -48,10 +50,10 @@
                               Margin="0,0,0,5"
                               PreviewMouseWheel="DataGrid_PreviewMouseWheel"
                               CellEditEnding="DataGrid_CellEditEnding">
-                        <DataGrid.Columns>
+                        <DataGrid.Columns >
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="SizeToCells" IsReadOnly="False"/>
                             <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubUrl}" Width="*" IsReadOnly="True"/>
-                            <DataGridTemplateColumn Header="Last Update" Width="SizeToCells">
+                            <DataGridTemplateColumn Header="Last Update" Width="SizeToCells" MinWidth="120">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock>
@@ -74,7 +76,7 @@
                             <DataGridTemplateColumn Header="Status" Width="SizeToCells">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Rectangle Width="20" Height="20" RadiusX="3" RadiusY="3">
+                                        <Rectangle Width="20" Height="20" RadiusX="2" RadiusY="2">
                                             <Rectangle.Style>
                                                 <Style TargetType="Rectangle">
                                                     <Setter Property="Fill" Value="Gray"/>
@@ -130,7 +132,7 @@
                           Background="Transparent"
                           FontSize="14" 
                           FontWeight="Bold" 
-                          Margin="0,0,0,5"
+                          Margin="0,0,0,2"
                           IsExpanded="True"
                           Visibility="{Binding ElementName=FastAddAddonsGrid, Path=HasItems, Converter={StaticResource BoolToVisibilityConverter}}">
                     <!-- Default: open -->
@@ -176,7 +178,7 @@
                 <ItemsControl ItemsSource="{Binding CustomAddonLists}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Expander FontSize="14" FontWeight="Bold" Margin="0,0,0,5" Foreground="White" Background="Transparent">
+                            <Expander FontSize="14" FontWeight="Bold" Margin="0,0,0,2" Foreground="White" Background="Transparent">
                                 <Expander.Header>
                                     <DockPanel LastChildFill="False">
                                         <!-- Nombre de la lista -->

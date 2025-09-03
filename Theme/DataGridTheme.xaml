@@ -3,21 +3,23 @@
 
     <!-- Estilo global para DataGrid -->
     <Style TargetType="DataGrid">
+        <Setter Property="HeadersVisibility" Value="None"/>
         <Setter Property="Background" Value="#2C2A3E"/>
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="BorderBrush" Value="#5A5776"/>
-        <Setter Property="RowBackground" Value="#2C2A3E"/>
-        <Setter Property="AlternatingRowBackground" Value="#34324A"/>
-        <Setter Property="HorizontalGridLinesBrush" Value="#444062"/>
-        <Setter Property="VerticalGridLinesBrush" Value="#444062"/>
+        <Setter Property="BorderBrush" Value="#805A5776"/>
+        <Setter Property="RowBackground" Value="Transparent"/>
+        <Setter Property="AlternatingRowBackground" Value="Transparent"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="#805A5776"/>
+        <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
         <Setter Property="GridLinesVisibility" Value="Horizontal"/>
-        <Setter Property="RowHeight" Value="30"/>
+        <Setter Property="RowHeight" Value="25"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="SelectionMode" Value="Single"/>
         <Setter Property="SelectionUnit" Value="FullRow"/>
-        <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
+        <Setter Property="ScrollViewer.BorderThickness" Value="1"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="EnableRowVirtualization" Value="True"/>
 
@@ -25,11 +27,11 @@
         <Setter Property="ColumnHeaderStyle">
             <Setter.Value>
                 <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="Background" Value="#3A3756"/>
+                    <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="Foreground" Value="White"/>
                     <Setter Property="FontWeight" Value="Bold"/>
                     <Setter Property="FontSize" Value="14"/>
-                    <Setter Property="BorderBrush" Value="#5A5776"/>
+                    <Setter Property="BorderBrush" Value="#805A5776"/>
                     <Setter Property="BorderThickness" Value="0,0,0,1"/>
                     <Setter Property="HorizontalContentAlignment" Value="Center"/>
                     <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -41,19 +43,36 @@
         <Setter Property="CellStyle">
             <Setter.Value>
                 <Style TargetType="DataGridCell">
-                    <Setter Property="BorderBrush" Value="#444062"/>
-                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                    <Setter Property="Padding" Value="8,0,8,0"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
                     <Setter Property="HorizontalContentAlignment" Value="Center"/>
                     <Setter Property="VerticalContentAlignment" Value="Center"/>
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#5A5776"/>
+                            <Setter Property="Background" Value="Transparent"/>
                             <Setter Property="Foreground" Value="White"/>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
             </Setter.Value>
         </Setter>
+
+        <!-- Estilo de filas para hover -->
+        <Setter Property="RowStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Height" Value="25"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#803A3756"/>
+                        </Trigger>
+
+                    </Style.Triggers>
+                </Style>
+            </Setter.Value>
+        </Setter>
+
     </Style>
 </ResourceDictionary>
