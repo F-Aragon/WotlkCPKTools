@@ -120,16 +120,23 @@
                                                     Background="#007ACC" Foreground="White"
                                                     Width="30"
                                                     Margin="0"/>
-                                            <Button Content="⬇️"
-                                                    Command="{Binding DataContext.MoveToFastAddCommand, ElementName=Root}"
+                                            <Button Command="{Binding DataContext.MoveToFastAddCommand, ElementName=Root}"
                                                     CommandParameter="{Binding}"
-                                                    Background="#007ACC" Foreground="White"
+                                                    Background="Transparent"
                                                     Width="30"
-                                                    Margin="0"/>
+                                                    Height="30"
+                                                    Margin="0"
+                                                    BorderThickness="0">
+                                                <Viewbox Width="20" Height="20" Stretch="Uniform">
+                                                    <ContentControl Content="{StaticResource IconArrowDown}" Foreground="Red"/>
+                                                </Viewbox>
+                                            </Button>
+
                                             <Button Command="{Binding DataContext.RemoveInstalledCommand, ElementName=Root}"
                                                     CommandParameter="{Binding}"
                                                     Background="Transparent"
                                                     Width="30"
+                                                    Height="30"
                                                     Margin="0"
                                                     BorderThickness="0">
                                                 <Viewbox Width="20" Height="20" Stretch="Uniform">

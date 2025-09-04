@@ -1,10 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- Icono: Flecha hacia abajo -->
-    <Viewbox x:Key="IconArrowDown" x:Shared="False" Width="16" Height="16" Stretch="Uniform">
+    <!-- Icono: Down Arror with Bar on TOP -->
+    <Viewbox x:Key="IconArrowDownWithBar" x:Shared="False" Width="16" Height="16" Stretch="Uniform">
         <Canvas Width="16" Height="16">
-            <Path Fill="White" Data="M1 3.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5M8 6a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 12.293V6.5A.5.5 0 0 1 8 6" />
+            <Path Fill="White" 
+                  Data="M1 3.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5M8 6a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 12.293V6.5A.5.5 0 0 1 8 6" />
         </Canvas>
     </Viewbox>
 
@@ -16,10 +17,13 @@
         </Canvas>
     </Viewbox>
 
-    <!-- Icono: Flecha hacia arriba -->
-    <Viewbox x:Key="IconArrowUp" x:Shared="False" Width="16" Height="16" Stretch="Uniform">
+    <!-- Icono: Flecha hacia Abajo -->
+    <Viewbox x:Key="IconArrowDown" x:Shared="False" Width="16" Height="16" Stretch="Uniform">
         <Canvas Width="16" Height="16">
-            <Path Fill="White" Data="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
+            <Path Stroke="LightBlue" StrokeThickness="2"
+                  StrokeStartLineCap="Round"
+                  StrokeEndLineCap="Round"
+                  Data="M8 1 L8 12 M4 8 L8 12 L12 8"/>
         </Canvas>
     </Viewbox>
 
@@ -107,7 +111,7 @@
     </Viewbox>
 
     <!-- Cloud Download -->
-    <Viewbox x:Key="IconUpload" x:Shared="False" Width="20" Height="20" Stretch="Uniform">
+    <Viewbox x:Key="IconFilledCloudWithArrowGoingDown" x:Shared="False" Width="20" Height="20" Stretch="Uniform">
         <Canvas Width="20" Height="20">
             <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}" Data="M8 0a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 4.095 0 5.555 0 7.318 0 9.366 1.708 11 3.781 11H7.5V5.5a.5.5 0 0 1 1 0V11h4.188C14.502 11 16 9.57 16 7.773c0-1.636-1.242-2.969-2.834-3.194C12.923 1.999 10.69 0 8 0m-.354 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V11h-1v3.293l-2.146-2.147a.5.5 0 0 0-.708.708z"/>
         </Canvas>
