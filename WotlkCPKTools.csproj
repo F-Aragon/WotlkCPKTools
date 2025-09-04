@@ -20,6 +20,15 @@
     <None Remove="Resources\Images\back2.png" />
     <None Remove="Resources\Images\back3.jpg" />
     <None Remove="Resources\Images\back4.jpeg" />
+    <None Remove="Resources\Svg icons\arrow-bar-down.svg" />
+    <None Remove="Resources\Svg icons\arrow-clockwise.svg" />
+    <None Remove="Resources\Svg icons\arrow-down-square.svg" />
+    <None Remove="Resources\Svg icons\arrow-down.svg" />
+    <None Remove="Resources\Svg icons\arrow-repeat.svg" />
+    <None Remove="Resources\Svg icons\ban.svg" />
+    <None Remove="Resources\Svg icons\cloud-download.svg" />
+    <None Remove="Resources\Svg icons\plus-lg.svg" />
+    <None Remove="Resources\Svg icons\trash-fill.svg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +44,15 @@
     <Resource Include="Resources\Images\back4.jpeg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Svg icons\arrow-bar-down.svg" />
+    <Resource Include="Resources\Svg icons\arrow-clockwise.svg" />
+    <Resource Include="Resources\Svg icons\arrow-down-square.svg" />
+    <Resource Include="Resources\Svg icons\arrow-down.svg" />
+    <Resource Include="Resources\Svg icons\arrow-repeat.svg" />
+    <Resource Include="Resources\Svg icons\ban.svg" />
+    <Resource Include="Resources\Svg icons\cloud-download.svg" />
+    <Resource Include="Resources\Svg icons\plus-lg.svg" />
+    <Resource Include="Resources\Svg icons\trash-fill.svg" />
   </ItemGroup>
 
 </Project>

@@ -50,6 +50,14 @@
                                        Foreground="White"
                                        DockPanel.Dock="Left"/>
                             <!-- Podés agregar botones más adelante -->
+                            <Button Content="Update All"
+                                    Command="{Binding DataContext.UpdateAllCommand, ElementName=Root}"
+                                    Height="auto" Width="auto"
+                                    Background="Green" Foreground="White" HorizontalAlignment="left"/>
+                            <Button Content="Refresh"
+                                    Command="{Binding DataContext.RefreshCommand, ElementName=Root}"
+                                    Height="auto" Width="auto"
+                                    Background="#4CAF50" Foreground="White"/>
                         </DockPanel>
                     </Expander.Header>
                     <DataGrid x:Name="InstalledAddonsGrid"
@@ -118,12 +126,16 @@
                                                     Background="#007ACC" Foreground="White"
                                                     Width="30"
                                                     Margin="0"/>
-                                            <Button Content="🗑️"
-                                                    Command="{Binding DataContext.RemoveInstalledCommand, ElementName=Root}"
+                                            <Button Command="{Binding DataContext.RemoveInstalledCommand, ElementName=Root}"
                                                     CommandParameter="{Binding}"
-                                                    Background="Red" Foreground="White"
+                                                    Background="Transparent"
                                                     Width="30"
-                                                    Margin="0"/>
+                                                    Margin="0"
+                                                    BorderThickness="0">
+                                                <Viewbox Width="20" Height="20" Stretch="Uniform">
+                                                    <ContentControl Content="{StaticResource IconTrash}" Foreground="Red"/>
+                                                </Viewbox>
+                                            </Button>
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -161,16 +173,25 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                            <Button Content="+" 
-                                                    Command="{Binding DataContext.AddFromFastAddCommand, ElementName=Root}"
+                                            <Button Command="{Binding DataContext.AddFromFastAddCommand, ElementName=Root}"
                                                     CommandParameter="{Binding}"
-                                                    Background="#4CAF50" Foreground="White"
-                                                    Width="30"/>
-                                            <Button Content="🗑️"
-                                                    Command="{Binding DataContext.DeleteFastAddCommand, ElementName=Root}"
+                                                    Background="Transparent"
+                                                    Width="30"
+                                                    BorderThickness="0">
+                                                <Viewbox Width="20" Height="20" Stretch="Uniform">
+                                                    <ContentControl Content="{StaticResource IconPlus}" Foreground="#4CAF50"/>
+                                                </Viewbox>
+                                            </Button>
+                                            <Button Command="{Binding DataContext.DeleteFastAddCommand, ElementName=Root}"
                                                     CommandParameter="{Binding}"
-                                                    Background="Red" Foreground="White"
-                                                    Width="30"/>
+                                                    Background="Transparent"
+                                                    Width="30"
+                                                    BorderThickness="0">
+                                                <Viewbox Width="20" Height="20" Stretch="Uniform">
+                                                    <ContentControl Content="{StaticResource IconTrash}" Foreground="Red"/>
+                                                </Viewbox>
+                                            </Button>
+                                            
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -195,37 +216,58 @@
                                         
                                         <!-- Botones a la derecha -->
                                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
-                                            <Button Width="30" Height="25"
+                                            <Button Width="27" Height="25"
+                                                    Background="Transparent"
                                                     Command="{Binding DataContext.DownloadCustomList, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                    CommandParameter="{Binding}" 
-                                                    Foreground="White">
+                                                    CommandParameter="{Binding}"
+                                                    BorderThickness="0">
+                                                <Button.Content>
+                                                    <ContentControl>
+                                                        <ContentControl.Style>
+                                                            <Style TargetType="ContentControl">
+                                                                <!-- Icono por defecto -->
+                                                                <Setter Property="Content" Value="{StaticResource IconCloudInsideFilled}"/>
+                                                                <Setter Property="Foreground" Value="Yellow"/>
+                                                                <Setter Property="Height" Value="25"/>
+                                                                <Style.Triggers>
+                                                                    <!-- Si está actualizado, mostrar otro icono -->
+                                                                    <DataTrigger Binding="{Binding IsUpToDate}" Value="True">
+                                                                        <Setter Property="Content" Value="{StaticResource IconCloudCheckFilled}"/>
+                                                                        <Setter Property="Foreground" Value="#4000FF00"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </ContentControl.Style>
+                                                    </ContentControl>
+                                                </Button.Content>
+
                                                 <Button.Style>
                                                     <Style TargetType="Button">
                                                         <Setter Property="Visibility" Value="Visible"/>
-                                                        <Setter Property="Content" Value="⟳"/>
-                                                        <Setter Property="Background" Value="Red"/>
                                                         <Style.Triggers>
+                                                            <!-- Ocultar si RepoFileUrl es null o vacío -->
                                                             <DataTrigger Binding="{Binding RepoFileUrl}" Value="{x:Null}">
                                                                 <Setter Property="Visibility" Value="Collapsed"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding RepoFileUrl}" Value="">
                                                                 <Setter Property="Visibility" Value="Collapsed"/>
                                                             </DataTrigger>
-                                                            <DataTrigger Binding="{Binding IsUpToDate}" Value="True">
-                                                                <Setter Property="Content" Value="✔️"/>
-                                                                <Setter Property="Background" Value="#4CAF50"/>
-                                                            </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
                                                 </Button.Style>
                                             </Button>
 
-                                            <Button Width="30" Height="25"
-                                                    Foreground="Red"
+
+
+                                            <Button Width="30" Height="20"
                                                     Background="Transparent"
-                                                    Content="🗑️"
                                                     Command="{Binding DataContext.DeleteList, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                    CommandParameter="{Binding}" />
+                                                    CommandParameter="{Binding}"
+                                                    BorderThickness="0">
+                                                <Viewbox Width="20" Height="20" Stretch="Uniform">
+                                                    <ContentControl Content="{StaticResource IconTrash}" Foreground="#80FF0000"/>
+                                                </Viewbox>
+                                            </Button>
                                         </StackPanel>
 
                                     </DockPanel>
@@ -243,15 +285,25 @@
                                         <DataGridTemplateColumn Header="Actions" Width="80">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                                                         <Button Command="{Binding DataContext.MoveFromCustomListFileCommand, ElementName=Root}" 
                                                                 CommandParameter="{Binding}" 
-                                                                Background="#4CAF50" Foreground="White"
-                                                                Width="30">
+                                                                Background="Transparent" Foreground="White"
+                                                                Width="30" Height="25"
+                                                                BorderThickness="0"
+                                                                HorizontalContentAlignment="Center">
                                                             <Button.Style>
                                                                 <Style TargetType="Button">
-                                                                    <Setter Property="Content" Value="+"/>
+                                                                    
+                                                                    <Setter Property="Content">
+                                                                        <Setter.Value>
+                                                                            <Viewbox Width="20" Height="20">
+                                                                                <ContentControl Content="{StaticResource IconPlus}" Foreground="#4CAF50"/>
+                                                                            </Viewbox>
+                                                                        </Setter.Value>
+                                                                    </Setter>
                                                                     <Style.Triggers>
+                                                                        
                                                                         <DataTrigger Value="True">
                                                                             <DataTrigger.Binding>
                                                                                 <MultiBinding Converter="{StaticResource IsInstalledConverter}">
@@ -270,6 +322,7 @@
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
                                     </DataGrid.Columns>
+
                                 </DataGrid>
 
                             </Expander>
@@ -282,45 +335,89 @@
         </ScrollViewer>
 
         <!-- Bottom buttons -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Button Content="Add New"
-                    Command="{Binding DataContext.OpenAddAddonWindowCommand, ElementName=Root}"
-                    Height="40" Width="80"
-                    Background="#007ACC" Foreground="White"/>
-            <Button Content="Refresh"
-                    Command="{Binding DataContext.RefreshCommand, ElementName=Root}"
-                    Height="40" Width="80"
-                    Background="#4CAF50" Foreground="White"/>
-            <Button Content="Refresh&#x0a;All Lists"
-                    Command="{Binding DataContext.RefreshAllListsCommand, ElementName=Root}"
-                    Height="40" Width="80"
-                    Background="Red" Foreground="White"/>
-            <Button Content="Update All"
-                    Command="{Binding DataContext.UpdateAllCommand, ElementName=Root}"
-                    Height="40" Width="80"
-                    Background="Green" Foreground="White"/>
-            <Button Content="Download&#x0a;RecommendedList"
-                    Command="{Binding DataContext.DownloadRecommendedList, ElementName=Root}"
-                    Height="40" Width="80"
-                    Background="DarkBlue" Foreground="White"/>
-            <Button Content="Add&#x0a;CustomList"
-                    Command="{Binding DataContext.OpenAddCustomListWindowCommand, ElementName=Root}"
-                    Height="40" Width="80"
-                    Background="DarkBlue" Foreground="White"/>
-            <Button Content="C.List📂"
-                    Command="{Binding DataContext.OpenCustomListFolderCommand, ElementName=Root}"
-                    Height="40" Width="50"
-                    Background="#f5cb42" Foreground="Black"/>
-        </StackPanel>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                
+                <ColumnDefinition Width="*"/>
 
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Command="{Binding DataContext.RefreshAllListsCommand, ElementName=Root}"
+                    Height="auto" Width="auto"
+                    Background="Transparent" Foreground="White"
+                    BorderThickness="0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ContentControl Content="{StaticResource IconDobleArrowCircle}" Width="20" Height="20" Margin="0,0,4,0"/>
+                    <TextBlock Text="Check for Updates" VerticalAlignment="Center" FontSize="15" />
+                </StackPanel>
+            </Button>
+
+            <Button Grid.Column="1"
+                    Command="{Binding DataContext.OpenAddAddonWindowCommand, ElementName=Root}"
+                    Height="auto" Width="auto"
+                    Background="Transparent" Foreground="White"
+                    BorderThickness="0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ContentControl Content="{StaticResource IconPlus}" Width="20" Height="20" Margin="0,0,4,0"/>
+                    <TextBlock Text="Add New Addon" VerticalAlignment="Center" FontSize="15" />
+                </StackPanel>
+            </Button>
+
+
+            <Button Grid.Column="3"
+                    Command="{Binding DataContext.DownloadRecommendedList, ElementName=Root}"
+                    Height="auto" Width="auto"
+                    Background="Transparent" Foreground="White"
+                    BorderThickness="0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ContentControl Content="{StaticResource IconArrowDownSquare}" Width="25" Height="25" Margin="5"/>
+                    
+                </StackPanel>
+            </Button>
+            
+            <Button Grid.Column="4"
+                    Command="{Binding DataContext.OpenAddCustomListWindowCommand, ElementName=Root}"
+                    Height="auto" Width="auto"
+                    Background="Transparent" Foreground="White"
+                    BorderThickness="0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,3,0">
+                    <ContentControl Content="{StaticResource IconList}" Width="25" Height="25" Margin="7,4,7,4"/>
+                    <TextBlock Text="Add Custom List" VerticalAlignment="Center" FontSize="15" />
+                </StackPanel>
+            </Button>
+
+            <Button Grid.Column="5"
+                    Command="{Binding DataContext.OpenCustomListFolderCommand, ElementName=Root}"
+                    Height="auto" Width="auto"
+                    Background="Transparent" Foreground="White"
+                    BorderThickness="0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,3,0">
+                    <ContentControl Content="{StaticResource IconFolder}" Width="25" Height="25" Margin="7,4,7,4"/>
+                    <TextBlock Text="CustomList" VerticalAlignment="Center" FontSize="15" />
+                </StackPanel>
+            </Button>
+
+        </Grid>
+        
         <!-- Loading overlay -->
+        
         <Grid Grid.RowSpan="2"
               Panel.ZIndex="1"
               IsHitTestVisible="{Binding IsLoading}"
+             
               Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            
             <Border Background="#80000000"/>
+            
             <ProgressBar Width="150" Height="20" IsIndeterminate="True"
                          VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </Grid>
+        
     </Grid>
 </UserControl>
