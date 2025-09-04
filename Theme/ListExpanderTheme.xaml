@@ -6,7 +6,7 @@
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="FontSize" Value="14"/>
-        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="IsExpanded" Value="True"/>
 
         <Setter Property="Template">
@@ -31,7 +31,22 @@
                                               IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
                                               Width="20" Height="20" Margin="2" DockPanel.Dock="Left"
                                               Background="Transparent" BorderThickness="0">
-                                    <TextBlock x:Name="ArrowIcon" Text="▼" FontWeight="Bold" Foreground="White"/>
+                                    <ToggleButton.Style>
+                                        <Style TargetType="ToggleButton">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderBrush" Value="Transparent"/>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ToggleButton">
+                                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </ToggleButton.Style>
+
+                                    <TextBlock x:Name="ArrowIcon" Text="▼" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
                                 </ToggleButton>
 
                                 <!-- Nombre de lista -->

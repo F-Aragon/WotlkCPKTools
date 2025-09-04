@@ -17,7 +17,7 @@
                 
                 <ResourceDictionary Source="/Theme/DataGridTheme.xaml"/>
                 <ResourceDictionary Source="/Theme/ListExpanderTheme.xaml"/>
-
+                
             </ResourceDictionary.MergedDictionaries>
 
 

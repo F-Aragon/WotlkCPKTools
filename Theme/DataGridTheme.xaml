@@ -28,7 +28,7 @@
                 <Style TargetType="DataGridColumnHeader">
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="FontWeight" Value="Normal"/>
                     <Setter Property="FontSize" Value="14"/>
                     <Setter Property="BorderBrush" Value="Transparent"/>
                     <Setter Property="BorderThickness" Value="0"/>
@@ -69,7 +69,6 @@
                         </Trigger>
                         <!-- Selección -->
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Background" Value="#803A3756"/>
                             <Setter Property="Foreground" Value="White"/>
                         </Trigger>
                     </Style.Triggers>
@@ -77,6 +76,7 @@
             </Setter.Value>
         </Setter>
 
+        
     </Style>
 
 </ResourceDictionary>

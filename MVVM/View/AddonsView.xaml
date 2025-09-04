@@ -43,8 +43,8 @@
                           Style="{StaticResource ListExpanderStyle}">
                     <Expander.Header>
                         <DockPanel LastChildFill="False">
-                            <TextBlock Text="Installed Addons"
-                                       FontSize="14"
+                            <TextBlock Text="INSTALLED"
+                                       FontSize="20"
                                        FontWeight="Bold"
                                        VerticalAlignment="Center"
                                        Foreground="White"
@@ -60,9 +60,9 @@
                               PreviewMouseWheel="DataGrid_PreviewMouseWheel"
                               CellEditEnding="DataGrid_CellEditEnding">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="Auto" />
-                            <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubUrl}" Width="*" />
-                            <DataGridTemplateColumn Header="Last Update" Width="Auto" >
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="Auto" MinWidth="160"/>
+                            <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubUrl}" Width="*" FontWeight="Normal"/>
+                            <DataGridTemplateColumn Header="Last Update" Width="110" >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock>
@@ -80,10 +80,10 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn Header="Status" Width="Auto">
+                            <DataGridTemplateColumn Header="Status" Width="24">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Rectangle Width="20" Height="20" RadiusX="2" RadiusY="2">
+                                        <Rectangle Width="20" Height="20" RadiusX="2" RadiusY="2" HorizontalAlignment="Right">
                                             <Rectangle.Style>
                                                 <Style TargetType="Rectangle">
                                                     <Setter Property="Fill" Value="Gray"/>
@@ -102,25 +102,28 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn Header="Actions" Width="120">
+                            <DataGridTemplateColumn Header="Actions" Width="95" MinWidth="95">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
                                             <Button Content="🔄"
                                                     Command="{Binding DataContext.UpdateCommand, ElementName=Root}"
                                                     CommandParameter="{Binding}"
                                                     Background="#007ACC" Foreground="White"
-                                                    Width="30"/>
+                                                    Width="30"
+                                                    Margin="0"/>
                                             <Button Content="⬇️"
                                                     Command="{Binding DataContext.MoveToFastAddCommand, ElementName=Root}"
                                                     CommandParameter="{Binding}"
                                                     Background="#007ACC" Foreground="White"
-                                                    Width="30"/>
+                                                    Width="30"
+                                                    Margin="0"/>
                                             <Button Content="🗑️"
                                                     Command="{Binding DataContext.RemoveInstalledCommand, ElementName=Root}"
                                                     CommandParameter="{Binding}"
                                                     Background="Red" Foreground="White"
-                                                    Width="30"/>
+                                                    Width="30"
+                                                    Margin="0"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -129,14 +132,14 @@
                     </DataGrid>
                 </Expander>
 
-                <!-- Fast Add -->
+                <!-- Quick Add -->
                 <Expander Style="{StaticResource ListExpanderStyle}" 
                           IsExpanded="True"
                           Visibility="{Binding ElementName=FastAddAddonsGrid, Path=HasItems, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Expander.Header>
                         <DockPanel LastChildFill="False">
-                            <TextBlock Text="Fast Add Addons"
-                                       FontSize="14"
+                            <TextBlock Text="QUICK ADD"
+                                       FontSize="20"
                                        FontWeight="Bold"
                                        VerticalAlignment="Center"
                                        Foreground="White"
@@ -152,7 +155,7 @@
                               PreviewMouseWheel="DataGrid_PreviewMouseWheel"
                               CellEditEnding="DataGrid_CellEditEnding">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="Auto" />
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="Auto" MinWidth="160"/>
                             <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubUrl}" Width="*" />
                             <DataGridTemplateColumn Header="Actions" Width="80" >
                                 <DataGridTemplateColumn.CellTemplate>
@@ -180,56 +183,64 @@
                 <ItemsControl ItemsSource="{Binding CustomAddonLists}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Expander FontSize="14" FontWeight="Bold" Foreground="White" Background="Transparent">
+                            <Expander Style="{StaticResource ListExpanderStyle}" FontSize="14" FontWeight="Normal" Foreground="White" Background="Transparent">
                                 <Expander.Header>
-                                    <DockPanel LastChildFill="False">
-                                        <TextBlock Text="{Binding ListName}" 
-                                                   FontSize="14" FontWeight="Bold"
-                                                   VerticalAlignment="Center"
-                                                   Foreground="White"
-                                                   DockPanel.Dock="Left" />
-                                        <Button Width="30" Height="25"
-                                                Command="{Binding DataContext.DownloadCustomList, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                CommandParameter="{Binding}" 
-                                                DockPanel.Dock="Right"
-                                                Foreground="White">
-                                            <Button.Style>
-                                                <Style TargetType="Button">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                    <Setter Property="Content" Value="⟳"/>
-                                                    <Setter Property="Background" Value="Red"/>
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding RepoFileUrl}" Value="{x:Null}">
-                                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding RepoFileUrl}" Value="">
-                                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding IsUpToDate}" Value="True">
-                                                            <Setter Property="Content" Value="✔️"/>
-                                                            <Setter Property="Background" Value="#4CAF50"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Button.Style>
-                                        </Button>
-                                        <Button Width="30" Height="25"
-                                                Foreground="Red"
-                                                Background="Transparent"
-                                                Content="🗑️"
-                                                Command="{Binding DataContext.DeleteList, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                CommandParameter="{Binding}" />
+                                    <DockPanel LastChildFill="True" VerticalAlignment="Center" Margin="0,0,0,0">
+
+                                        <!-- Nombre de la lista -->
+                                        <TextBlock Text="{Binding ListName}" FontSize="17" FontWeight="Bold" 
+                                                   Foreground="White" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                        
+                                        <Rectangle Height="1" Fill="Gray" VerticalAlignment="Center" Margin="4,0,4,0" HorizontalAlignment="Stretch" DockPanel.Dock="Left"/>
+                                        
+                                        <!-- Botones a la derecha -->
+                                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
+                                            <Button Width="30" Height="25"
+                                                    Command="{Binding DataContext.DownloadCustomList, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                    CommandParameter="{Binding}" 
+                                                    Foreground="White">
+                                                <Button.Style>
+                                                    <Style TargetType="Button">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                        <Setter Property="Content" Value="⟳"/>
+                                                        <Setter Property="Background" Value="Red"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding RepoFileUrl}" Value="{x:Null}">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding RepoFileUrl}" Value="">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding IsUpToDate}" Value="True">
+                                                                <Setter Property="Content" Value="✔️"/>
+                                                                <Setter Property="Background" Value="#4CAF50"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+
+                                            <Button Width="30" Height="25"
+                                                    Foreground="Red"
+                                                    Background="Transparent"
+                                                    Content="🗑️"
+                                                    Command="{Binding DataContext.DeleteList, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                    CommandParameter="{Binding}" />
+                                        </StackPanel>
+
                                     </DockPanel>
                                 </Expander.Header>
+
+                                <!-- Contenido del Expander -->
                                 <DataGrid ItemsSource="{Binding Addons}"
                                           AutoGenerateColumns="False"
                                           CanUserAddRows="False"
                                           IsReadOnly="True"
                                           PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="Auto" />
+                                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="Auto" MinWidth="160"/>
                                         <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubUrl}" Width="*" />
-                                        <DataGridTemplateColumn Header="Actions" Width="80" >
+                                        <DataGridTemplateColumn Header="Actions" Width="80">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -260,10 +271,12 @@
                                         </DataGridTemplateColumn>
                                     </DataGrid.Columns>
                                 </DataGrid>
+
                             </Expander>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+
 
             </StackPanel>
         </ScrollViewer>
