@@ -51,19 +51,32 @@
                                        DockPanel.Dock="Left"/>
                             <!-- Podés agregar botones más adelante -->
                             <Button DockPanel.Dock="Right"
-                                    Content="Refresh"
                                     Command="{Binding DataContext.RefreshCommand, ElementName=Root}"
-                                    Height="auto" Width="100"
-                                    Background="#4CAF50" Foreground="White"/>
+                                    Height="auto" Width="auto"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Margin="0,0,4,0">
+                                <Viewbox Width="20" Height="20" Stretch="Uniform">
+                                    <ContentControl Content="{StaticResource IconClockArrow}"/>
+                                </Viewbox>
+                            </Button>
                             <Button DockPanel.Dock="Right"
-                                    Content="Update All"
                                     Command="{Binding DataContext.UpdateAllCommand, ElementName=Root}"
                                     Height="auto" Width="auto"
-                                    Background="Green" Foreground="White" HorizontalAlignment="left"/>
+                                    Background="Transparent" HorizontalAlignment="left"
+                                    BorderThickness="0"
+                                    Margin="0,0,4,0">
+                                <Viewbox Width="20" Height="20" Stretch="Uniform">
+                                    <ContentControl Content="{StaticResource IconArrowDownSquare}"/>
+                                </Viewbox>
+                            </Button>
+
+
                             <!-- Last Child Fill -->
                             <Rectangle Height="1" Fill="Gray" VerticalAlignment="Center" Margin="4,0,6,0" />
                         </DockPanel>
                     </Expander.Header>
+                    
                     <DataGrid x:Name="InstalledAddonsGrid"
                               ItemsSource="{Binding InstalledAddons}"
                               AutoGenerateColumns="False"
@@ -118,6 +131,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                                            <!-- Installed Addons "Update" Button -->
                                             <Button Command="{Binding DataContext.UpdateCommand, ElementName=Root}"
                                                     CommandParameter="{Binding}"
                                                     Background="Transparent"
@@ -129,15 +143,12 @@
                                                         <ContentControl.Style>
                                                             <Style TargetType="ContentControl">
                                                                 <Setter Property="Height" Value="25"/>
+                                                                <!-- Default icon -->
+                                                                <Setter Property="Content" Value="{StaticResource IconCloudInsideFilled-Yellow}"/>
                                                                 <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding IsUpdated}" Value="False">
-                                                                        <Setter Property="Content" Value="{StaticResource IconCloudInsideFilled}"/>
-                                                                        <Setter Property="Foreground" Value="Yellow"/>
-                                                                    </DataTrigger>
-                                                                    <!-- Si está actualizado, mostrar otro icono -->
+                                                                    <!-- If updated, show green cloud check icon -->
                                                                     <DataTrigger Binding="{Binding IsUpdated}" Value="True">
-                                                                        <Setter Property="Content" Value="{StaticResource IconCloudCheckFilled}"/>
-                                                                        <Setter Property="Foreground" Value="#4000FF00"/>
+                                                                        <Setter Property="Content" Value="{StaticResource IconCloudCheckFilled-Green}"/>
                                                                     </DataTrigger>
                                                                 </Style.Triggers>
                                                             </Style>
@@ -145,7 +156,7 @@
                                                     </ContentControl>
                                                 </Button.Content>
                                             </Button>
-                                            
+
                                             <Button Command="{Binding DataContext.MoveToFastAddCommand, ElementName=Root}"
                                                     CommandParameter="{Binding}"
                                                     Background="Transparent"
@@ -251,6 +262,7 @@
                                         
                                         <!-- Botones a la derecha -->
                                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
+                                            <!-- Custom Lists "Download" Button -->
                                             <Button Width="27" Height="25"
                                                     Background="Transparent"
                                                     Command="{Binding DataContext.DownloadCustomList, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
@@ -260,15 +272,13 @@
                                                     <ContentControl>
                                                         <ContentControl.Style>
                                                             <Style TargetType="ContentControl">
-                                                                <!-- Icono por defecto -->
-                                                                <Setter Property="Content" Value="{StaticResource IconCloudInsideFilled}"/>
-                                                                <Setter Property="Foreground" Value="Yellow"/>
                                                                 <Setter Property="Height" Value="25"/>
+                                                                <!-- Default icon -->
+                                                                <Setter Property="Content" Value="{StaticResource IconCloudInsideFilled-Yellow}"/>
                                                                 <Style.Triggers>
-                                                                    <!-- Si está actualizado, mostrar otro icono -->
+                                                                    <!-- If up to date, show green cloud check icon -->
                                                                     <DataTrigger Binding="{Binding IsUpToDate}" Value="True">
-                                                                        <Setter Property="Content" Value="{StaticResource IconCloudCheckFilled}"/>
-                                                                        <Setter Property="Foreground" Value="#4000FF00"/>
+                                                                        <Setter Property="Content" Value="{StaticResource IconCloudCheckFilled-Green}"/>
                                                                     </DataTrigger>
                                                                 </Style.Triggers>
                                                             </Style>
@@ -280,7 +290,7 @@
                                                     <Style TargetType="Button">
                                                         <Setter Property="Visibility" Value="Visible"/>
                                                         <Style.Triggers>
-                                                            <!-- Ocultar si RepoFileUrl es null o vacío -->
+                                                            <!-- Hide button if RepoFileUrl is null or empty -->
                                                             <DataTrigger Binding="{Binding RepoFileUrl}" Value="{x:Null}">
                                                                 <Setter Property="Visibility" Value="Collapsed"/>
                                                             </DataTrigger>
@@ -413,7 +423,7 @@
                     Background="Transparent" Foreground="White"
                     BorderThickness="0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <ContentControl Content="{StaticResource IconArrowDownSquare}" Width="25" Height="25" Margin="5"/>
+                    <ContentControl Content="{StaticResource IconFileWithArrowDown}" Width="25" Height="25" Margin="3,4,3,4"/>
                     
                 </StackPanel>
             </Button>
@@ -424,7 +434,7 @@
                     Background="Transparent" Foreground="White"
                     BorderThickness="0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,3,0">
-                    <ContentControl Content="{StaticResource IconList}" Width="25" Height="25" Margin="7,4,7,4"/>
+                    <ContentControl Content="{StaticResource IconList}" Width="25" Height="25" Margin="3,4,7,4"/>
                     <TextBlock Text="Add Custom List" VerticalAlignment="Center" FontSize="15" />
                 </StackPanel>
             </Button>

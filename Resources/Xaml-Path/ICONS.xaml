@@ -9,8 +9,8 @@
         </Canvas>
     </Viewbox>
 
-    <!-- Icono: Reloj -->
-    <Viewbox x:Key="IconClock" x:Shared="False" Width="16" Height="16" Stretch="Uniform">
+    <!-- Icono: Clock arrow -->
+    <Viewbox x:Key="IconClockArrow" x:Shared="False" Width="16" Height="16" Stretch="Uniform">
         <Canvas Width="16" Height="16">
             <Path Fill="White" Data="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
             <Path Fill="White" Data="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
@@ -84,7 +84,7 @@
     <!-- Icono: IconArrowDownSquare -->
     <Viewbox x:Key="IconArrowDownSquare" x:Shared="False" Width="25" Height="25" Stretch="Uniform">
         <Canvas Width="16" Height="16">
-            <Path Fill="White" Data="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
+            <Path Fill="LightGreen" Data="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
         </Canvas>
     </Viewbox>
 
@@ -116,19 +116,35 @@
             <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}" Data="M8 0a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 4.095 0 5.555 0 7.318 0 9.366 1.708 11 3.781 11H7.5V5.5a.5.5 0 0 1 1 0V11h4.188C14.502 11 16 9.57 16 7.773c0-1.636-1.242-2.969-2.834-3.194C12.923 1.999 10.69 0 8 0m-.354 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V11h-1v3.293l-2.146-2.147a.5.5 0 0 0-.708.708z"/>
         </Canvas>
     </Viewbox>
-    <!-- Icono: Cloud Inside Arrow Filled -->
-    <Viewbox x:Key="IconCloudInsideFilled" x:Shared="False" Width="25" Height="25" Stretch="Uniform">
+
+    <!-- Icono: Cloud Inside Arrow Filled - Yellow -->
+    <Viewbox x:Key="IconCloudInsideFilled-Yellow" x:Shared="False" Width="25" Height="25" Stretch="Uniform">
         <Canvas Width="16" Height="16">
-            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}" Data="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2m2.354 6.854-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 9.293V5.5a.5.5 0 0 1 1 0v3.793l1.146-1.147a.5.5 0 0 1 .708.708" />
+            <Path Fill="Yellow" Data="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2m2.354 6.854-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 9.293V5.5a.5.5 0 0 1 1 0v3.793l1.146-1.147a.5.5 0 0 1 .708.708" />
         </Canvas>
     </Viewbox>
 
-    <!-- Icono: Cloud Check Filled -->
-    <Viewbox x:Key="IconCloudCheckFilled" x:Shared="False" Width="25" Height="25" Stretch="Uniform">
+    <!-- Icono: Cloud Inside Arrow Filled - Green -->
+    <Viewbox x:Key="IconCloudInsideFilled-Green" x:Shared="False" Width="25" Height="25" Stretch="Uniform">
         <Canvas Width="16" Height="16">
-            <Path Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}" Data="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2m2.354 4.854-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708"/>
+            <Path Fill="#4000FF00" Data="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2m2.354 6.854-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 9.293V5.5a.5.5 0 0 1 1 0v3.793l1.146-1.147a.5.5 0 0 1 .708.708" />
         </Canvas>
     </Viewbox>
+
+    <!-- Icono: Cloud Check Filled - Yellow -->
+    <Viewbox x:Key="IconCloudCheckFilled-Yellow" x:Shared="False" Width="25" Height="25" Stretch="Uniform">
+        <Canvas Width="16" Height="16">
+            <Path Fill="Yellow" Data="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2m2.354 4.854-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708"/>
+        </Canvas>
+    </Viewbox>
+
+    <!-- Icono: Cloud Check Filled - Green -->
+    <Viewbox x:Key="IconCloudCheckFilled-Green" x:Shared="False" Width="25" Height="25" Stretch="Uniform">
+        <Canvas Width="16" Height="16">
+            <Path Fill="#4000FF00" Data="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2m2.354 4.854-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708"/>
+        </Canvas>
+    </Viewbox>
+
 
     <!-- Check Icon -->
     <Viewbox x:Key="IconCheck" x:Shared="False" Stretch="Uniform" Width="20" Height="20">
@@ -137,4 +153,22 @@
         </Canvas>
     </Viewbox>
 
+
+    <!-- Fat Arrow Down With R inside -->
+    <Viewbox x:Key="FatArrowDownWithR" Stretch="Uniform" Width="25" Height="25">
+        <Canvas Width="16" Height="16">
+            <Path Fill="White" Data="M 5.5 1.7304688 A 1 1 0 0 0 4.5 2.7304688 L 4.5 5.7304688 L 1.65625 5.7304688 C 0.78025083 5.7304688 0.32578185 6.7760631 0.92578125 7.4140625 L 7.2695312 14.183594 A 1 1 0 0 0 8.7304688 14.183594 L 15.076172 7.4140625 C 15.674171 6.7750631 15.219702 5.7304688 14.345703 5.7304688 L 11.5 5.7304688 L 11.5 2.7304688 A 1 1 0 0 0 10.5 1.7304688 L 5.5 1.7304688 z M 6.3632812 5.3398438 L 7.0957031 5.3398438 L 8.1484375 5.3398438 C 8.6871482 5.3398438 9.1020187 5.4769882 9.3945312 5.75 C 9.6894814 6.0230118 9.8378906 6.4099628 9.8378906 6.9121094 C 9.8378906 7.4337568 9.6894814 7.8393157 9.3945312 8.1269531 C 9.2706061 8.2488129 9.1231923 8.3438296 8.9550781 8.4140625 L 10.027344 10.533203 L 9.1503906 10.533203 L 8.2109375 8.5566406 C 8.1897902 8.5571005 8.1699784 8.5585938 8.1484375 8.5585938 L 7.0957031 8.5585938 L 7.0957031 10.533203 L 6.3632812 10.533203 L 6.3632812 5.3398438 z M 7.0957031 6.0351562 L 7.0957031 7.8632812 L 8.1484375 7.8632812 C 8.4385125 7.8632812 8.6633368 7.7863816 8.8242188 7.6328125 C 8.9875383 7.4792434 9.0703125 7.2642151 9.0703125 6.9863281 C 9.0703125 6.6816275 8.9875383 6.4465227 8.8242188 6.2832031 C 8.6633368 6.117446 8.4385125 6.0351562 8.1484375 6.0351562 L 7.0957031 6.0351562 z"/>
+        </Canvas>
+    </Viewbox>
+
+    <!-- File with Arrow Down Icon -->
+    <Viewbox x:Key="IconFileWithArrowDown" Stretch="Uniform" Width="25" Height="25">
+        <Canvas Width="16" Height="16">
+            <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=Foreground}" 
+                  Data="M8.5 6.5a.5.5 0 0 0-1 0v3.793L6.354 9.146a.5.5 0 1 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
+            <Path Fill="{Binding RelativeSource={RelativeSource AncestorType=ContentControl}, Path=Foreground}" 
+                  Data="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+        </Canvas>
+    </Viewbox>
+    
 </ResourceDictionary>
