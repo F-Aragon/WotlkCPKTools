@@ -42,7 +42,7 @@
                 <Expander IsExpanded="True"
                           Style="{StaticResource ListExpanderStyle}">
                     <Expander.Header>
-                        <DockPanel LastChildFill="False">
+                        <DockPanel LastChildFill="True">
                             <TextBlock Text="INSTALLED"
                                        FontSize="20"
                                        FontWeight="Bold"
@@ -60,7 +60,8 @@
                                     Command="{Binding DataContext.UpdateAllCommand, ElementName=Root}"
                                     Height="auto" Width="auto"
                                     Background="Green" Foreground="White" HorizontalAlignment="left"/>
-                            
+                            <!-- Last Child Fill -->
+                            <Rectangle Height="1" Fill="Gray" VerticalAlignment="Center" Margin="4,0,6,0" />
                         </DockPanel>
                     </Expander.Header>
                     <DataGrid x:Name="InstalledAddonsGrid"
@@ -181,13 +182,15 @@
                           IsExpanded="True"
                           Visibility="{Binding ElementName=FastAddAddonsGrid, Path=HasItems, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Expander.Header>
-                        <DockPanel LastChildFill="False">
+                        <DockPanel LastChildFill="True">
                             <TextBlock Text="QUICK ADD"
                                        FontSize="20"
                                        FontWeight="Bold"
                                        VerticalAlignment="Center"
                                        Foreground="White"
                                        DockPanel.Dock="Left"/>
+                            <!-- Last Child Fill -->
+                            <Rectangle Height="1" Fill="Gray" VerticalAlignment="Center" Margin="4,0,6,0" />
                             <!-- Can add buttons latter -->
                         </DockPanel>
                     </Expander.Header>
@@ -244,7 +247,7 @@
                                         <TextBlock Text="{Binding ListName}" FontSize="17" FontWeight="Bold" 
                                                    Foreground="White" VerticalAlignment="Center" Margin="0,0,4,0"/>
                                         
-                                        <Rectangle Height="1" Fill="Gray" VerticalAlignment="Center" Margin="4,0,4,0" HorizontalAlignment="Stretch" DockPanel.Dock="Left"/>
+                                        
                                         
                                         <!-- Botones a la derecha -->
                                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
@@ -301,7 +304,9 @@
                                                 </Viewbox>
                                             </Button>
                                         </StackPanel>
-
+                                        
+                                        <!-- Last Child Fill -->
+                                        <Rectangle Height="1" Fill="Gray" VerticalAlignment="Center" Margin="4,0,6,0" />
                                     </DockPanel>
                                 </Expander.Header>
 

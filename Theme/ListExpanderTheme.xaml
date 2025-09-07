@@ -29,7 +29,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <!-- Flecha -->
                                     <ColumnDefinition Width="*"/>
-                                    <!-- Texto/Header -->
+                                    <!-- Contenedor header -->
                                     <ColumnDefinition Width="Auto"/>
                                     <!-- Botones -->
                                 </Grid.ColumnDefinitions>
@@ -57,11 +57,10 @@
                                     <TextBlock x:Name="ArrowIcon" Text="▼" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
                                 </ToggleButton>
 
-                                <!-- Nombre de lista (se estira con *) -->
-                                <ContentPresenter ContentSource="Header"
-                                                  VerticalAlignment="Center"
-                                                  Margin="4,0,4,0"
-                                                  Grid.Column="1"/>
+                                <!-- Contenedor header (sin línea) -->
+                                <Grid Grid.Column="1" VerticalAlignment="Center">
+                                    <ContentPresenter ContentSource="Header" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                </Grid>
 
                                 <!-- Panel de botones a la derecha -->
                                 <StackPanel x:Name="RightButtonsPanel"
