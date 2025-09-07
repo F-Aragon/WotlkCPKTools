@@ -24,13 +24,22 @@
                             </Grid.RowDefinitions>
 
                             <!-- Header -->
-                            <DockPanel Grid.Row="0" VerticalAlignment="Center">
+                            <Grid Grid.Row="0" VerticalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <!-- Flecha -->
+                                    <ColumnDefinition Width="*"/>
+                                    <!-- Texto/Header -->
+                                    <ColumnDefinition Width="Auto"/>
+                                    <!-- Botones -->
+                                </Grid.ColumnDefinitions>
 
                                 <!-- ToggleButton que controla la expansión -->
                                 <ToggleButton x:Name="ExpanderToggle"
                                               IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
-                                              Width="20" Height="20" Margin="2" DockPanel.Dock="Left"
-                                              Background="Transparent" BorderThickness="0">
+                                              Width="20" Height="20" Margin="2"
+                                              Background="Transparent" BorderThickness="0"
+                                              Grid.Column="0">
                                     <ToggleButton.Style>
                                         <Style TargetType="ToggleButton">
                                             <Setter Property="Background" Value="Transparent"/>
@@ -45,21 +54,24 @@
                                             </Setter>
                                         </Style>
                                     </ToggleButton.Style>
-
                                     <TextBlock x:Name="ArrowIcon" Text="▼" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
                                 </ToggleButton>
 
-                                <!-- Nombre de lista -->
-                                <ContentPresenter ContentSource="Header" VerticalAlignment="Center" Margin="4,0,4,0"/>
+                                <!-- Nombre de lista (se estira con *) -->
+                                <ContentPresenter ContentSource="Header"
+                                                  VerticalAlignment="Center"
+                                                  Margin="4,0,4,0"
+                                                  Grid.Column="1"/>
 
-                                <!-- Línea que rellena el espacio -->
-                                <Rectangle Height="1" Fill="Gray" VerticalAlignment="Center" Margin="4,0,4,0" HorizontalAlignment="Stretch" DockPanel.Dock="Left"/>
-
-                                <!-- Panel de botones/indicadores <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right"/>-->
-                                
-                            </DockPanel>
-
-
+                                <!-- Panel de botones a la derecha -->
+                                <StackPanel x:Name="RightButtonsPanel"
+                                            Orientation="Horizontal"
+                                            Grid.Column="2"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center">
+                                    <!-- Tus botones extra irán acá -->
+                                </StackPanel>
+                            </Grid>
 
                             <!-- Contenido del Expander -->
                             <ContentPresenter x:Name="PART_Content" Grid.Row="1" Visibility="Collapsed" Margin="{TemplateBinding Padding}"/>

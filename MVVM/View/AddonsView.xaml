@@ -50,14 +50,17 @@
                                        Foreground="White"
                                        DockPanel.Dock="Left"/>
                             <!-- Podés agregar botones más adelante -->
-                            <Button Content="Update All"
+                            <Button DockPanel.Dock="Right"
+                                    Content="Refresh"
+                                    Command="{Binding DataContext.RefreshCommand, ElementName=Root}"
+                                    Height="auto" Width="100"
+                                    Background="#4CAF50" Foreground="White"/>
+                            <Button DockPanel.Dock="Right"
+                                    Content="Update All"
                                     Command="{Binding DataContext.UpdateAllCommand, ElementName=Root}"
                                     Height="auto" Width="auto"
                                     Background="Green" Foreground="White" HorizontalAlignment="left"/>
-                            <Button Content="Refresh"
-                                    Command="{Binding DataContext.RefreshCommand, ElementName=Root}"
-                                    Height="auto" Width="auto"
-                                    Background="#4CAF50" Foreground="White"/>
+                            
                         </DockPanel>
                     </Expander.Header>
                     <DataGrid x:Name="InstalledAddonsGrid"
@@ -114,12 +117,34 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
-                                            <Button Content="🔄"
-                                                    Command="{Binding DataContext.UpdateCommand, ElementName=Root}"
+                                            <Button Command="{Binding DataContext.UpdateCommand, ElementName=Root}"
                                                     CommandParameter="{Binding}"
-                                                    Background="#007ACC" Foreground="White"
+                                                    Background="Transparent"
+                                                    BorderThickness="0"
                                                     Width="30"
-                                                    Margin="0"/>
+                                                    Margin="0">
+                                                <Button.Content>
+                                                    <ContentControl>
+                                                        <ContentControl.Style>
+                                                            <Style TargetType="ContentControl">
+                                                                <Setter Property="Height" Value="25"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsUpdated}" Value="False">
+                                                                        <Setter Property="Content" Value="{StaticResource IconCloudInsideFilled}"/>
+                                                                        <Setter Property="Foreground" Value="Yellow"/>
+                                                                    </DataTrigger>
+                                                                    <!-- Si está actualizado, mostrar otro icono -->
+                                                                    <DataTrigger Binding="{Binding IsUpdated}" Value="True">
+                                                                        <Setter Property="Content" Value="{StaticResource IconCloudCheckFilled}"/>
+                                                                        <Setter Property="Foreground" Value="#4000FF00"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </ContentControl.Style>
+                                                    </ContentControl>
+                                                </Button.Content>
+                                            </Button>
+                                            
                                             <Button Command="{Binding DataContext.MoveToFastAddCommand, ElementName=Root}"
                                                     CommandParameter="{Binding}"
                                                     Background="Transparent"
