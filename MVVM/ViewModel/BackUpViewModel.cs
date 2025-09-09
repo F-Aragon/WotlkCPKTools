@@ -265,9 +265,9 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 var lines = File.ReadAllLines(infoFile);
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    if (lines[i].StartsWith("!IsFavorite:"))
+                    if (lines[i].StartsWith("!Favorite:"))
                     {
-                        lines[i] = $"!IsFavorite:{backup.IsFavorite}";
+                        lines[i] = $"!Favorite:{backup.IsFavorite}";
                         break;
                     }
                 }
@@ -308,7 +308,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 {
                     writer.WriteLine($"@{backup.Date:yyyy-MM-dd HH:mm}");
                     writer.WriteLine($"#{backup.Title}");
-                    writer.WriteLine($"!IsFavorite:{backup.IsFavorite}");
+                    writer.WriteLine($"!Favorite:{backup.IsFavorite}");
                     writer.WriteLine(backup.Comments);
                 }
 

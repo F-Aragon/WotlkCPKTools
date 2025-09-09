@@ -46,7 +46,7 @@ namespace WotlkCPKTools.Services
                 var lines = File.ReadAllLines(infoFile);
 
                 // Get all comment lines (ignore @, #, or IsFavorite lines)
-                var commentsLines = lines.Where(l => !l.StartsWith("@") && !l.StartsWith("#") && !l.StartsWith("IsFavorite:", StringComparison.OrdinalIgnoreCase))
+                var commentsLines = lines.Where(l => !l.StartsWith("@") && !l.StartsWith("#") && !l.StartsWith("!Favorite:", StringComparison.OrdinalIgnoreCase))
                     .Select(l => l.Trim());
 
                 // Get date and title
@@ -58,8 +58,8 @@ namespace WotlkCPKTools.Services
                 date = dateLine != null ? ParseDate(dateLine) : Directory.GetCreationTime(folderPath);
 
                 // Read favorite flag
-                var favoriteLine = lines.FirstOrDefault(l => l.StartsWith("IsFavorite:", StringComparison.OrdinalIgnoreCase));
-                if (favoriteLine != null && bool.TryParse(favoriteLine.Substring("IsFavorite:".Length).Trim(), out var fav))
+                var favoriteLine = lines.FirstOrDefault(l => l.StartsWith("!Favorite:", StringComparison.OrdinalIgnoreCase));
+                if (favoriteLine != null && bool.TryParse(favoriteLine.Substring("!Favorite:".Length).Trim(), out var fav))
                     isFavorite = fav;
             }
             else
