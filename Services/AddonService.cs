@@ -27,6 +27,7 @@ namespace WotlkCPKTools.Services
                 foreach (var addon in list)
                 {
                     addon.RefreshUpdateStatus();
+
                 }
 
                 return list ?? new List<AddonInfo>();
@@ -140,15 +141,49 @@ namespace WotlkCPKTools.Services
         {
             try
             {
+                // Load all stored addons
                 List<AddonInfo> storedAddons = LoadAddonsFromLocal();
-                var match = storedAddons.Find(o => o.GitHubUrl.Equals(gitHubUrl, StringComparison.OrdinalIgnoreCase));
+
+                // Find the addon to remove
+                var match = storedAddons.Find(a => a.GitHubUrl.Equals(gitHubUrl, StringComparison.OrdinalIgnoreCase));
                 if (match != null)
                 {
-                    RemoveAddonFolders(match);
+                    // Get all folders from other addons (excluding the one being removed)
+                    var otherFolders = storedAddons
+                        .Where(a => a.GitHubUrl != gitHubUrl)
+                        .SelectMany(a => a.LocalFolders ?? new List<string?>())
+                        .Distinct()
+                        .ToList();
+
+                    // Iterate through the folders of the addon to remove
+                    foreach (var folder in match.LocalFolders ?? new List<string?>())
+                    {
+                        if (string.IsNullOrEmpty(folder)) continue;
+
+                        string fullPath = Path.Combine(Pathing.AddOns, folder);
+
+                        if (!otherFolders.Contains(folder) && Directory.Exists(fullPath))
+                        {
+                            // Folder is not shared: safe to delete
+                            Directory.Delete(fullPath, true);
+                            Debug.WriteLine($"Deleted folder '{folder}' for addon '{match.Name}'.");
+                        }
+                        else
+                        {
+                            // Folder is shared with other addons
+                            var sharedWith = storedAddons
+                                .Where(a => a.GitHubUrl != gitHubUrl && (a.LocalFolders ?? new List<string?>()).Contains(folder))
+                                .Select(a => a.Name);
+
+                            Debug.WriteLine($"Skipping '{folder}' because it is shared with: {string.Join(", ", sharedWith)}");
+                        }
+                    }
                 }
 
-                storedAddons.RemoveAll(o => o.GitHubUrl.Equals(gitHubUrl, StringComparison.OrdinalIgnoreCase));
+                // Remove the addon from the local list
+                storedAddons.RemoveAll(a => a.GitHubUrl.Equals(gitHubUrl, StringComparison.OrdinalIgnoreCase));
                 await SaveAddonsListToJson(storedAddons);
+
                 return true;
             }
             catch (Exception ex)
@@ -157,6 +192,7 @@ namespace WotlkCPKTools.Services
                 return false;
             }
         }
+
 
         private static string ExtractZipToTempFolder(string zipFilePath, string? baseTempPath = null)
         {
@@ -460,5 +496,8 @@ namespace WotlkCPKTools.Services
                 await SaveAddonsListToJson(addons); 
             }
         }
+
+
+
     }
 }

@@ -29,17 +29,26 @@ namespace WotlkCPKTools.Services
             GitHubService _gitHubService = new GitHubService();
 
             var installed = new ObservableCollection<AddonItem>(
-                _addonService.LoadAddonsFromLocal().Select(a => new AddonItem
+                _addonService.LoadAddonsFromLocal().Select(a =>
                 {
-                    Name = a.Name,
-                    GitHubUrl = a.GitHubUrl,
-                    LastUpdate = a.LastUpdateDate,
-                    IsUpdated = a.IsUpdated
+                    var item = new AddonItem
+                    {
+                        Name = a.Name,
+                        GitHubUrl = a.GitHubUrl,
+                        LastUpdate = a.LastUpdateDate,
+                        IsUpdated = a.IsUpdated
+                    };
+
+                    // Refresh the IsComplete property based on local folders
+                    item.RefreshCompletionStatus();
+
+                    return item;
                 })
             );
 
             return installed;
         }
+
 
         /// <summary>
         /// Builds the Fast Add list from local JSON and filters out any item already installed (by GitHub link).

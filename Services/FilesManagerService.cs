@@ -94,5 +94,48 @@ namespace WotlkCPKTools.Services
             // Copiar backup con progreso
             await Task.Run(() => CopyDirectoryWithProgress(backupFolder, Pathing.WTF, progress));
         }
+
+        /// <summary>
+        /// Checks if all local folders of an addon exist in the AddOns directory.
+        /// Receives the GitHub URL of the addon.
+        /// </summary>
+        public bool CheckIfAddonIsComplete(string githubUrl)
+        {
+            try
+            {
+                AddonService addonService = new AddonService();
+                var addons = addonService.LoadAddonsFromLocal();
+
+                // Find the addon by GitHub URL
+                var match = addons.FirstOrDefault(a =>
+                    a.GitHubUrl.Equals(githubUrl, StringComparison.OrdinalIgnoreCase));
+
+                if (match == null || match.LocalFolders == null || match.LocalFolders.Count == 0)
+                {
+                    Debug.WriteLine($"Addon not found or has no LocalFolders for URL: {githubUrl}");
+                    return false;
+                }
+
+                // Check that all local folders exist
+                foreach (var folder in match.LocalFolders)
+                {
+                    string fullPath = Path.Combine(Pathing.AddOns, folder);
+                    if (!Directory.Exists(fullPath))
+                    {
+                        Debug.WriteLine($"Missing folder for addon {match.Name}: {fullPath}");
+                        return false;
+                    }
+                }
+
+                return true; // all folders exist
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error checking completeness for addon {githubUrl}: {ex.Message}");
+                return false;
+            }
+        }
+
+
     }
 }

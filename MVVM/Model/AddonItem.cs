@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using WotlkCPKTools.Services;
 
 namespace WotlkCPKTools.MVVM.Model
 {
@@ -9,7 +10,12 @@ namespace WotlkCPKTools.MVVM.Model
         public string IconPath { get; set; }
         public string GitHubUrl { get; set; }
         public bool IsUpdated { get; set; }
+        public bool IsComplete { get; set; }
         public DateTime? LastUpdate { get; set; }
+
+
+
+
 
         private string _downloadStatus = "";
         public string DownloadStatus
@@ -25,8 +31,20 @@ namespace WotlkCPKTools.MVVM.Model
             }
         }
 
+
+
+
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+
+        public void RefreshCompletionStatus()
+        {
+            FilesManagerService fms = new FilesManagerService();
+            IsComplete = fms.CheckIfAddonIsComplete(GitHubUrl);
+        }
+
     }
 }
