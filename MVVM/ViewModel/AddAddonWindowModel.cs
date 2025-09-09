@@ -73,7 +73,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
             if (added)
             {
                 StatusMessage = "Addon successfully added";
-                StatusColor = Brushes.Green;
+                StatusColor = Brushes.LightGreen;
             }
             else
             {
