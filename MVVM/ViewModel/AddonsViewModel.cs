@@ -36,6 +36,22 @@ namespace WotlkCPKTools.MVVM.ViewModel
             }
         }
 
+        private bool _isRecommendedListAvailable;
+        public bool IsRecommendedListAvailable
+        {
+            get => _isRecommendedListAvailable;
+            set
+            {
+                if (_isRecommendedListAvailable != value)
+                {
+                    _isRecommendedListAvailable = value;
+                    OnPropertyChanged(nameof(IsRecommendedListAvailable));
+                    OnPropertyChanged(nameof(IsRecommendedListNotAvailable));
+                }
+            }
+        }
+        public bool IsRecommendedListNotAvailable => !IsRecommendedListAvailable;
+
         // Commands for XAML
         public ICommand OpenAddAddonWindowCommand { get; }
         public ICommand UpdateCommand { get; }
@@ -115,8 +131,12 @@ namespace WotlkCPKTools.MVVM.ViewModel
             {
                 if (_ is CustomAddonList) 
                 {
-                    if(CustomAddonList.DeleteCustomList((CustomAddonList)_))
+                    if (CustomAddonList.DeleteCustomList((CustomAddonList)_))
+                    {
                         await LoadCustomListsAsync();
+                        UpdateRecommendedListAvailability();
+                    }
+                        
                 }
                 
             });
@@ -250,19 +270,20 @@ namespace WotlkCPKTools.MVVM.ViewModel
             {
                 try
                 {
-                    IsLoading = true; // Show Spinner
+                    IsLoading = true; // show spinner
 
-                    using (var client = new HttpClient())
-                    {
-                        var content = await client.GetStringAsync(Pathing.RecommendedListUrl);
+                    using var client = new HttpClient();
+                    var content = await client.GetStringAsync(Pathing.RecommendedListUrl);
 
-                        if (!Directory.Exists(Pathing.CustomAddOnsLists))
-                            Directory.CreateDirectory(Pathing.CustomAddOnsLists);
+                    if (!Directory.Exists(Pathing.CustomAddOnsLists))
+                        Directory.CreateDirectory(Pathing.CustomAddOnsLists);
 
-                        await File.WriteAllTextAsync(Pathing.RecommendedFile, content);
-                    }
+                    await File.WriteAllTextAsync(Pathing.RecommendedFile, content);
 
-                    // Reload Custom Lists
+                    // **Update property**
+                    IsRecommendedListAvailable = File.Exists(Pathing.RecommendedFile);
+
+                    // Reload custom lists
                     await LoadCustomListsAsync();
 
                     Debug.WriteLine("Recommended list downloaded successfully.");
@@ -276,6 +297,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
                     IsLoading = false;
                 }
             });
+
 
             //Downloads a custom list and save to CustomLists folder
             DownloadCustomList = new RelayCommand(async o =>
@@ -378,6 +400,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 //await _addonService.SaveAddonsListToJson(completedList); done in CreateCompleteListAsync()
 
                 await ReloadBothAsync();
+                UpdateRecommendedListAvailability();
             }
             finally
             {
@@ -426,6 +449,11 @@ namespace WotlkCPKTools.MVVM.ViewModel
             {
                 LoadCustomListsAsync().ConfigureAwait(false);
             }
+        }
+
+        private void UpdateRecommendedListAvailability()
+        {
+            IsRecommendedListAvailable = File.Exists(Pathing.RecommendedFile);
         }
 
     }

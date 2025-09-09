@@ -395,13 +395,16 @@
                     Command="{Binding DataContext.DownloadRecommendedList, ElementName=Root}"
                     Height="auto" Width="auto"
                     Background="Transparent" Foreground="White"
-                    BorderThickness="0">
+                    BorderThickness="0"
+                    Visibility="{Binding IsRecommendedListNotAvailable,
+                                Converter={StaticResource BoolToVisibilityConverter}}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <ContentControl Content="{StaticResource IconFileWithArrowDown}" Width="25" Height="25" Margin="3,4,3,4"/>
-                    
+                    <ContentControl Content="{StaticResource IconFileWithArrowDown}"
+                        Width="25" Height="25" Margin="3,4,3,4"/>
                 </StackPanel>
             </Button>
-            
+
+
             <Button Grid.Column="4"
                     Command="{Binding DataContext.OpenAddCustomListWindowCommand, ElementName=Root}"
                     Height="auto" Width="auto"
