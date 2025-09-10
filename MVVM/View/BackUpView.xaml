@@ -80,8 +80,8 @@
 
                 <!-- Buttons (top-right) -->
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,0,0,0">
-                    <Button Content="Create Backup" Width="150" Height="32" Command="{Binding BackupWtfCommand}"/>
-                    <Button Width="30" Height="30" Margin="6,0,0,0" Command="{Binding OpenBackupsFolder}" Background="Transparent" BorderThickness="0">
+                    <Button Content="Create Backup" ToolTip="Save WTF" Width="150" Height="32" Command="{Binding BackupWtfCommand}"/>
+                    <Button Width="30" Height="30" ToolTip="Open BackUps Folder" Margin="6,0,0,0" Command="{Binding OpenBackupsFolder}" Background="Transparent" BorderThickness="0">
                         <ContentControl Content="{StaticResource IconFolder}" Width="25" Height="25"/>
                     </Button>
                 </StackPanel>
@@ -198,6 +198,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Width="30" Height="25"
+                                                ToolTip="Open this Backup folder"
                                                 Command="{Binding DataContext.OpenBackupFolderCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
                                                 CommandParameter="{Binding FolderPath}"
                                                 Background="Transparent" BorderThickness="0">
@@ -258,7 +259,7 @@
                         </Grid>
 
                         <!-- 'Now' button -->
-                        <Button Grid.Column="1" Content="Now" Width="40" Height="25" Margin="5,0,0,0"
+                        <Button Grid.Column="1" Content="Now" ToolTip="Select current Day and Hour" Width="40" Height="25" Margin="5,0,0,0"
                                 Command="{Binding SetBackupDateToNowCommand}"/>
 
                         <!-- Progress bar -->
@@ -281,9 +282,9 @@
 
                     <!-- Action buttons -->
                     <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,0,0">
-                        <Button Content="Update Backup" Width="120" Margin="0,0,5,0" Height="25" Command="{Binding UpdateBackupCommand}"/>
-                        <Button Content="Delete Backup" Width="120" Margin="0,0,5,0" Command="{Binding DeleteBackupCommand}"/>
-                        <Button Content="Restore Backup" Width="120" Command="{Binding RestoreBackupCommand}"/>
+                        <Button Content="Update Backup" Width="120" ToolTip="Update Backup info (Not the content)" Margin="0,0,5,0" Height="25" Command="{Binding UpdateBackupCommand}"/>
+                        <Button Content="Delete Backup" Width="120" ToolTip="Remove selected Backup" Margin="0,0,5,0" Command="{Binding DeleteBackupCommand}"/>
+                        <Button Content="Restore Backup" Width="120" ToolTip="Remove current WoW WTF folder and restore with selected backup" Command="{Binding RestoreBackupCommand}"/>
                     </StackPanel>
                 </Grid>
             </Grid>

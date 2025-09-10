@@ -5,7 +5,6 @@
        TargetType="{x:Type RadioButton}"
        x:Key="MenuButtonTheme">
         <Setter Property="Background" Value="#88333147"/>
-        <!-- Fondo oscuro translúcido -->
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="FontSize" Value="18"/>
@@ -26,16 +25,14 @@
         </Setter>
 
         <Style.Triggers>
-            <!-- Seleccionado -->
+            <!-- Selected -->
             <Trigger Property="IsChecked" Value="True">
                 <Setter Property="Background" Value="#AA000000"/>
-                <!-- más opaco pero translúcido -->
             </Trigger>
 
             <!-- Hover -->
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="#88000000"/>
-                <!-- leve cambio translúcido -->
             </Trigger>
         </Style.Triggers>
     </Style>

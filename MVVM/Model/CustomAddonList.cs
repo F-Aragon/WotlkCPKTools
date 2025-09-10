@@ -47,25 +47,13 @@ namespace WotlkCPKTools.MVVM.Model
             }
         }
 
-        // Implementación de INotifyPropertyChanged
+        // INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
 
-        /*public static async Task UpdateCustomListAsync(string remoteUrl)
-        {
-            string rawUrl = GitHubService.ConvertToRawUrl(remoteUrl); // convertir a raw
-            string content = await new HttpClient().GetStringAsync(rawUrl);
-
-            if (!Directory.Exists(Pathing.CustomAddOnsLists))
-                Directory.CreateDirectory(Pathing.CustomAddOnsLists);
-
-            string localFileName = GitHubService.GetName(remoteUrl); // devuelve customListOnlineTest.txt
-            string localPath = Path.Combine(Pathing.CustomAddOnsLists, localFileName);
-
-            await File.WriteAllTextAsync(localPath, content);
-        }*/
+        
 
 
         //If a single char is different, it will return false

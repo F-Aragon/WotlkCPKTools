@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- Estilo global para DataGrid -->
+    <!-- DataGrid general style -->
     <Style TargetType="DataGrid">
         <Setter Property="HeadersVisibility" Value="None"/>
         <Setter Property="Background" Value="Transparent"/>
@@ -39,7 +39,7 @@
             </Setter.Value>
         </Setter>
 
-        <!-- CellStyle general -->
+        <!-- CellStyle -->
         <Setter Property="CellStyle">
             <Setter.Value>
                 <Style TargetType="DataGridCell">
@@ -54,7 +54,7 @@
             </Setter.Value>
         </Setter>
 
-        <!-- RowStyle general -->
+        <!-- RowStyle -->
         <Setter Property="RowStyle">
             <Setter.Value>
                 <Style TargetType="DataGridRow">
@@ -67,7 +67,7 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background" Value="#803A3756"/>
                         </Trigger>
-                        <!-- Selección -->
+                        <!-- Selected -->
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Foreground" Value="White"/>
                         </Trigger>

@@ -30,11 +30,5 @@ namespace WotlkCPKTools.Core
             _execute(parameter);
         }
 
-        /*private event EventHandler InternalCanExecuteChanged;
-        public void RaiseCanExecuteChanged()
-        {
-            InternalCanExecuteChanged?.Invoke(this, EventArgs.Empty);
-            CommandManager.InvalidateRequerySuggested();
-        }*/
     }
 }

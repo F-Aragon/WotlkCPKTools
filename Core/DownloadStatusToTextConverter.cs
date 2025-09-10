@@ -16,7 +16,7 @@ namespace WotlkCPKTools.Core
             string status = values[1] as string;
 
             if (!string.IsNullOrEmpty(status))
-                return status; // muestra "Descargando", "Copiando", etc.
+                return status; // Shows "Downloading..." or "Extracting...", etc.
 
             return lastUpdate?.ToString("yyyy-MM-dd HH:mm") ?? "";
         }

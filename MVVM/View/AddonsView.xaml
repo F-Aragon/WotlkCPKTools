@@ -13,8 +13,9 @@
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <conv:IsInstalledConverter x:Key="IsInstalledConverter"/>
         <conv:AddonStatusToIconConverter x:Key="AddonStatusToIconConverter"/>
+        <conv:AddonStatusToTooltipConverter x:Key="AddonStatusToTooltipConverter"/>
 
-        <!-- Estilos por columna -->
+        <!-- Styles per column -->
         <Style x:Key="LeftCellStyle" TargetType="DataGridCell">
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
         </Style>
@@ -49,14 +50,16 @@
                                        FontWeight="Bold"
                                        VerticalAlignment="Center"
                                        Foreground="White"
-                                       DockPanel.Dock="Left"/>
-                            <!-- Podés agregar botones más adelante -->
+                                       DockPanel.Dock="Left"
+                                       ToolTip="List of addons installed inside WoW AddOns folder"/>
+                            <!-- If i need more buttons -->
                             <Button DockPanel.Dock="Right"
                                     Command="{Binding DataContext.RefreshCommand, ElementName=Root}"
                                     Height="auto" Width="auto"
                                     Background="Transparent"
                                     BorderThickness="0"
-                                    Margin="0,0,4,0">
+                                    Margin="0,0,4,0"
+                                    ToolTip="Refresh Installed and Quick Add">
                                 <Viewbox Width="20" Height="20" Stretch="Uniform">
                                     <ContentControl Content="{StaticResource IconClockArrow}"/>
                                 </Viewbox>
@@ -66,7 +69,8 @@
                                     Height="auto" Width="auto"
                                     Background="Transparent" HorizontalAlignment="left"
                                     BorderThickness="0"
-                                    Margin="0,0,4,0">
+                                    Margin="0,0,4,0"
+                                    ToolTip="Updates all Installed addons">
                                 <Viewbox Width="20" Height="20" Stretch="Uniform">
                                     <ContentControl Content="{StaticResource IconArrowDownSquare}"/>
                                 </Viewbox>
@@ -85,6 +89,7 @@
                               IsReadOnly="False"
                               PreviewMouseWheel="DataGrid_PreviewMouseWheel"
                               CellEditEnding="DataGrid_CellEditEnding">
+                        
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="Auto" MinWidth="160"/>
                             <DataGridTextColumn Header="GitHub Link" Binding="{Binding GitHubUrl}" Width="*" FontWeight="Normal"/>
@@ -128,6 +133,15 @@
                                                         </ContentControl.Content>
                                                     </ContentControl>
                                                 </Button.Content>
+
+                                                <!-- Dynamic tooltip -->
+                                                <Button.ToolTip>
+                                                    <MultiBinding Converter="{StaticResource AddonStatusToTooltipConverter}">
+                                                        <Binding Path="IsComplete"/>
+                                                        <Binding Path="IsUpdated"/>
+                                                    </MultiBinding>
+                                                </Button.ToolTip>
+                                                
                                             </Button>
 
 
@@ -137,7 +151,8 @@
                                                     Width="30"
                                                     Height="30"
                                                     Margin="0"
-                                                    BorderThickness="0">
+                                                    BorderThickness="0"
+                                                    ToolTip="Delete Addon folders and move to Quick Add List">
                                                 <Viewbox Width="20" Height="20" Stretch="Uniform">
                                                     <ContentControl Content="{StaticResource IconArrowDown}" Foreground="Red"/>
                                                 </Viewbox>
@@ -149,7 +164,8 @@
                                                     Width="30"
                                                     Height="30"
                                                     Margin="0"
-                                                    BorderThickness="0">
+                                                    BorderThickness="0"
+                                                    ToolTip="Delete local folders and remove from installed">
                                                 <Viewbox Width="20" Height="20" Stretch="Uniform">
                                                     <ContentControl Content="{StaticResource IconTrash}" Foreground="Red"/>
                                                 </Viewbox>
@@ -173,7 +189,8 @@
                                        FontWeight="Bold"
                                        VerticalAlignment="Center"
                                        Foreground="White"
-                                       DockPanel.Dock="Left"/>
+                                       DockPanel.Dock="Left"
+                                       ToolTip="List to add saved addons"/>
                             <!-- Last Child Fill -->
                             <Rectangle Height="1" Fill="Gray" VerticalAlignment="Center" Margin="4,0,6,0" />
                             <!-- Can add buttons latter -->
@@ -197,7 +214,8 @@
                                                     CommandParameter="{Binding}"
                                                     Background="Transparent"
                                                     Width="30"
-                                                    BorderThickness="0">
+                                                    BorderThickness="0"
+                                                    ToolTip="Move to Installed List">
                                                 <Viewbox Width="20" Height="20" Stretch="Uniform">
                                                     <ContentControl Content="{StaticResource IconPlus}" Foreground="#4CAF50"/>
                                                 </Viewbox>
@@ -206,7 +224,8 @@
                                                     CommandParameter="{Binding}"
                                                     Background="Transparent"
                                                     Width="30"
-                                                    BorderThickness="0">
+                                                    BorderThickness="0"
+                                                    ToolTip="Remove from Quick Add List">
                                                 <Viewbox Width="20" Height="20" Stretch="Uniform">
                                                     <ContentControl Content="{StaticResource IconTrash}" Foreground="Red"/>
                                                 </Viewbox>
@@ -228,15 +247,15 @@
                                 <Expander.Header>
                                     <DockPanel LastChildFill="True" VerticalAlignment="Center" Margin="0,0,0,0">
 
-                                        <!-- Nombre de la lista -->
+                                        <!-- List Name -->
                                         <TextBlock Text="{Binding ListName}" FontSize="17" FontWeight="Bold" 
                                                    Foreground="White" VerticalAlignment="Center" Margin="0,0,4,0"/>
                                         
                                         
                                         
-                                        <!-- Botones a la derecha -->
+                                        <!-- Buttons to the right -->
                                         <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
-                                            <!-- Custom Lists "Download" Button -->
+                                            <!-- Custom Lists Update Button -->
                                             <Button Width="27" Height="25"
                                                     Background="Transparent"
                                                     Command="{Binding DataContext.DownloadCustomList, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
@@ -262,8 +281,16 @@
 
                                                 <Button.Style>
                                                     <Style TargetType="Button">
+                                                        <!-- Default Tooltip -->
+                                                        <Setter Property="ToolTip" Value="List outdated, Click to update"/>
                                                         <Setter Property="Visibility" Value="Visible"/>
+
                                                         <Style.Triggers>
+                                                            <!-- Change tooltip -->
+                                                            <DataTrigger Binding="{Binding IsUpToDate}" Value="True">
+                                                                <Setter Property="ToolTip" Value="This list is already up to date"/>
+                                                            </DataTrigger>
+
                                                             <!-- Hide button if RepoFileUrl is null or empty -->
                                                             <DataTrigger Binding="{Binding RepoFileUrl}" Value="{x:Null}">
                                                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -278,11 +305,13 @@
 
 
 
+
                                             <Button Width="30" Height="20"
                                                     Background="Transparent"
                                                     Command="{Binding DataContext.DeleteList, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                     CommandParameter="{Binding}"
-                                                    BorderThickness="0">
+                                                    BorderThickness="0"
+                                                    ToolTip="Remove this CustomList">
                                                 <Viewbox Width="20" Height="20" Stretch="Uniform">
                                                     <ContentControl Content="{StaticResource IconTrash}" Foreground="#80FF0000"/>
                                                 </Viewbox>
@@ -294,7 +323,7 @@
                                     </DockPanel>
                                 </Expander.Header>
 
-                                <!-- Contenido del Expander -->
+                                <!-- Expander Content -->
                                 <DataGrid ItemsSource="{Binding Addons}"
                                           AutoGenerateColumns="False"
                                           CanUserAddRows="False"
@@ -315,7 +344,7 @@
                                                                 HorizontalContentAlignment="Center">
                                                             <Button.Style>
                                                                 <Style TargetType="Button">
-                                                                    
+                                                                    <!-- Default: addon not installed -->
                                                                     <Setter Property="Content">
                                                                         <Setter.Value>
                                                                             <Viewbox Width="20" Height="20">
@@ -323,8 +352,10 @@
                                                                             </Viewbox>
                                                                         </Setter.Value>
                                                                     </Setter>
+                                                                    <Setter Property="ToolTip" Value="Add this addon to Installed List"/>
+
                                                                     <Style.Triggers>
-                                                                        
+                                                                        <!-- If addon is installed -->
                                                                         <DataTrigger Value="True">
                                                                             <DataTrigger.Binding>
                                                                                 <MultiBinding Converter="{StaticResource IsInstalledConverter}">
@@ -333,11 +364,13 @@
                                                                                 </MultiBinding>
                                                                             </DataTrigger.Binding>
                                                                             <Setter Property="Content" Value="✔️"/>
+                                                                            <Setter Property="ToolTip" Value="This addon is already installed"/>
                                                                         </DataTrigger>
                                                                     </Style.Triggers>
                                                                 </Style>
                                                             </Button.Style>
                                                         </Button>
+
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
@@ -373,7 +406,8 @@
                     Height="auto" Width="auto"
                     Background="Transparent" Foreground="LightGray"
                     BorderThickness="0"
-                    Margin="5,0">
+                    Margin="5,0"
+                    ToolTip="Check for updates in Addons and Lists">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <ContentControl Content="{StaticResource IconDobleArrowCircle}" Width="20" Height="20" Margin="0,0,4,0"/>
                     <TextBlock Text="Check for Updates" VerticalAlignment="Center" FontSize="15" />
@@ -385,7 +419,8 @@
                     Height="auto" Width="auto"
                     Background="Transparent" Foreground="LightGreen"
                     BorderThickness="0"
-                    Margin="5,0">
+                    Margin="5,0"
+                    ToolTip="Add a new addon from GitHub">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <ContentControl Content="{StaticResource IconPlus}" Width="20" Height="20" Margin="0,0,4,0"/>
                     <TextBlock Text="Add New Addon" VerticalAlignment="Center" FontSize="15" />
@@ -396,10 +431,11 @@
             <Button Grid.Column="3"
                     Command="{Binding DataContext.DownloadRecommendedList, ElementName=Root}"
                     Height="auto" Width="auto"
-                    Background="Transparent" Foreground="White"
+                    Background="Transparent" Foreground="#AAFFA500"
                     BorderThickness="0"
                     Visibility="{Binding IsRecommendedListNotAvailable,
-                                Converter={StaticResource BoolToVisibilityConverter}}">
+                                Converter={StaticResource BoolToVisibilityConverter}}"
+                    ToolTip="Download Recommended Addons List">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <ContentControl Content="{StaticResource IconFileWithArrowDown}"
                         Width="25" Height="25" Margin="3,4,3,4"/>
@@ -421,8 +457,9 @@
             <Button Grid.Column="5"
                     Command="{Binding DataContext.OpenCustomListFolderCommand, ElementName=Root}"
                     Height="auto" Width="auto"
-                    Background="Transparent" Foreground="White"
-                    BorderThickness="0">
+                    Background="Transparent" Foreground="LightYellow"
+                    BorderThickness="0"
+                    ToolTip="Open CustomList Folder">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,3,0">
                     <ContentControl Content="{StaticResource IconFolder}" Width="25" Height="25" Margin="7,4,7,4"/>
                     <TextBlock Text="CustomList" VerticalAlignment="Center" FontSize="15" />

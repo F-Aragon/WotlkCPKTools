@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- Estilo global ScrollBar (ancho, thumb, triggers) -->
+    <!-- ScrollBar -->
     <Style TargetType="ScrollBar">
         <Setter Property="Width" Value="4"/>
         <Setter Property="Background" Value="Transparent"/>
@@ -41,7 +41,7 @@
         </Setter>
     </Style>
 
-    <!-- Estilo global ScrollViewer con grid de 2 columnas -->
+    <!-- ScrollViewer 2 columns grid -->
     <Style TargetType="ScrollViewer">
         <Setter Property="VerticalScrollBarVisibility" Value="Visible"/>
         <Setter Property="HorizontalScrollBarVisibility" Value="Hidden"/>
@@ -55,7 +55,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="6"/>
-                                <!-- columna del ScrollBar -->
+                                <!-- ScrollBar Column -->
                             </Grid.ColumnDefinitions>
                             <ScrollContentPresenter Grid.Column="0"
                                                     Content="{TemplateBinding Content}" 

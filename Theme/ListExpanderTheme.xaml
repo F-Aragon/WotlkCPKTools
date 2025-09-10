@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- Estilo base para todos los Expanders de listas con header personalizable -->
+    <!-- Expanders -->
     <Style x:Key="ListExpanderStyle" TargetType="Expander">
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="Background" Value="Transparent"/>
@@ -20,21 +20,21 @@
                                 <RowDefinition Height="Auto"/>
                                 <!-- Header -->
                                 <RowDefinition Height="*"/>
-                                <!-- Contenido -->
+                                <!-- Content -->
                             </Grid.RowDefinitions>
 
                             <!-- Header -->
                             <Grid Grid.Row="0" VerticalAlignment="Center">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
-                                    <!-- Flecha -->
+                                    <!-- Arrow -->
                                     <ColumnDefinition Width="*"/>
-                                    <!-- Contenedor header -->
+                                    <!-- Header ContentPresenter -->
                                     <ColumnDefinition Width="Auto"/>
-                                    <!-- Botones -->
+                                    <!-- Buttons -->
                                 </Grid.ColumnDefinitions>
 
-                                <!-- ToggleButton que controla la expansión -->
+                                <!-- ToggleButton -->
                                 <ToggleButton x:Name="ExpanderToggle"
                                               IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
                                               Width="20" Height="20" Margin="2"
@@ -57,33 +57,33 @@
                                     <TextBlock x:Name="ArrowIcon" Text="▼" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
                                 </ToggleButton>
 
-                                <!-- Contenedor header (sin línea) -->
+                                <!-- Header ContentPresenter -->
                                 <Grid Grid.Column="1" VerticalAlignment="Center">
                                     <ContentPresenter ContentSource="Header" VerticalAlignment="Center" Margin="0,0,4,0"/>
                                 </Grid>
 
-                                <!-- Panel de botones a la derecha -->
+                                <!-- Right buttons -->
                                 <StackPanel x:Name="RightButtonsPanel"
                                             Orientation="Horizontal"
                                             Grid.Column="2"
                                             HorizontalAlignment="Right"
                                             VerticalAlignment="Center">
-                                    <!-- Tus botones extra irán acá -->
+                                    <!-- Extra buttons if needed -->
                                 </StackPanel>
                             </Grid>
 
-                            <!-- Contenido del Expander -->
+                            <!-- Expander content -->
                             <ContentPresenter x:Name="PART_Content" Grid.Row="1" Visibility="Collapsed" Margin="{TemplateBinding Padding}"/>
                         </Grid>
                     </Border>
 
                     <ControlTemplate.Triggers>
-                        <!-- Mostrar contenido cuando IsExpanded = True -->
+                        <!-- Show content if IsExpanded = True -->
                         <Trigger Property="IsExpanded" Value="True">
                             <Setter TargetName="PART_Content" Property="Visibility" Value="Visible"/>
                         </Trigger>
 
-                        <!-- Cambiar el icono según el estado -->
+                        <!-- Change icon depending on IsChecked -->
                         <Trigger SourceName="ExpanderToggle" Property="IsChecked" Value="True">
                             <Setter TargetName="ArrowIcon" Property="Text" Value="▲"/>
                         </Trigger>

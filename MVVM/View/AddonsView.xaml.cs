@@ -43,7 +43,7 @@ namespace WotlkCPKTools.MVVM.View
             {
                 if (e.Row.Item is AddonItem addonItem)
                 {
-                    // Buscar el AddonInfo correspondiente
+                    // Find the AddonInfo
                     AddonService _addonService = new AddonService();
                     var storedAddons = _addonService.LoadAddonsFromLocal();
                     var match = storedAddons.FirstOrDefault(a => a.GitHubUrl == addonItem.GitHubUrl);

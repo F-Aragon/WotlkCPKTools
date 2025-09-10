@@ -40,7 +40,8 @@
                                />
                 </Border>
 
-                <Button Content="Browse" 
+                <Button Content="Browse"
+                        ToolTip="Change Realmlist folder"
                         Width="80" 
                         Margin="5,0,0,0"
                         Foreground="White"
@@ -54,6 +55,7 @@
             <!-- Second Row: Launcher.exe -->
             <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="15,5">
                 <TextBlock Text="Launcher .exe: " 
+                           ToolTip="Change wow.exe location (or any *.exe)"
                            Width="150" 
                            VerticalAlignment="Center" 
                            Foreground="LightGray"

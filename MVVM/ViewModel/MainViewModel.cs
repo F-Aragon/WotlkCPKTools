@@ -98,11 +98,11 @@ namespace WotlkCPKTools.MVVM.ViewModel
 
                 RealmlistContent = File.Exists(filePath)
                     ? File.ReadAllText(filePath)
-                    : "Archivo realmlist.wtf no encontrado.";
+                    : "realmlist.wtf not found.";
             }
             catch (Exception ex)
             {
-                RealmlistContent = $"Error leyendo realmlist: {ex.Message}";
+                RealmlistContent = $"Error reading realmlist: {ex.Message}";
             }
         }
 
@@ -151,7 +151,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"No se pudo abrir GitHub: {ex.Message}");
+                MessageBox.Show($"Could not open GitHub: {ex.Message}");
             }
         }
 
@@ -168,7 +168,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"No se pudo abrir Discord: {ex.Message}");
+                MessageBox.Show($"Could not open Discord: {ex.Message}");
             }
         }
 

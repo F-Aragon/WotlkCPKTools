@@ -19,7 +19,7 @@ namespace WotlkCPKTools.Services
             _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("WotlkCPKTools");
 
-            // Asegurar que la carpeta temp exista
+            // Ensure Temp folder exists
             Directory.CreateDirectory(Pathing.TempFolder);
         }
 
@@ -140,7 +140,7 @@ namespace WotlkCPKTools.Services
             string repoMainBranch = await GetDefaultBranchAsync(repoUrl);
             var (owner, repo) = GetOwnerAndRepo(repoUrl);
             
-            //string zipUrl = $"https://github.com/{owner}/{repo}/archive/refs/heads/{repoMainBranch}.zip";
+            
             string zipUrl = $"https://github.com/{owner}/{repo.Replace(".git", "")}/archive/refs/heads/{repoMainBranch}.zip";
             string zipFilePath = Path.Combine(Pathing.TempFolder, repoName + ".zip");
 

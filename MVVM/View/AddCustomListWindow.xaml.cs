@@ -10,14 +10,14 @@ namespace WotlkCPKTools.MVVM.View
             InitializeComponent();
         }
 
-        // Cerrar la ventana
+        // Close window
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = false;
             this.Close();
         }
 
-        // Permitir arrastrar la ventana haciendo click en cualquier lugar
+        // Mouse drag window
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ButtonState == MouseButtonState.Pressed)

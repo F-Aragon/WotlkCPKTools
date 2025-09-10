@@ -22,32 +22,35 @@ namespace WotlkCPKTools.Services
         }
 
         /// <summary>
-        /// Builds the Installed addons list from local JSON.
+        /// Builds the Sorted Installed addons list from local JSON.
         /// </summary>
         public ObservableCollection<AddonItem> BuildInstalledItems()
         {
             GitHubService _gitHubService = new GitHubService();
 
             var installed = new ObservableCollection<AddonItem>(
-                _addonService.LoadAddonsFromLocal().Select(a =>
-                {
-                    var item = new AddonItem
+                _addonService.LoadAddonsFromLocal()
+                    .Select(a =>
                     {
-                        Name = a.Name,
-                        GitHubUrl = a.GitHubUrl,
-                        LastUpdate = a.LastUpdateDate,
-                        IsUpdated = a.IsUpdated
-                    };
+                        var item = new AddonItem
+                        {
+                            Name = a.Name,
+                            GitHubUrl = a.GitHubUrl,
+                            LastUpdate = a.LastUpdateDate,
+                            IsUpdated = a.IsUpdated
+                        };
 
-                    // Refresh the IsComplete property based on local folders
-                    item.RefreshCompletionStatus();
-
-                    return item;
-                })
+                        // Refresh the IsComplete property based on local folders
+                        item.RefreshCompletionStatus();
+                        
+                        return item;
+                    })
+                    .OrderBy(a => a.Name) // Sort alphabetically by Name
             );
 
             return installed;
         }
+
 
 
         /// <summary>
@@ -67,6 +70,7 @@ namespace WotlkCPKTools.Services
                         GitHubUrl = f.GitHubUrl,
                         IsUpdated = false
                     })
+                    .OrderBy(a => a.Name) // Sort alphabetically by Name
             );
 
             return fastAdd;

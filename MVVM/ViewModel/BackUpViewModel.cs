@@ -364,13 +364,13 @@ namespace WotlkCPKTools.MVVM.ViewModel
 
             try
             {
-                IsRestoring = true; // <-- mostrar ProgressBar
+                IsRestoring = true; // <-- Show ProgressBar
 
                 var progress = new Progress<string>(s =>
                 {
                     RestoreProgress = s;
 
-                    // Extraer porcentaje
+                    // Extract percentage
                     var percentIndex = s.IndexOf('%');
                     if (percentIndex > 0)
                     {
@@ -380,11 +380,11 @@ namespace WotlkCPKTools.MVVM.ViewModel
                     }
                 });
 
-                // Borra la carpeta WTF actual
+                // Delete current WTF
                 if (Directory.Exists(Pathing.WTF))
                     Directory.Delete(Pathing.WTF, recursive: true);
 
-                // Restaurar backup con progreso
+                // Restore backup with progress bar
                 await _filesManagerService.RestoreBackupAsync(backup.FolderPath, progress);
 
                 System.Windows.MessageBox.Show($"Backup '{backup.Title}' restored successfully.", "Success", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
@@ -395,7 +395,7 @@ namespace WotlkCPKTools.MVVM.ViewModel
             }
             finally
             {
-                IsRestoring = false; // <-- ocultar ProgressBar
+                IsRestoring = false; // <-- Hide progress bar
                 RestoreProgress = string.Empty;
                 RestoreProgressPercentage = 0;
             }

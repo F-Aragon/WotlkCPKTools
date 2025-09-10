@@ -42,7 +42,7 @@ namespace WotlkCPKTools.MVVM.View
             if (BackupsListView.ActualWidth > 0)
             {
                 double otherColumnsWidth = DateColumn.ActualWidth + 40 + 30 + 45; // Date + Fav + Open + size
-                double newWidth = BackupsListView.ActualWidth - otherColumnsWidth - 5; // margen interno
+                double newWidth = BackupsListView.ActualWidth - otherColumnsWidth - 5; // Internal margin
                 if (newWidth > 0)
                     TitleColumn.Width = newWidth;
             }
