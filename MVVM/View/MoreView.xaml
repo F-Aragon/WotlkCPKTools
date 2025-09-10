@@ -7,51 +7,77 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <!-- Set DataContext directly to MoreViewModel -->
     <UserControl.DataContext>
         <vm:MoreViewModel/>
     </UserControl.DataContext>
 
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="10"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <Grid>
+        <!-- Semi-transparent background rectangle -->
+        <Rectangle Fill="Black" Opacity="0.6"/>
 
-        <!-- First Row: Realmlist File -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5">
-            <TextBlock Text="REALMLIST File: " 
-                       Width="150" 
-                       VerticalAlignment="Center" 
-                       Foreground="White"/>
-            <TextBlock Text="{Binding RealmlistFolderPath}" 
-                       VerticalAlignment="Center" 
-                       Foreground="LightGray" 
-                       Width="500" 
-                       TextTrimming="CharacterEllipsis"/>
-            <Button Content="Browse" 
-                    Width="80" 
-                    Margin="5,0,0,0"
-                    Command="{Binding BrowseRealmlistFileCommand}"/>
-        </StackPanel>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <!-- Second Row: Launcher.exe -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,5">
-            <TextBlock Text="Launcher .exe: " 
-                       Width="150" 
-                       VerticalAlignment="Center" 
-                       Foreground="White"/>
-            <TextBlock Text="{Binding LauncherExePath}" 
-                       VerticalAlignment="Center" 
-                       Foreground="LightGray" 
-                       Width="500" 
-                       TextTrimming="CharacterEllipsis"/>
-            <Button Content="Browse" 
-                    Width="80" 
-                    Margin="5,0,0,0"
-                    Command="{Binding BrowseLauncherExeCommand}"/>
-        </StackPanel>
+            <!-- First Row: Realmlist File -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="15,10,5,0">
+                <TextBlock Text="REALMLIST File: " 
+                           Width="150" 
+                           VerticalAlignment="Center" 
+                           Foreground="LightGray"
+                           FontWeight="Bold"
+                           FontSize="15"/>
 
+                <Border Background="#2C2A3E" CornerRadius="5" Padding="5" Margin="5,0,0,0">
+                    <TextBlock Text="{Binding RealmlistFolderPath}" 
+                               VerticalAlignment="Center" 
+                               Foreground="White" 
+                               Width="500" 
+                               TextTrimming="CharacterEllipsis"
+                               />
+                </Border>
+
+                <Button Content="Browse" 
+                        Width="80" 
+                        Margin="5,0,0,0"
+                        Foreground="White"
+                        Background="#444062"
+                        BorderBrush="#5A5776"
+                        BorderThickness="1"
+                        Cursor="Hand"
+                        Command="{Binding BrowseRealmlistFileCommand}"/>
+            </StackPanel>
+
+            <!-- Second Row: Launcher.exe -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="15,5">
+                <TextBlock Text="Launcher .exe: " 
+                           Width="150" 
+                           VerticalAlignment="Center" 
+                           Foreground="LightGray"
+                           FontWeight="Bold"
+                           FontSize="15"/>
+
+                <Border Background="#2C2A3E" CornerRadius="5" Padding="5" Margin="5,0,0,0">
+                    <TextBlock Text="{Binding LauncherExePath}" 
+                               VerticalAlignment="Center" 
+                               Foreground="White" 
+                               Width="500" 
+                               TextTrimming="CharacterEllipsis"/>
+                </Border>
+
+                <Button Content="Browse" 
+                        Width="80" 
+                        Margin="5,0,0,0"
+                        Foreground="White"
+                        Background="#444062"
+                        BorderBrush="#5A5776"
+                        BorderThickness="1"
+                        Cursor="Hand"
+                        Command="{Binding BrowseLauncherExeCommand}"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>
