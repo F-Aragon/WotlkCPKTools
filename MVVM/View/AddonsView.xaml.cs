@@ -1,9 +1,7 @@
-﻿using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using WotlkCPKTools.MVVM.Model;
-using WotlkCPKTools.MVVM.ViewModel;
 using WotlkCPKTools.Services;
 
 namespace WotlkCPKTools.MVVM.View

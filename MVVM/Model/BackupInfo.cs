@@ -1,5 +1,4 @@
-﻿using System;
-using WotlkCPKTools.Core;
+﻿using WotlkCPKTools.Core;
 
 namespace WotlkCPKTools.MVVM.Model
 {
