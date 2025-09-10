@@ -18,38 +18,44 @@
             GlassFrameThickness="0"
             UseAeroCaptionButtons="False"/>
     </WindowChrome.WindowChrome>
+
     <Window.DataContext>
         <viewModel:MainViewModel/>
     </Window.DataContext>
 
-    <Border  MouseDown="_MouseDown"  BorderThickness="1">
-        <Border.Background>
-            <ImageBrush ImageSource="/Resources/Images/back2.png" 
-                    Stretch="UniformToFill" 
-                    AlignmentX="Center" 
-                    AlignmentY="Center"/>
-        </Border.Background>
+    <Border MouseDown="_MouseDown" BorderThickness="1">
         <Grid>
-            <!-- Darker Overlay  -->
+            <!-- Two overlapping ImageBrush backgrounds for crossfade -->
+            <Border x:Name="BackgroundBorder1">
+                <Border.Background>
+                    <ImageBrush x:Name="BackgroundBrush1" Stretch="UniformToFill" AlignmentX="Center" AlignmentY="Center" Opacity="1"/>
+                </Border.Background>
+            </Border>
+            <Border x:Name="BackgroundBorder2">
+                <Border.Background>
+                    <ImageBrush x:Name="BackgroundBrush2" Stretch="UniformToFill" AlignmentX="Center" AlignmentY="Center" Opacity="0"/>
+                </Border.Background>
+            </Border>
+
+            <!-- Darker overlay -->
             <Rectangle>
                 <Rectangle.Fill>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                        <!-- Arriba más transparente -->
                         <GradientStop Color="#50000000" Offset="0"/>
-                        <!-- Abajo más opaco -->
                         <GradientStop Color="#000000" Offset="1"/>
                     </LinearGradientBrush>
                 </Rectangle.Fill>
             </Rectangle>
 
-            <Grid Margin="2" Background="transparent">
+            <!-- Main Grid -->
+            <Grid Margin="2" Background="Transparent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
                     <RowDefinition/>
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
 
-                <!-- Header Row -->
+                <!-- Header -->
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="200"/>
@@ -57,73 +63,30 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Title -->
                     <TextBlock Text="CPK WoW Tools"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"
                                Foreground="White"
                                FontSize="22"/>
 
-                    <!-- Menu -->
                     <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="0,5,0,0">
-                        <RadioButton Content="Addons"
-                                     Width="100"
-                                     Foreground="White"
-                                     FontSize="20"
-                                     Style="{StaticResource MenuButtonTheme}"
-                                     IsChecked="True"
-                                     Command="{Binding AddonsViewCommand}"/>
-
-                        <RadioButton Content="Backup"
-                                     Width="100"
-                                     Foreground="White"
-                                     FontSize="20"
-                                     Style="{StaticResource MenuButtonTheme}"
-                                     Command="{Binding BackUpViewCommand}"/>
-
-                        <RadioButton Content="More"
-                                     Width="100"
-                                     Foreground="White"
-                                     FontSize="20"
-                                     Style="{StaticResource MenuButtonTheme}"
-                                     Command="{Binding MoreViewCommand}"/>
+                        <RadioButton Content="Addons" Width="100" Foreground="White" FontSize="20" Style="{StaticResource MenuButtonTheme}" IsChecked="True" Command="{Binding AddonsViewCommand}"/>
+                        <RadioButton Content="Backup" Width="100" Foreground="White" FontSize="20" Style="{StaticResource MenuButtonTheme}" Command="{Binding BackUpViewCommand}"/>
+                        <RadioButton Content="More" Width="100" Foreground="White" FontSize="20" Style="{StaticResource MenuButtonTheme}" Command="{Binding MoreViewCommand}"/>
                     </StackPanel>
 
-                    <!-- Minimize & Close Buttons -->
                     <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top">
-                        <Button Width="25" Height="20" Margin="2"
-                                Content="_"
-                                FontWeight="Bold"
-                                Foreground="White"
-                                Background="Transparent"
-                                BorderBrush="Transparent"
-                                Click="MinimizeWindow_Click"/>
-                        
-                        <Button Width="25" Height="20" Margin="2"
-                                Content="🗗" 
-                                FontWeight="Bold"
-                                Foreground="White"
-                                Background="Transparent"
-                                BorderBrush="Transparent"
-                                Click="RestoreWindow_Click"/>
-
-                        <Button Width="25" Height="20" Margin="2"
-                                Content="X"
-                                FontWeight="Bold"
-                                Foreground="White"
-                                Background="Transparent"
-                                BorderBrush="Transparent"
-                                Click="CloseWindow_Click"/>
+                        <Button Width="25" Height="20" Margin="2" Content="_" FontWeight="Bold" Foreground="White" Background="Transparent" BorderBrush="Transparent" Click="MinimizeWindow_Click"/>
+                        <Button Width="25" Height="20" Margin="2" Content="🗗" FontWeight="Bold" Foreground="White" Background="Transparent" BorderBrush="Transparent" Click="RestoreWindow_Click"/>
+                        <Button Width="25" Height="20" Margin="2" Content="X" FontWeight="Bold" Foreground="White" Background="Transparent" BorderBrush="Transparent" Click="CloseWindow_Click"/>
                     </StackPanel>
                 </Grid>
 
                 <!-- Content -->
-                <ContentControl Grid.Row="1"
-                                Margin="10,0,10,5"
-                                Content="{Binding CurrentView}"/>
+                <ContentControl Grid.Row="1" Margin="10,0,10,5" Content="{Binding CurrentView}"/>
 
                 <!-- Footer -->
-                <Grid Grid.Row="2" Background="#801D1B2B" >
+                <Grid Grid.Row="2" Background="#801D1B2B">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
@@ -133,75 +96,19 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
+                    <Button Grid.Column="0" Width="30" Height="30" Background="Transparent" ToolTip="GitHub" BorderThickness="0" Margin="0,0,5,0" Command="{Binding OpenGitHubAppRepoCommand}">
+                        <ContentControl Content="{StaticResource GitHubIcon}"/>
+                    </Button>
 
-                <!-- GitHub -->
-                <Button Grid.Column="0"
-                        Width="30" Height="30"
-                        Background="Transparent"
-                        ToolTip="GitHub"
-                        BorderThickness="0"
-                        Margin="0,0,5,0"
-                        Command="{Binding OpenGitHubAppRepoCommand}">
-                    <ContentControl Content="{StaticResource GitHubIcon}"/>
-                </Button>
+                    <Button Grid.Column="1" Width="30" Height="30" Background="Transparent" ToolTip="Discord" BorderThickness="0" Margin="0,0,5,0" Command="{Binding OpenDiscordUrlCommand}">
+                        <ContentControl Content="{StaticResource DiscordIcon}"/>
+                    </Button>
 
-                <!-- Discord -->
-                <Button Grid.Column="1"
-                        Width="30" Height="30"
-                        Background="Transparent"
-                        ToolTip="Discord"
-                        BorderThickness="0"
-                        Margin="0,0,5,0"
-                        Command="{Binding OpenDiscordUrlCommand}">
-                    <ContentControl Content="{StaticResource DiscordIcon}"/>
-                </Button>
+                    <TextBlock Grid.Column="3" Text="{Binding RealmlistContent}" TextWrapping="Wrap" TextAlignment="Right" Background="#80000000" Foreground="White" Padding="5" Margin="5,0" VerticalAlignment="Top" IsHitTestVisible="False" FontSize="13"/>
+                    <TextBlock Grid.Column="3" Text="{Binding StatusMessage}" VerticalAlignment="Center" Foreground="LightGray" FontSize="12" Margin="10,0" Background="#40000000" Padding="2"/>
 
-                <!-- Read-only display of realmlist content, aligned right -->
-                <TextBlock Grid.Column="3"
-                            Text="{Binding RealmlistContent}"
-                            TextWrapping="Wrap"
-                            TextAlignment="Right"
-                            Background="#80000000" 
-                            Foreground="White"
-                            Padding="5"
-                            Margin="5,0"
-                            VerticalAlignment="Top"
-                            IsHitTestVisible="False"
-                            FontSize="13"/>
-
-                <!-- Status message -->
-                <TextBlock Grid.Column="3"
-                            Text="{Binding StatusMessage}"
-                            VerticalAlignment="Center"
-                            Foreground="LightGray"
-                            FontSize="12"
-                            Margin="10,0"
-                            Background="#40000000"
-                            Padding="2"/>
-
-                <!-- Realmlist folder button -->
-                <Button Grid.Column="4"
-                        FontSize="13"
-                        Content="Realmlist 📁"
-                        Width="90" Height="25"
-                        Margin="5,0"
-                        Foreground="White"
-                        Background="#88444062" 
-                        BorderBrush="#30FFFFFF"
-                        Cursor="Hand"
-                        Command="{Binding OpenRealmlistFolderCommand}"/>
-
-                <!-- Launcher button -->
-                <Button Grid.Column="5"
-                        FontSize="13"
-                        Content="Launch WoW"
-                        Width="120" Height="25"
-                        Margin="10,0"
-                        Foreground="White"
-                        Background="#883A3756"
-                        BorderBrush="#30FFFFFF"
-                        Cursor="Hand"
-                        Command="{Binding LaunchWoWCommand}"/>
+                    <Button Grid.Column="4" FontSize="13" Content="Realmlist 📁" Width="90" Height="25" Margin="5,0" Foreground="White" Background="#88444062" BorderBrush="#30FFFFFF" Cursor="Hand" Command="{Binding OpenRealmlistFolderCommand}"/>
+                    <Button Grid.Column="5" FontSize="13" Content="Launch WoW" Width="120" Height="25" Margin="10,0" Foreground="White" Background="#883A3756" BorderBrush="#30FFFFFF" Cursor="Hand" Command="{Binding LaunchWoWCommand}"/>
                 </Grid>
             </Grid>
         </Grid>

@@ -32,16 +32,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Images\back1.jpeg">
+    <Resource Include="Resources\Images\Backgrounds\back1.jpeg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Images\back2.png">
+    <Resource Include="Resources\Images\Backgrounds\back2.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Images\back3.jpg">
+    <Resource Include="Resources\Images\Backgrounds\back3.jpg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Images\back4.jpeg">
+    <Resource Include="Resources\Images\Backgrounds\back4.jpeg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Svg icons\arrow-bar-down.svg" />

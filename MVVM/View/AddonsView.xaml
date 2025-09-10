@@ -371,8 +371,9 @@
             <Button Grid.Column="0"
                     Command="{Binding DataContext.RefreshAllListsCommand, ElementName=Root}"
                     Height="auto" Width="auto"
-                    Background="Transparent" Foreground="White"
-                    BorderThickness="0">
+                    Background="Transparent" Foreground="LightGray"
+                    BorderThickness="0"
+                    Margin="5,0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <ContentControl Content="{StaticResource IconDobleArrowCircle}" Width="20" Height="20" Margin="0,0,4,0"/>
                     <TextBlock Text="Check for Updates" VerticalAlignment="Center" FontSize="15" />
@@ -382,8 +383,9 @@
             <Button Grid.Column="1"
                     Command="{Binding DataContext.OpenAddAddonWindowCommand, ElementName=Root}"
                     Height="auto" Width="auto"
-                    Background="Transparent" Foreground="White"
-                    BorderThickness="0">
+                    Background="Transparent" Foreground="LightGreen"
+                    BorderThickness="0"
+                    Margin="5,0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <ContentControl Content="{StaticResource IconPlus}" Width="20" Height="20" Margin="0,0,4,0"/>
                     <TextBlock Text="Add New Addon" VerticalAlignment="Center" FontSize="15" />
