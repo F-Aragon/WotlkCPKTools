@@ -15,6 +15,10 @@ namespace WotlkCPKTools
         {
             this.WindowState = WindowState.Minimized;
         }
+        private void RestoreWindow_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Normal;
+        }
 
         private void CloseWindow_Click(object sender, RoutedEventArgs e)
         {

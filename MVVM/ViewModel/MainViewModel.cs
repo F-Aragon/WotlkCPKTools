@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Windows;
 using System.Windows.Input;
 using WotlkCPKTools.Core;
 using WotlkCPKTools.Services;
@@ -32,6 +33,8 @@ namespace WotlkCPKTools.MVVM.ViewModel
 
         public ICommand LaunchWoWCommand { get; }
         public ICommand OpenRealmlistFolderCommand { get; }
+        public ICommand OpenGitHubAppRepoCommand { get; }
+        public ICommand OpenDiscordUrlCommand { get; }
 
         public RelayCommand AddonsViewCommand { get; set; }
         public RelayCommand BackUpViewCommand { get; set; }
@@ -68,6 +71,10 @@ namespace WotlkCPKTools.MVVM.ViewModel
             // Footer commands
             LaunchWoWCommand = new RelayCommand(_ => LaunchWoW());
             OpenRealmlistFolderCommand = new RelayCommand(_ => OpenRealmlistFolder());
+
+            // External links
+            OpenGitHubAppRepoCommand = new RelayCommand(OpenGitHubRepo);
+            OpenDiscordUrlCommand = new RelayCommand(OpenDiscord);
 
             // Load realmlist content at startup
             LoadRealmlistContent();
@@ -130,5 +137,40 @@ namespace WotlkCPKTools.MVVM.ViewModel
                 StatusMessage = $"Error: {ex.Message}";
             }
         }
+
+        private void OpenGitHubRepo(object obj)
+        {
+            try
+            {
+                string url = "https://github.com/FranciscoRAragon/WotlkCPKTools";
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"No se pudo abrir GitHub: {ex.Message}");
+            }
+        }
+
+        private void OpenDiscord(object obj)
+        {
+            try
+            {
+                string url = "https://discord.gg/9TyTnZZ8vZ";
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"No se pudo abrir Discord: {ex.Message}");
+            }
+        }
+
     }
 }
