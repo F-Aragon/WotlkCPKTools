@@ -36,7 +36,7 @@
         <!-- Backup creation section -->
         <Border Grid.Row="0" BorderBrush="#80000000" BorderThickness="1" 
                 Padding="10" Margin="0,0,0,10"
-                Background="#80000000">
+                Background="#90000000">
 
             <Grid>
                 <Grid.RowDefinitions>
@@ -99,7 +99,7 @@
 
         <!-- Backup Manager -->
         <Border Grid.Row="2" BorderBrush="#80000000" BorderThickness="1" Padding="10"
-                Background="#80000000">
+                Background="#90000000">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -117,7 +117,8 @@
                           Foreground="White"
                           Background="#20000000"
                           BorderBrush="#50999999"
-                          BorderThickness="1">
+                          BorderThickness="1"
+                          GridViewColumnHeader.Click="GridViewColumnHeader_Click">
 
                     <!-- Style for column headers -->
                     <ListView.Resources>
@@ -159,14 +160,19 @@
 
                     <!-- ListView columns -->
                     <ListView.View>
-                        <GridView>
+                        <GridView >
                             <GridViewColumn x:Name="DateColumn" Header="Date" Width="45">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Date, StringFormat={}{0:MM/dd}}" Foreground="White"/>
+                                        <TextBlock Text="{Binding Date, StringFormat={}{0:MM/dd}}" Foreground="White">
+                                            <TextBlock.ToolTip>
+                                                <TextBlock Text="{Binding Date, StringFormat={}{0:MM/dd/yyyy HH:mm:ss}}" />
+                                            </TextBlock.ToolTip>
+                                        </TextBlock>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
+
 
                             <GridViewColumn x:Name="TitleColumn" Header="Title">
                                 <GridViewColumn.CellTemplate>

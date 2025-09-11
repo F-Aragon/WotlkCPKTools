@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <PackageIcon>CPKWoWTools.ico</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -53,6 +54,13 @@
     <Resource Include="Resources\Svg icons\cloud-download.svg" />
     <Resource Include="Resources\Svg icons\plus-lg.svg" />
     <Resource Include="Resources\Svg icons\trash-fill.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\Images\icon\CPKWoWTools.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
