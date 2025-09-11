@@ -1,18 +1,19 @@
 ﻿using System.IO;
 
+
 namespace WotlkCPKTools.Services
 {
     public static class Pathing
     {
         // Relative to CPKTools.exe
-
+        
         //WoW Folders
         //Base WoW Folder (*.exe)
-        public static readonly string WoWFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory);
+        public static readonly string WoWFolder = Path.GetDirectoryName(Environment.ProcessPath)!;
         //WTF
-        public static readonly string WTF = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WTF");
+        public static readonly string WTF = Path.Combine(WoWFolder, "WTF");
         //AddOns
-        public static readonly string AddOns = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Interface", "AddOns");
+        public static readonly string AddOns = Path.Combine(WoWFolder, "Interface", "AddOns");
         //Realmlist.wtf folder
         public static readonly string RealmlistFolder = Path.Combine(WoWFolder, "Data", "enUS");
 
@@ -27,7 +28,7 @@ namespace WotlkCPKTools.Services
         // Subfolder for backups
         public static readonly string BackupsFolder = Path.Combine(BaseFolder, "BackUps");
         // storedAddons.json folder
-        public static readonly string storedAddons = Path.Combine(WoWFolder, "CPKTools");
+        public static readonly string storedAddons = BaseFolder;
         // storedAddons.json file
         public static readonly string storedAddonsFile = Path.Combine(storedAddons, "storedAddons.json");
         // SubFolder for Data
@@ -60,7 +61,12 @@ namespace WotlkCPKTools.Services
             Directory.CreateDirectory(WTF);
             Directory.CreateDirectory(AddOns);
 
+            // Ensure JSON files exist
+            if (!File.Exists(storedAddonsFile))
+                File.WriteAllText(storedAddonsFile, "[]");
 
+            if (!File.Exists(fastAddAddonsFile))
+                File.WriteAllText(fastAddAddonsFile, "[]");
         }
     }
 }

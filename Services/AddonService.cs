@@ -409,7 +409,7 @@ namespace WotlkCPKTools.Services
                 return false;
 
             fullAddonInfoList.Add(newFullAddon);
-            await SaveAddonsListToJson(fullAddonInfoList);
+            await SaveAddonsListToJson(fullAddonInfoList);  
             return true;
         }
         
