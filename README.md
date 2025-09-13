@@ -8,6 +8,8 @@
 
 CPK WoW Tools is a desktop app designed to simplify addon and backup management for World of Warcraft. Easily install, update, back up, and organize your addons and WTF folder, while also serving as a convenient game launcher.
 
+Download and drop the CPKWoWTools.exe inside your World of Warcraft folder.
+
 ![Logo](https://i.imgur.com/AeTELrV.png)
 
 </div>
