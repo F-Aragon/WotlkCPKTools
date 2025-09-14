@@ -46,7 +46,7 @@ namespace WotlkCPKTools.Services
 
         // URLs
         // Recommended List
-        public static readonly string RecommendedListUrl = "https://raw.githubusercontent.com/FranciscoRAragon/WotlkCPKTools/master/Resources/Data/Recommended.txt";
+        public static readonly string RecommendedListUrl = "https://raw.githubusercontent.com/FranciscoRAragon/WotlkCPKTools/master/Recommended.txt";
 
         static Pathing()
         {
