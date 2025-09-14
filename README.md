@@ -24,6 +24,9 @@ Download the [latest release](https://github.com/FranciscoRAragon/WotlkCPKTools/
   
 </div>
 
+## General Features
+* Supports multiple World of Warcraft expansions. (Select realmlist and WTF folder in More tab)
+
 ## Addons Manager
 * Add addons directly from GitHub.
 * Check and update all your addons with a single click.
