@@ -1,5 +1,5 @@
 #Base addons for WotLK 3.3.5a
-@https://github.com/FranciscoRAragon/WotlkCPKTools/blob/master/Resources/Data/Recommended.txt
+@https://github.com/FranciscoRAragon/WotlkCPKTools/blob/master/Recommended.txt
 
 WeakAuras-WotLK:https://github.com/NoM0Re/WeakAuras-WotLK
 ElvUI:https://github.com/ElvUI-WotLK/ElvUI
