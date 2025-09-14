@@ -93,6 +93,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
@@ -106,12 +107,14 @@
                     <Button Grid.Column="1" Width="30" Height="30" Background="Transparent" ToolTip="Open Chupanki's Archive Discord" BorderThickness="0" Margin="0,0,5,0" Command="{Binding OpenDiscordUrlCommand}">
                         <ContentControl Content="{StaticResource DiscordIcon}"/>
                     </Button>
+                    <TextBlock Grid.Column="2" Text="v0.3.0" FontSize="15" FontStyle="Italic" Foreground="#30FFFFFF" VerticalAlignment="Bottom" />
+                    <TextBlock Grid.Column="4" Text="{Binding RealmlistContent}" TextWrapping="Wrap" TextAlignment="Right" Background="#80000000" Foreground="White" Padding="5" Margin="5,0" VerticalAlignment="Top" IsHitTestVisible="False" FontSize="13"/>
+                    <!-- 
+                    <TextBlock Grid.Column="4" Text="{Binding StatusMessage}" VerticalAlignment="Center" Foreground="LightGray" FontSize="12" Margin="10,0" Background="#40000000" Padding="2"/>
+                    -->
 
-                    <TextBlock Grid.Column="3" Text="{Binding RealmlistContent}" TextWrapping="Wrap" TextAlignment="Right" Background="#80000000" Foreground="White" Padding="5" Margin="5,0" VerticalAlignment="Top" IsHitTestVisible="False" FontSize="13"/>
-                    <TextBlock Grid.Column="3" Text="{Binding StatusMessage}" VerticalAlignment="Center" Foreground="LightGray" FontSize="12" Margin="10,0" Background="#40000000" Padding="2"/>
-
-                    <Button Grid.Column="4" ToolTip="Open Realmlist folder" FontSize="13" Content="Realmlist 📁" Width="90" Height="25" Margin="5,0" Foreground="White" Background="#88444062" BorderBrush="#30FFFFFF" Cursor="Hand" Command="{Binding OpenRealmlistFolderCommand}"/>
-                    <Button Grid.Column="5" ToolTip="Execute current wow.exe (Go to More to set it)" FontSize="13" Content="Launch WoW" Width="120" Height="25" Margin="10,0" Foreground="White" Background="#883A3756" BorderBrush="#30FFFFFF" Cursor="Hand" Command="{Binding LaunchWoWCommand}"/>
+                    <Button Grid.Column="5" ToolTip="Open Realmlist folder" FontSize="13" Content="Realmlist 📁" Width="90" Height="25" Margin="5,0" Foreground="White" Background="#88444062" BorderBrush="#30FFFFFF" Cursor="Hand" Command="{Binding OpenRealmlistFolderCommand}"/>
+                    <Button Grid.Column="6" ToolTip="Execute current wow.exe (Go to More to set it)" FontSize="13" Content="Launch WoW" Width="120" Height="25" Margin="10,0" Foreground="White" Background="#883A3756" BorderBrush="#30FFFFFF" Cursor="Hand" Command="{Binding LaunchWoWCommand}"/>
                 </Grid>
             </Grid>
         </Grid>
