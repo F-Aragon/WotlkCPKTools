@@ -160,12 +160,24 @@ namespace WotlkCPKTools.Services
 
         public static async Task<List<string>> GetRawLinesAsync(string rawUrl)
         {
-            using (var client = new HttpClient())
+            try
             {
+                using var client = new HttpClient();
                 var content = await client.GetStringAsync(rawUrl);
 
-                var lines = content.Split(new[] { '\r', '\n' });
+                var lines = content.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
                 return new List<string>(lines);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[CustomList] Failed to access repository: {rawUrl}. Error: {ex.Message}");
+                System.Windows.MessageBox.Show(
+                    $"Failed to access file:\n{rawUrl}\n\nThis repository or file may not exist, may be private, or the link could be incorrect.\n\nError details: {ex.Message}",
+                    "Repository/File Access Error",
+                    System.Windows.MessageBoxButton.OK,
+                    System.Windows.MessageBoxImage.Warning
+                );
+                return new List<string>();
             }
         }
 
