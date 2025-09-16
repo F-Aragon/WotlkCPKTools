@@ -2,7 +2,9 @@
 @https://github.com/FranciscoRAragon/WotlkCPKTools/blob/master/Recommended.txt
 
 WeakAuras-WotLK:https://github.com/NoM0Re/WeakAuras-WotLK
+Skada-WoTLK:https://github.com/bkader/Skada-WoTLK
+DBM-Zidras:https://github.com/Zidras/DBM-Warmane
+
 ElvUI:https://github.com/ElvUI-WotLK/ElvUI
 ElvUI_AddOnSkins:https://github.com/ElvUI-WotLK/ElvUI_AddOnSkins
-
-DBM-Zidras:https://github.com/Zidras/DBM-Warmane
+ElvUI_EnhancedFriendsList:https://github.com/ElvUI-WotLK/ElvUI_EnhancedFriendsList
