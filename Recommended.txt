@@ -6,6 +6,5 @@ WeakAuras-WotLK:https://github.com/NoM0Re/WeakAuras-WotLK
 Skada-WoTLK:https://github.com/bkader/Skada-WoTLK
 DBM-Zidras:https://github.com/Zidras/DBM-Warmane
 
-ElvUI:https://github.com/ElvUI-WotLK/ElvUI
-ElvUI_AddOnSkins:https://github.com/ElvUI-WotLK/ElvUI_AddOnSkins
-ElvUI_EnhancedFriendsList:https://github.com/ElvUI-WotLK/ElvUI_EnhancedFriendsList
+PallyPower:https://github.com/NoM0Re/PallyPower-Improved-3.3.5
+Talented:https://github.com/bkader/Talented_WoTLK
