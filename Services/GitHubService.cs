@@ -98,7 +98,7 @@ namespace WotlkCPKTools.Services
         public static bool IsValidGitHubRepoUrl(string url)
         {
             if (string.IsNullOrWhiteSpace(url)) return false;
-            return Regex.IsMatch(url, @"^https:\/\/github\.com\/[\w\-]+\/[\w\-]+(\.git)?$");
+            return Regex.IsMatch(url, @"^https:\/\/github\.com\/[\w\-.]+\/[\w\-.]+(\.git)?$");
         }
 
         public async Task<string?> GetDefaultBranchAsync(string repoUrl)
