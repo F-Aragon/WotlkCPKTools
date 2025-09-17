@@ -107,7 +107,7 @@
                     <Button Grid.Column="1" Width="30" Height="30" Background="Transparent" ToolTip="Open Chupanki's Archive Discord" BorderThickness="0" Margin="0,0,5,0" Command="{Binding OpenDiscordUrlCommand}">
                         <ContentControl Content="{StaticResource DiscordIcon}"/>
                     </Button>
-                    <TextBlock Grid.Column="2" Text="v0.3.1" FontSize="15" FontStyle="Italic" Foreground="#30FFFFFF" VerticalAlignment="Bottom" />
+                    <TextBlock Grid.Column="2" Text="v0.3.2" FontSize="15" FontStyle="Italic" Foreground="#30FFFFFF" VerticalAlignment="Bottom" />
                     <TextBlock Grid.Column="4" Text="{Binding RealmlistContent}" TextWrapping="Wrap" TextAlignment="Right" Background="#80000000" Foreground="White" Padding="5" Margin="5,0" VerticalAlignment="Top" IsHitTestVisible="False" FontSize="13"/>
                     <!-- 
                     <TextBlock Grid.Column="4" Text="{Binding StatusMessage}" VerticalAlignment="Center" Foreground="LightGray" FontSize="12" Margin="10,0" Background="#40000000" Padding="2"/>
