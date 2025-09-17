@@ -67,7 +67,7 @@ Download the [latest release](https://github.com/FranciscoRAragon/WotlkCPKTools/
 > ⚠️ Your antivirus might detect the app as a potential threat.  
 > This is a **false positive** — add it as an exception in your antivirus.
 
-Check: [VirusTotal scan](https://www.virustotal.com/gui/file/170b81d362e823f8321f88395f305f331bbe22867516c436919fea599cda2283/detection)
+Check VirusTotal scan link in the [latest release](https://github.com/FranciscoRAragon/WotlkCPKTools/releases).
 
 ## Custom Lists  
 
